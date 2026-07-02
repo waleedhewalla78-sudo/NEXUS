@@ -1,0 +1,141 @@
+# ============================================================
+# CI – Nexus Social Platform
+# ============================================================
+# Runs on every push and PR to main:
+#   1. Lint (ESLint)
+#   2. Type-check (tsc)
+#   3. Build (next build – validates compilation)
+#   4. Docker build (verifies the production image)
+# ============================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ---- Lint & Type-check ----
+  quality:
+    name: Lint & Type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npx tsc --noEmit
+
+  # ---- Build ----
+  build:
+    name: Build
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-key
+          DIFY_API_KEY: placeholder-dify
+          INTERNAL_TOOL_SECRET: ci-internal-secret-min-32-characters
+          REDIS_URL: redis://localhost:6379
+          CHATWOOT_WEBHOOK_SECRET: ci-webhook-secret
+          APPROVAL_HMAC_SECRET: ci-approval-hmac-secret-min-32-chars
+          STRIPE_SECRET_KEY: sk_test_ci
+          STRIPE_WEBHOOK_SECRET: whsec_ci
+
+  # ---- Smoke tests (Vitest + Playwright) ----
+  smoke:
+    name: Smoke Tests
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests (Vitest)
+        run: npm run test:unit
+
+      - name: Integration tests (Vitest)
+        run: npm run test:integration
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Playwright smoke + publish E2E
+        run: npx playwright test e2e/smoke.spec.ts e2e/publish-integration.spec.ts e2e/publish-flow.spec.ts
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-key
+
+  # ---- Docker ----
+  docker:
+    name: Docker Build
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co \
+            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder-key \
+            -t nexus-social-app:ci .
+
+      - name: Check image size
+        run: |
+          SIZE=$(docker image inspect nexus-social-app:ci --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB} MB"
+          if [ "$SIZE_MB" -gt 300 ]; then
+            echo "::warning::Docker image is ${SIZE_MB}MB (target: <300MB)"
+          fi
+
+      - name: Smoke test – container starts
+        run: |
+          docker run -d --name smoke \
+            -e NEXT_PUBLIC_SUPABASE_URL=https://placeholder.supabase.co \
+            -e NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder-key \
+            -p 3000:3000 \
+            nexus-social-app:ci
+          sleep 5
+          curl -f http://localhost:3000/api/health || (docker logs smoke && exit 1)
+          docker stop smoke

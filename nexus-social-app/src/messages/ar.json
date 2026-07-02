@@ -1,0 +1,43 @@
+{
+  "Nav": {
+    "dashboard": "لوحة التحكم",
+    "inbox": "صندوق الوارد",
+    "campaigns": "الحملات",
+    "settings": "الإعدادات",
+    "aiOps": "عمليات الذكاء الاصطناعي",
+    "abm": "التسويق المستهدف",
+    "attribution": "إسناد الإيرادات",
+    "controlPlane": "لوحة التحكم بالوكلاء",
+    "briefWizard": "معالج الإحاطة",
+    "intelligence": "الاستخبارات",
+    "approvals": "الموافقات",
+    "analytics": "التحليلات",
+    "calendar": "التقويم",
+    "createPost": "إنشاء منشور",
+    "automations": "الأتمتة",
+    "reputation": "السمعة",
+    "aiAgent": "وكيل الذكاء الاصطناعي",
+    "backToAiOps": "← عمليات الذكاء الاصطناعي",
+    "languageEn": "EN",
+    "languageAr": "عربي",
+    "signOut": "تسجيل الخروج",
+    "signIn": "تسجيل الدخول",
+    "search": "بحث…",
+    "profile": "الملف الشخصي",
+    "workspace": "مساحة العمل"
+  },
+  "Abm": {
+    "title": "التسويق المستهدف للحسابات",
+    "subtitle": "الحسابات المستهدفة · درجات نية المشتري · تفسير الذكاء الاصطناعي",
+    "targetAccounts": "الحسابات المستهدفة",
+    "highIntent": "نية عالية (≥70)",
+    "avgIntentScore": "متوسط درجة النية",
+    "accountList": "قائمة الحسابات (عرض ABM)",
+    "industry": "القطاع",
+    "topics": "المواضيع",
+    "why": "لماذا؟",
+    "hide": "إخفاء",
+    "loading": "جاري تحميل الحسابات المستهدفة…",
+    "mockBadge": "بيانات تجريبية ثابتة — NEXGEN"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "Nav": {
+    "dashboard": "Dashboard",
+    "inbox": "Inbox",
+    "campaigns": "Campaigns",
+    "settings": "Settings",
+    "aiOps": "AI Ops",
+    "abm": "ABM",
+    "attribution": "Attribution",
+    "controlPlane": "Control Plane",
+    "briefWizard": "Brief Wizard",
+    "intelligence": "Intelligence",
+    "approvals": "Approvals",
+    "analytics": "Analytics",
+    "calendar": "Calendar",
+    "createPost": "Create Post",
+    "automations": "Automations",
+    "reputation": "Reputation",
+    "aiAgent": "AI Agent",
+    "backToAiOps": "← AI Ops",
+    "languageEn": "EN",
+    "languageAr": "عربي",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "search": "Search…",
+    "profile": "Profile",
+    "workspace": "Workspace"
+  },
+  "Abm": {
+    "title": "Account-Based Marketing",
+    "subtitle": "Target accounts · buyer intent scores · AI explainability",
+    "targetAccounts": "Target accounts",
+    "highIntent": "High intent (≥70)",
+    "avgIntentScore": "Avg intent score",
+    "accountList": "Account list (ABM view)",
+    "industry": "Industry",
+    "topics": "Topics",
+    "why": "Why?",
+    "hide": "Hide",
+    "loading": "Loading target accounts…",
+    "mockBadge": "NEXGEN static demo data"
+  }
+}

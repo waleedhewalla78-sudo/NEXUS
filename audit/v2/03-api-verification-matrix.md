@@ -1,0 +1,25 @@
+# API Verification Matrix
+
+This document provides a detailed endpoint inventory for the entire repository, analyzing authentication, schema validations, integrations, and testing coverage.
+
+## API Endpoint Inventory
+
+| Method | Path | Request Schema | Response Schema | Authentication / AuthZ | Integration Level | Test Coverage | Current Status | Code Reference / Gap |
+| :---: | :--- | :--- | :--- | :--- | :---: | :--- | :--- | :--- |
+| **GET** | `/api/health` | None | `{ status: string, details: object }` | Anonymous | LEVEL 3 | Playwright Smoke | **PARTIALLY_IMPLEMENTED** | [health/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/health/route.ts). Fails DB check due to missing `workspaces` table, but masks it by returning HTTP 200. |
+| **POST** | `/api/webhooks/chatwoot-ai` | Chatwoot webhook JSON | `{ status: string, workspaceId: string }` | None (Kill Switch & Canary) | LEVEL 3 | Playwright `AI-02` (Fails if DB empty) | **PARTIALLY_IMPLEMENTED** | [chatwoot-ai/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/webhooks/chatwoot-ai/route.ts). Enqueues messages in Redis, but worker is dead. |
+| **POST** | `/api/webhooks/chatwoot-ai-feedback` | Chatwoot message updated JSON | `{ status: string }` | None | LEVEL 0 | None | **PARTIALLY_IMPLEMENTED** | [chatwoot-ai-feedback/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/webhooks/chatwoot-ai-feedback/route.ts). Crashes on database select because it queries the non-existent column `inbox_id` instead of `chatwoot_inbox_id`. |
+| **POST** | `/api/webhooks/chatwoot-csat` | Chatwoot webhook JSON | `{ status: string }` | None | LEVEL 3 | None | **PARTIALLY_IMPLEMENTED** | [chatwoot-csat/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/webhooks/chatwoot-csat/route.ts). Receives CSAT score 1-5 and inserts into database. |
+| **POST** | `/api/webhooks/stripe` | Stripe event payload | Text success response | Stripe signature check | LEVEL 3 | None | **PARTIALLY_IMPLEMENTED** | [stripe/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/webhooks/stripe/route.ts). Vulnerable to concurrency race conditions because it uses non-atomic read-then-upsert ledger queries. |
+| **POST** | `/api/tools/check-order-status` | `{ order_id: string }` | Shopify shipping JSON | `INTERNAL_TOOL_SECRET` Bearer header | LEVEL 2 | Unit tests in `proxy-routes.test.ts` | **VERIFIED_COMPLETE** | [check-order-status/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/tools/check-order-status/route.ts). Implements timeout handling and parameter validation. |
+| **POST** | `/api/tools/issue-refund` | `{ order_id: string, amount: number }` | `{ status: 'pending_approval', ... }` | `INTERNAL_TOOL_SECRET` Bearer header | LEVEL 2 | Unit tests in `proxy-routes.test.ts` | **VERIFIED_COMPLETE** | [issue-refund/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/tools/issue-refund/route.ts). Correctly delegates write operation to human approval loop. |
+| **GET** | `/api/tools/approve-refund` | Token and action params | `{ status: string, message: string }` | None (Decodes base64 only) | LEVEL 2 | None | **MOCKED_OR_STUBBED** | [approve-refund/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/tools/approve-refund/route.ts). Signature validation is missing (only base64 decodes), exposing endpoint to spoofing. Actual refund calls are stubbed. |
+| **POST** | `/api/tools/create-support-ticket` | Zod ticket validation | `{ ticket_id: string }` | `INTERNAL_TOOL_SECRET` Bearer header | LEVEL 2 | Unit tests in `proxy-routes.test.ts` | **VERIFIED_COMPLETE** | Implements standard ticket generation. |
+| **GET** | `/api/cron/ai-eval` | None | `{ status: string }` | `CRON_SECRET` Bearer header | LEVEL 1 | None | **PARTIALLY_IMPLEMENTED** | [ai-eval/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/cron/ai-eval/route.ts). Calls `runAIEvaluationJob()` which fails because worker is dead. |
+| **POST** | `/api/crm/sync` | `{ leadData: object, crmPlatform: string }` | `{ success: boolean }` | None | LEVEL 2 | None | **MOCKED_OR_STUBBED** | [sync/route.ts](file:///d:/nexus-social-platform/nexus-social-app/src/app/api/crm/sync/route.ts). CRM integration is commented out. |
+
+## Major API Vulnerabilities & Broken Routes
+
+1.  **`/api/webhooks/chatwoot-ai-feedback` (CRASH):** The SQL schema defines the column name as `chatwoot_inbox_id` in `chatwoot_inbox_workspace_map` table. However, this endpoint attempts to query `inbox_id`. The database raises an exception and the API fails on every message update webhook.
+2.  **`/api/tools/approve-refund` (UNSAFE):** This endpoint implements GET actions that perform financial refunds based on a magic link token. Since there is zero signature verification or key comparison (only a Base64 string decode), anyone can spoof a token, leading to unauthorized refunds.
+3.  **`/api/webhooks/stripe` (CONCURRENCY RISK):** Ledger credit balance calculations are non-atomic (they fetch then upsert), creating a race condition on duplicate webhook notifications.

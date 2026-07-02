@@ -1,0 +1,22 @@
+-- Nexus Social: Full Schema Migration Guide
+-- Please execute the following SQL files in the Supabase SQL Editor in this exact order:
+
+-- Sprint 1: Auth & Workspaces
+-- Run: ai_schema.sql (contains workspaces, members, settings if modified)
+
+-- Sprint 5: Omnichannel
+-- Run: omnichannel_schema.sql
+
+-- Sprint 6: Predictive Analytics
+-- Run: reputation_schema.sql (contains predictions, or ai_schema.sql)
+
+-- Sprint 7: Enterprise Pages & Audit Logs
+-- Run: enterprise_schema.sql
+
+-- Sprint 8: Monetization & White-Labeling
+-- Run: sprint8_schema.sql
+-- Run: sprint8_custom_domains.sql
+
+-- Sprint 9: Webhooks, Custom Reports, and Data Warehousing
+-- Run: sprint9_schema.sql
+-- Run: sprint9_schema_part2.sql

@@ -1,0 +1,79 @@
+# docker-compose.prod.yml
+# Production deployment for Nexus Social App (standalone Next.js image)
+#
+# Prerequisites:
+#   1. Copy .env.production.template → .env.production and fill all PROD_* values
+#   2. CI must have pushed ghcr.io/<org>/nexus-social-app:latest (see deploy-production.yml)
+#
+# Usage:
+#   export GITHUB_REPOSITORY=your-org/nexus-social-app   # or set IMAGE below
+#   docker compose -f docker-compose.prod.yml pull
+#   docker compose -f docker-compose.prod.yml up -d
+#
+# Production uses managed Redis (e.g., Upstash / Redis Cloud), managed Supabase,
+# and managed Qdrant. Do NOT run local redis/qdrant containers — set REDIS_URL,
+# DATABASE_URL, QDRANT_URL in .env.production instead.
+
+services:
+  web:
+    image: ${IMAGE:-ghcr.io/your-org/nexus-social-app:latest}
+    container_name: nexus-social-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      HOSTNAME: "0.0.0.0"
+      # OTLP traces → local collector → Sentry (see otel-collector-config.prod.yaml)
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      otel-collector:
+        condition: service_started
+    networks:
+      - nexus-prod
+
+  worker:
+    image: ${IMAGE:-ghcr.io/your-org/nexus-social-app:latest}
+    container_name: nexus-social-worker
+    restart: unless-stopped
+    command: ["node", "dist/bin/worker.js"]
+    env_file:
+      - .env.production
+    environment:
+      NODE_ENV: production
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - nexus-prod
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: nexus-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.prod.yaml:/etc/otel-collector-config.yaml:ro
+    env_file:
+      - .env.production
+    environment:
+      SENTRY_DSN: ${SENTRY_DSN}
+      SENTRY_ENVIRONMENT: ${SENTRY_ENVIRONMENT:-production}
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - nexus-prod
+    restart: unless-stopped
+
+networks:
+  nexus-prod:
+    driver: bridge

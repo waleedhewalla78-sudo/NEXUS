@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Theme tokens — applied per-page via Tailwind classes, not forced on body */
+@layer base {
+  :root {
+    --background: #f9fafb;
+    --foreground: #111827;
+  }
+
+  html.dark body {
+    background-color: #0f172a;
+    color: #f1f5f9;
+  }
+
+  html.dark .bg-white {
+    background-color: #1e293b;
+  }
+
+  html.dark .text-gray-900 {
+    color: #f1f5f9;
+  }
+
+  html.dark .border-gray-200 {
+    border-color: #334155;
+  }
+
+  /* Arabic RTL — logical layout for sidebar, dashboard, inbox */
+  html[dir='rtl'] {
+    font-family: 'Segoe UI', Tahoma, 'Noto Sans Arabic', 'Arial', sans-serif;
+  }
+
+  html[dir='rtl'] .app-shell-row {
+    flex-direction: row-reverse;
+  }
+
+  html[dir='rtl'] .sidebar-panel {
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.06);
+  }
+
+  html[dir='rtl'] .inbox-split-pane {
+    flex-direction: row-reverse;
+  }
+
+  /* Customer bubbles at inline-start (right in RTL), agent at inline-end (left in RTL) */
+  .inbox-message-row--customer {
+    justify-content: flex-start;
+  }
+
+  .inbox-message-row--agent {
+    justify-content: flex-end;
+  }
+
+  .inbox-bubble {
+    text-align: start;
+    unicode-bidi: plaintext;
+  }
+
+  .inbox-bubble-timestamp {
+    text-align: end;
+  }
+}

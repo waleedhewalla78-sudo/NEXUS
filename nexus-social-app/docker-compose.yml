@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    # Uncomment the following lines if you want to run a local Supabase instance for dev/testing
+    # depends_on:
+    #   - supabase
+    #   
+#  supabase:
+#    image: supabase/postgres:latest
+#    environment:
+#      - POSTGRES_PASSWORD=yourpassword
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - supabase-data:/var/lib/postgresql/data
+#
+#volumes:
+#  supabase-data:

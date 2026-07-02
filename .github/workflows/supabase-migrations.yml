@@ -1,0 +1,62 @@
+name: Supabase Migrations
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'nexus-social-app/supabase/migrations/**'
+      - 'nexus-social-app/supabase/config.toml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'nexus-social-app/supabase/migrations/**'
+      - 'nexus-social-app/supabase/config.toml'
+
+defaults:
+  run:
+    working-directory: nexus-social-app
+
+jobs:
+  validate-migrations:
+    name: Validate migration SQL
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply migrations in order
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: |
+          for file in supabase/migrations/*.sql; do
+            echo "Applying $file"
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$file"
+          done
+
+      - name: Verify core tables exist
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "SELECT to_regclass('public.workspace_social_connections');"
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "SELECT to_regclass('public.post_analytics');"
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -c "SELECT column_name FROM information_schema.columns WHERE table_name='posts' AND column_name='publish_error';"
+
+      - name: Supabase CLI dry-run (optional, when linked)
+        if: ${{ secrets.SUPABASE_ACCESS_TOKEN != '' }}
+        continue-on-error: true
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/supabase/cli/main/install.sh | sh
+          supabase db push --dry-run

@@ -1,0 +1,300 @@
+# Full-stack Docker Compose for Nexus Social Platform
+# Usage (from repo root):
+#   cp .env.full-stack.example .env.full-stack
+#   docker compose --env-file .env.full-stack -f docker-compose.full-stack.yml up -d --build
+#
+# Supabase remains external (hosted project or local CLI). Set NEXT_PUBLIC_SUPABASE_* in env.
+
+name: nexus-full-stack
+
+services:
+  nexus-redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - nexus_redis_data:/data
+    networks:
+      - nexus-internal
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  nexus-web:
+    build:
+      context: ./nexus-social-app
+      dockerfile: Dockerfile
+    image: nexus-social-app:full-stack
+    container_name: nexus-web
+    restart: unless-stopped
+    ports:
+      - '${APP_PORT:-3005}:3000'
+    env_file:
+      - ${NEXUS_ENV_FILE:-./nexus-social-app/.env}
+      - ./nexus-social-app/.env.local
+    environment:
+      NODE_ENV: ${NEXUS_NODE_ENV:-development}
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      REDIS_URL: redis://nexus-redis:6379
+      # Integration URLs come from nexus-social-app/.env.local (cloud) unless --profile full is used.
+    depends_on:
+      nexus-redis:
+        condition: service_healthy
+    networks:
+      - nexus-internal
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  nexus-worker:
+    build:
+      context: ./nexus-social-app
+      dockerfile: Dockerfile
+    image: nexus-social-app:full-stack
+    container_name: nexus-worker
+    restart: unless-stopped
+    command: ['node', 'dist/bin/worker.js']
+    env_file:
+      - ${NEXUS_ENV_FILE:-./nexus-social-app/.env}
+      - ./nexus-social-app/.env.local
+    environment:
+      NODE_ENV: ${NEXUS_NODE_ENV:-development}
+      REDIS_URL: redis://nexus-redis:6379
+      PUBLISHING_ENABLED: '${PUBLISHING_ENABLED:-true}'
+      ANALYTICS_SYNC_ENABLED: '${ANALYTICS_SYNC_ENABLED:-true}'
+      SYNC_ANALYTICS_INTERVAL_MS: '${SYNC_ANALYTICS_INTERVAL_MS:-21600000}'
+      TOKEN_REFRESH_ENABLED: '${TOKEN_REFRESH_ENABLED:-true}'
+      TOKEN_REFRESH_INTERVAL_MS: '${TOKEN_REFRESH_INTERVAL_MS:-3600000}'
+    depends_on:
+      nexus-redis:
+        condition: service_healthy
+      nexus-web:
+        condition: service_started
+    networks:
+      - nexus-internal
+
+  chatwoot-postgres:
+    image: pgvector/pgvector:pg16
+    container_name: chatwoot-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: chatwoot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${CHATWOOT_POSTGRES_PASSWORD:-chatwoot}
+    volumes:
+      - chatwoot_postgres_data:/var/lib/postgresql/data
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  chatwoot-redis:
+    image: redis:alpine
+    container_name: chatwoot-redis
+    restart: unless-stopped
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  chatwoot-rails:
+    image: chatwoot/chatwoot:latest
+    container_name: chatwoot-rails
+    restart: unless-stopped
+    depends_on:
+      - chatwoot-postgres
+      - chatwoot-redis
+    ports:
+      - '${CHATWOOT_PORT:-3003}:3000'
+    environment:
+      RAILS_ENV: production
+      NODE_ENV: production
+      INSTALLATION_ENV: docker
+      FRONTEND_URL: http://localhost:${CHATWOOT_PORT:-3003}
+      POSTGRES_HOST: chatwoot-postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: ${CHATWOOT_POSTGRES_PASSWORD:-chatwoot}
+      POSTGRES_DATABASE: chatwoot
+      REDIS_URL: redis://chatwoot-redis:6379
+      SECRET_KEY_BASE: ${CHATWOOT_SECRET_KEY_BASE:-replace-with-long-random-string}
+    entrypoint: docker/entrypoints/rails.sh
+    command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  chatwoot-sidekiq:
+    image: chatwoot/chatwoot:latest
+    container_name: chatwoot-sidekiq
+    restart: unless-stopped
+    depends_on:
+      - chatwoot-postgres
+      - chatwoot-redis
+    environment:
+      RAILS_ENV: production
+      NODE_ENV: production
+      INSTALLATION_ENV: docker
+      POSTGRES_HOST: chatwoot-postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: ${CHATWOOT_POSTGRES_PASSWORD:-chatwoot}
+      POSTGRES_DATABASE: chatwoot
+      REDIS_URL: redis://chatwoot-redis:6379
+      SECRET_KEY_BASE: ${CHATWOOT_SECRET_KEY_BASE:-replace-with-long-random-string}
+    command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  dify-api:
+    image: langgenius/dify-api:1.4.3
+    container_name: dify-api
+    restart: unless-stopped
+    ports:
+      - '${DIFY_API_PORT:-5001}:5001'
+    environment:
+      MODE: api
+      CONSOLE_API_URL: http://localhost:${DIFY_API_PORT:-5001}
+      APP_API_URL: http://localhost:${DIFY_API_PORT:-5001}
+      SECRET_KEY: ${DIFY_SECRET_KEY:-replace-me}
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DIFY_POSTGRES_PASSWORD:-difyai123456}
+      DB_HOST: dify-postgres
+      DB_PORT: 5432
+      DB_DATABASE: dify
+      REDIS_HOST: dify-redis
+      REDIS_PORT: 6379
+      CELERY_BROKER_URL: redis://dify-redis:6379/1
+      VECTOR_STORE: weaviate
+      WEAVIATE_ENDPOINT: http://dify-weaviate:8080
+    depends_on:
+      - dify-postgres
+      - dify-redis
+      - dify-weaviate
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  dify-worker:
+    image: langgenius/dify-api:1.4.3
+    container_name: dify-worker
+    restart: unless-stopped
+    environment:
+      MODE: worker
+      SECRET_KEY: ${DIFY_SECRET_KEY:-replace-me}
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DIFY_POSTGRES_PASSWORD:-difyai123456}
+      DB_HOST: dify-postgres
+      DB_PORT: 5432
+      DB_DATABASE: dify
+      REDIS_HOST: dify-redis
+      REDIS_PORT: 6379
+      CELERY_BROKER_URL: redis://dify-redis:6379/1
+      VECTOR_STORE: weaviate
+      WEAVIATE_ENDPOINT: http://dify-weaviate:8080
+    depends_on:
+      - dify-postgres
+      - dify-redis
+      - dify-weaviate
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  dify-postgres:
+    image: postgres:15-alpine
+    container_name: dify-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DIFY_POSTGRES_PASSWORD:-difyai123456}
+      POSTGRES_DB: dify
+    volumes:
+      - dify_postgres_data:/var/lib/postgresql/data
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  dify-redis:
+    image: redis:6-alpine
+    container_name: dify-redis
+    restart: unless-stopped
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  dify-weaviate:
+    image: semitechnologies/weaviate:1.19.0
+    container_name: dify-weaviate
+    restart: unless-stopped
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: none
+      CLUSTER_HOSTNAME: node1
+    volumes:
+      - dify_weaviate_data:/var/lib/weaviate
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  activepieces:
+    image: ghcr.io/activepieces/activepieces:0.83.0
+    container_name: activepieces
+    restart: unless-stopped
+    ports:
+      - '${ACTIVEPIECES_PORT:-8080}:80'
+    environment:
+      AP_CONTAINER_TYPE: APP
+      AP_FRONTEND_URL: http://localhost:${ACTIVEPIECES_PORT:-8080}
+      AP_POSTGRES_HOST: activepieces-postgres
+      AP_POSTGRES_PORT: 5432
+      AP_POSTGRES_USERNAME: ${AP_POSTGRES_USERNAME:-postgres}
+      AP_POSTGRES_PASSWORD: ${AP_POSTGRES_PASSWORD:-activepieces}
+      AP_POSTGRES_DATABASE: ${AP_POSTGRES_DATABASE:-activepieces}
+      AP_REDIS_HOST: activepieces-redis
+      AP_REDIS_PORT: 6379
+      AP_ENCRYPTION_KEY: ${AP_ENCRYPTION_KEY:-replace-with-32-char-key}
+      AP_JWT_SECRET: ${AP_JWT_SECRET:-replace-with-jwt-secret}
+    depends_on:
+      - activepieces-postgres
+      - activepieces-redis
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  activepieces-postgres:
+    image: pgvector/pgvector:0.8.0-pg14
+    container_name: activepieces-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${AP_POSTGRES_DATABASE:-activepieces}
+      POSTGRES_USER: ${AP_POSTGRES_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${AP_POSTGRES_PASSWORD:-activepieces}
+    volumes:
+      - activepieces_postgres_data:/var/lib/postgresql/data
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+  activepieces-redis:
+    image: redis:7.0.7
+    container_name: activepieces-redis
+    restart: unless-stopped
+    networks:
+      - nexus-internal
+    profiles: ['integrations', 'full']
+
+volumes:
+  nexus_redis_data:
+  chatwoot_postgres_data:
+  dify_postgres_data:
+  dify_weaviate_data:
+  activepieces_postgres_data:
+
+networks:
+  nexus-internal:
+    driver: bridge

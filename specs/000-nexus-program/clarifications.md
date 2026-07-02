@@ -1,0 +1,78 @@
+# Program Clarifications — Speckit `/speckit.clarify`
+
+**Date:** 2026-06-27  
+**Supersedes ambiguities from:** pre-deployment analysis, external artifact review, UAT runs
+
+---
+
+## CL-006-001 — External Claude artifacts
+
+**Question:** Should Prompt Genius, Campaign Intelligence, Content Calendar, Higgsfield be copied as standalone React apps?
+
+**Decision:** **No.** Extract **ideas only** — implement as Nexus-native APIs, pages, and agent extensions under existing auth, SoR, and Inngest. Feature 005 defines the integration pattern.
+
+---
+
+## CL-006-002 — Inngest approval (A-GATE-001)
+
+**Question:** Is Inngest still blocked?
+
+**Decision:** **No (code complete).** `inngest` npm package installed; 8 functions registered. Production requires Inngest Cloud account + signing keys (DevOps).
+
+---
+
+## CL-006-003 — UAT cannibalization failures
+
+**Question:** Why does live integration fail after schema fix?
+
+**Decision:** **Uniqueness guard working correctly.** Repeat runs accumulate similar captions in `ai_cmo_content_pieces`. UAT scripts call `clearUatContentCorpus()` + `buildUniqueUatObjective()` (random topic + run token) before happy-path tests.
+
+---
+
+## CL-006-004 — TikTok / Snapchat publish
+
+**Question:** Are all social platforms supported?
+
+**Decision:** **Publish:** Facebook, Instagram, LinkedIn, X only. **Content planning** may reference other platforms in Creator output; **publish adapters** for TikTok/Snapchat are **FR-P01** backlog.
+
+---
+
+## CL-006-005 — Customer support agent
+
+**Question:** Is there a dedicated “support agent” product?
+
+**Decision:** **Inbox AI via Chatwoot** (`ai-orchestration.ts`) + Copilot `inbox_reply` intent. Not a separate trained model; uses Ollama/Dify with workspace config. Escalation = Chatwoot human handoff.
+
+---
+
+## CL-006-006 — audit_logs table
+
+**Question:** Workflow logs “audit_logs not in schema cache” — blocker?
+
+**Decision:** **Medium priority.** Workflow continues; audit writes fail silently. Apply `RUN_IN_SQL_EDITOR_UAT_AUDIT_LOGS.sql` before production.
+
+---
+
+## CL-006-007 — Production go-live definition
+
+**Question:** Is “58/58 tasks complete” sufficient for production?
+
+**Decision:** **No.** Production requires **FR-D01–D05** (live UAT + 003 operator gates + sign-off). Architecture complete ≠ live traffic proven.
+
+---
+
+## CL-006-008 — Path alias for operators
+
+**Question:** Playbook says `E:\AISOP\nexus-social-app`?
+
+**Decision:** Use **`e:\nexus-social-platform\nexus-social-app`** unless local symlink exists. Commands identical.
+
+---
+
+## Open questions (non-blocking)
+
+| ID | Question | Owner |
+|----|----------|-------|
+| OQ-004 | Postman B timeout — budget fail vs long Ollama run when Test A concurrent | Eng |
+| OQ-005 | Intelligence dashboard: persist imports vs ephemeral JSON | Product |
+| OQ-006 | Calendar export: from `ai_cmo_content_pieces` only vs include drafts | Product |

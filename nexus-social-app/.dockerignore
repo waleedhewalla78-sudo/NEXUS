@@ -1,0 +1,56 @@
+# .dockerignore
+# =======================================
+# Exclude everything not needed in the Docker build context
+
+# Dependencies (re-installed inside container)
+node_modules
+npm-debug.log*
+
+# Build output
+.next
+out
+
+# Version control
+.git
+.gitignore
+
+# Docker files (avoid recursive context)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Environment files (secrets – injected at runtime)
+.env
+.env.*
+
+# Dev / IDE / OS
+.vscode
+.idea
+*.swp
+*.swo
+tmp
+*.log
+
+# Tests (not needed in production image)
+tests
+__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+jest.config.*
+vitest.config.*
+cypress
+cypress.config.*
+
+# SQL migrations (applied separately)
+src/sql
+
+# Documentation
+docs
+README.md
+AGENTS.md
+CLAUDE.md
+
+# CI
+.github
