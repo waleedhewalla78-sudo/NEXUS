@@ -18,7 +18,7 @@
 | P005-S19-T002 | #11 | [005] HubSpot batch deal sync script | open |
 | P005-S19-T003 | #12 | [005] Domain link CRM → intent scores in attribution | open |
 | P005-S19-T004 | #13 | [005] Executive export CRM closed-won totals | open |
-| P005-S19-T005 | #14 | [005] HubSpot OAuth connection stub (settings UI) | open |
+| P005-S19-T005 | #14 | [005][DONE] HubSpot OAuth connection (settings UI + /api/oauth/hubspot) | open |
 | P005-S19-T006 | #15 | [005] Salesforce sync adapter (mirror schema) | open |
 | P005-S19-T007 | #16 | [005] MENA compliance profile pack | open |
 | P005-S19-T008 | #17 | [005] Workspace compliance profile toggle API + UI | open |

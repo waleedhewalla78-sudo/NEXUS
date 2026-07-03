@@ -1,5 +1,5 @@
 export default async function globalSetup() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://127.0.0.1:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://127.0.0.1:3005';
   const payload = {
     event: 'message_created',
     message: { message_type: 0, sender: { id: 999 } },

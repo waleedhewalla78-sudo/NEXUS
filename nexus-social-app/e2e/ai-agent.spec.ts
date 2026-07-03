@@ -5,7 +5,7 @@ test.describe('Nexus Social AI Agent: Critical Paths', () => {
 
   test.describe.configure({ timeout: 180_000 });
 
-  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://127.0.0.1:3000';
+  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://127.0.0.1:3005';
   const INBOX_ID = 1;
 
   async function postWebhook(request: APIRequestContext, payload: Record<string, unknown>) {

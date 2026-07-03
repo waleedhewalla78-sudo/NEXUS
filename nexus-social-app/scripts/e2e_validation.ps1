@@ -10,7 +10,7 @@ $logFile = Join-Path -Path $artifactDir -ChildPath "e2e_validation_$(Get-Date -F
 Start-Transcript -Path $logFile -NoClobber
 
 # Configuration
-$webhookUrl = 'http://127.0.0.1:3000/api/webhooks/chatwoot-ai'
+$webhookUrl = if ($env:NEXT_PUBLIC_APP_URL) { "$env:NEXT_PUBLIC_APP_URL/api/webhooks/chatwoot-ai" } else { 'http://127.0.0.1:3005/api/webhooks/chatwoot-ai' }
 
 # Sample payload (adjust as needed)
 $payload = @{ 

@@ -9,6 +9,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mirrorCrmActivity } from '../src/lib/ai-cmo/abm/crm-sync';
 import { isClosedWonStageValue } from '../src/lib/ai-cmo/abm/hubspot-webhook';
+import { resolveHubSpotAccessToken } from '../src/lib/crm/hubspot-token-store';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -67,13 +68,16 @@ async function searchClosedWonDeals(token: string): Promise<HubSpotDeal[]> {
 async function main() {
   loadEnv();
 
-  const token = process.env.HUBSPOT_ACCESS_TOKEN;
   const workspaceId =
     process.env.HUBSPOT_WEBHOOK_WORKSPACE_ID ??
     process.env.NEXT_PUBLIC_DEFAULT_WORKSPACE_ID;
 
+  const token =
+    (workspaceId ? await resolveHubSpotAccessToken(workspaceId) : null) ??
+    process.env.HUBSPOT_ACCESS_TOKEN;
+
   if (!token) {
-    console.error('[sync-hubspot] Missing HUBSPOT_ACCESS_TOKEN');
+    console.error('[sync-hubspot] Missing token — connect OAuth or set HUBSPOT_ACCESS_TOKEN');
     process.exit(1);
   }
   if (!workspaceId) {

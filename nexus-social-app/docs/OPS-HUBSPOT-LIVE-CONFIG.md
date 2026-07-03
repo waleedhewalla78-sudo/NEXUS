@@ -1,11 +1,29 @@
 # HubSpot Live Configuration Runbook
 
-**Feature:** 005 Sprint 19 — inbound webhook + batch sync  
-**UI:** `/settings` → HubSpot integration stub (OAuth full flow = backlog)
+**Feature:** 005 Sprint 19 — inbound webhook + batch sync + OAuth  
+**UI:** `/settings` → HubSpot CRM → **Connect HubSpot OAuth**
 
 ---
 
-## Prerequisites
+## OAuth path (recommended — DEC-003)
+
+1. HubSpot Developer → **Apps** → create OAuth app
+2. Redirect URL: `${PROD_APP_URL}/api/oauth/hubspot/callback`
+3. Scopes: `crm.objects.deals.read`, `crm.objects.contacts.read`, `crm.schemas.deals.read`
+4. Set env:
+
+```env
+HUBSPOT_CLIENT_ID=${PROD_HUBSPOT_CLIENT_ID}
+HUBSPOT_CLIENT_SECRET=${PROD_HUBSPOT_CLIENT_SECRET}
+HUBSPOT_OAUTH_REDIRECT_URI=${PROD_APP_URL}/api/oauth/hubspot/callback
+```
+
+5. In Nexus **Settings → HubSpot CRM**, click **Connect HubSpot OAuth**
+6. Batch sync uses workspace token: `npm run sync:hubspot-deals`
+
+---
+
+## Private app path (alternative)
 
 - HubSpot developer account or private app
 - Production workspace UUID: `${PROD_WORKSPACE_UUID}`

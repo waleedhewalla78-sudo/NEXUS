@@ -1,10 +1,10 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
-import type { OAuthPlatform } from './types';
+import type { OAuthStatePlatform } from './types';
 
 export type OAuthStatePayload = {
   workspaceId: string;
   userId: string;
-  platform: OAuthPlatform;
+  platform: OAuthStatePlatform;
   nonce: string;
   codeVerifier?: string;
   exp: number;
@@ -27,7 +27,7 @@ export function createOAuthState({
 }: {
   workspaceId: string;
   userId: string;
-  platform: OAuthPlatform;
+  platform: OAuthStatePlatform;
   codeVerifier?: string;
   ttlMs?: number;
 }): string {

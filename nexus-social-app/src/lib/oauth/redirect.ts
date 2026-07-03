@@ -1,4 +1,4 @@
-import type { OAuthPlatform } from './types';
+import type { OAuthStatePlatform } from './types';
 
 function settingsBaseUrl(): string {
   return process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3005';
@@ -9,7 +9,7 @@ export function oauthSettingsRedirect({
   outcome,
   message,
 }: {
-  platform: OAuthPlatform;
+  platform: OAuthStatePlatform;
   outcome: 'success' | 'error';
   message?: string;
 }): URL {

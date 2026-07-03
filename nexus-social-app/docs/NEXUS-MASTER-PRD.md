@@ -1,9 +1,9 @@
 # Nexus Social Platform — Master Product Requirements Document (PRD)
 
 **Document ID:** NEXUS-PRD-001  
-**Version:** 2.0.0  
-**Status:** Authoritative — reflects **as-built development state** as of 2026-07-03 (Track 1 alignment complete)  
-**Repository:** `nexus-social-app` (monorepo: `nexus-social-platform`)  
+**Version:** 2.1.0  
+**Status:** Authoritative — reflects **as-built development state** as of 2026-07-03 (committed `72f7b91` on `main`)  
+**Repository:** `nexus-social-app` (monorepo: `nexus-social-platform`) · **GitHub:** `waleedhewalla78-sudo/NEXUS`  
 **Canonical engineering constitution:** [`CONSTITUTION.md`](../CONSTITUTION.md) v1.3.0  
 **Audience:** Executive leadership · Product · Engineering · RevOps · Compliance · DevOps  
 **Session report:** [Appendix I — Track 1 Operations Report (2026-07-03)](#appendix-i--track-1-operations-report-2026-07-03)
@@ -39,9 +39,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Last verified gates** | `typecheck` PASS · **237** unit tests PASS · `uat:check-schema` 13/13 · `verify:abm-seed` PASS · Postman A/B PASS · live integration 5/5 · `verify:production:code` PASS |
+| **Last verified gates** | `typecheck` PASS · **239** unit tests PASS · `uat:check-schema` 13/13 · `verify:abm-seed` PASS · Postman A/B PASS · live integration 5/5 · `verify:production:code` PASS |
+| **GitHub** | `main` @ `72f7b91` (73 files, Sprint 18–19 + ops + S15–S17 partial) |
 | **Production verdict** | **Enterprise pilot / staging-ready** — production go-live **blocked** on Section B human gates (Meta, OAuth UAT, exec sign-off, prod secrets) |
-| **Production target infra** | Hostinger 8GB VPS · Caddy reverse proxy · Supabase · Upstash Redis · Inngest Cloud · **no local Postgres/Redis/Ollama on VPS** |
+| **VPS deploy (Hostinger)** | **Paused** — ops docs ready; Track 2 Hermes SSH deferred (DEC-006) |
 | **Known doc drift** | GitHub issues #7–#19 open but Sprint 18–19 shipped — close via `scripts/close-sprint-18-19-issues.sh` (#14 stays open) |
 
 ### Stakeholder decisions required (flagged, not assumed)
@@ -53,7 +54,7 @@
 | **DEC-003** | HubSpot Private App token vs full OAuth | RevOps | Live CRM sync in customer env |
 | **DEC-004** | PDPL security sign-off on memory/FinOps flows | Security | Enterprise MENA contracts (A-GATE-005) |
 | **DEC-005** | Production Supabase project + cutover date | DevOps | Production deploy |
-| **DEC-006** | Hermes AI SSH deploy vs GitHub Actions CD | DevOps | Track 2 VPS base setup |
+| **DEC-006** | Hermes AI SSH deploy vs GitHub Actions CD | DevOps | Track 2 VPS base setup — **PAUSED** |
 
 ---
 
@@ -140,7 +141,7 @@ Nexus differentiates on **governed agent mesh + reconciler SoR + CRM closed-loop
 
 | KPI | Target | Current measurement | Status |
 |-----|--------|---------------------|--------|
-| Unit test regression | 0 failures on main | **237** passed / 1 skipped | **PASS** |
+| Unit test regression | 0 failures on main | **239** passed / 1 skipped | **PASS** |
 | Schema UAT | 13/13 tables OK | `npm run uat:check-schema` | **PASS** |
 | Live integration closed loop | 5/5 | `npm run test:live-integration` | **PASS** |
 | Postman campaign A (202→published) | PASS | `npm run uat:postman-ab` | **PASS** |
@@ -292,6 +293,17 @@ Content generated?
 | **Main flow** | /ai-cmo/control-plane → roster, MTD cost, pending approvals, failed jobs, last audit per agent |
 | **Success** | JSON matches UI; data from cost_summary + audit_logs |
 | **Track** | 005 Sprint 18–19 |
+
+### UC-007 — Query platform channel risk heatmap
+
+| Field | Detail |
+|-------|--------|
+| **Actor** | Compliance Officer, AI Ops Lead |
+| **Preconditions** | API key scoped to workspace |
+| **Main flow** | `GET /api/v1/ai-cmo/channel-risk` → per-platform score, riskTier, factors, liveSignals |
+| **Alternatives** | No publish table → `liveSignals: null` (graceful); no evaluations → ruleset baseline only |
+| **Success** | Response includes LinkedIn, X, Instagram, Facebook, TikTok rows with `generatedAt` |
+| **Track** | S15-004-002 |
 
 ---
 
@@ -909,7 +921,7 @@ After apply: `NOTIFY pgrst, 'reload schema';`
 | Command | Purpose |
 |---------|---------|
 | `npm run typecheck` | TypeScript |
-| `npm run test:unit` | 237 unit tests |
+| `npm run test:unit` | 239 unit tests |
 | `npm run verify:production:code` | Local prod gate (typecheck + unit + schema) |
 | `npm run verify:production:uat` | UAT gate (integration + uat:check-schema) |
 | `npm run verify:production:deploy` | Live deploy gate (health + inngest + ai:verify) |
@@ -926,6 +938,7 @@ After apply: `NOTIFY pgrst, 'reload schema';`
 |---------|------|---------|
 | **1.0.0** | 2026-07-03 | Initial master PRD — consolidates 003/004/005 as-built state |
 | **2.0.0** | 2026-07-03 | Track 1 alignment: ops runbooks, Hostinger constraints, channel-risk liveSignals, circuit breakers, CI schema gate, Appendix I session report |
+| **2.1.0** | 2026-07-03 | Post-GitHub push (`72f7b91`): 239 tests, UC-007 channel risk, DEC-006 VPS paused, GitHub as source of truth |
 
 ### Appendix G — Open GitHub issues (tracking drift)
 
@@ -1049,9 +1062,15 @@ Issues **#7–#19** on `waleedhewalla78-sudo/NEXUS`: Sprint 18–19 work **shipp
 | P2 | DEC-002 agency hierarchy approval | Leadership |
 | P2 | Wire Caddy → Nexus container after Track 2 | DevOps |
 
-### I.7 Track 2 readiness (Hermes VPS — not executed in Cursor)
+### I.8 GitHub deployment (2026-07-03)
 
-Hermes prompt prepared for Hostinger Ubuntu 8GB VPS. **Known fix:** Step 4 `uw --force enable` → `ufw --force enable`. Expected Step 6 output: `docker --version` + `caddy version`. Creates `/opt/platform` for Nexus deploy artifacts.
+| Item | Value |
+|------|-------|
+| Commit | `72f7b91` on `main` |
+| Remote | https://github.com/waleedhewalla78-sudo/NEXUS |
+| Files | 73 changed (+4896 / −204 lines) |
+| Excluded | `nexus-social-app.json` (secrets — gitignored) |
+| CI | `.github/workflows/ci.yml` — includes `schema-gate` on push (needs Supabase secrets) |
 
 ---
 

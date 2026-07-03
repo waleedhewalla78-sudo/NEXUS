@@ -1,5 +1,8 @@
 import type { PublishPlatform } from '@/lib/publishers/types';
 
+/** Publish OAuth + CRM OAuth (HubSpot). */
+export type OAuthStatePlatform = PublishPlatform | 'hubspot';
+
 export type OAuthPlatform = PublishPlatform;
 
 export type TokenRefreshResult = {

@@ -19,6 +19,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "playwright test",
+    "test:e2e:auth": "playwright test --project=chromium-authenticated",
     "load-test": "k6 run load-tests/smoke.js",
     "load-test:full": "k6 run load-tests/post-creation.js",
     "load-test:ai": "k6 run load-tests/ai-orchestration.js",

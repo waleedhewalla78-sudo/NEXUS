@@ -26,7 +26,7 @@
 
 ```text
 npm run typecheck        → PASS
-npm run test:unit        → 231 passed | 1 skipped
+npm run test:unit        → 239 passed | 1 skipped
 npm run verify:abm-seed  → PASS (activate 202, control plane 200)
 npm run uat:check-schema → 13/13 OK (incl. abm_playbook_runs)
 npm run verify:production:code → PASS (orchestrator)
