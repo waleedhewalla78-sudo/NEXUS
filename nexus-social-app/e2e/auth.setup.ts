@@ -10,7 +10,7 @@ setup('authenticate demo user', async ({ page }) => {
   await page.goto('/login');
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(password);
-  await page.getByRole('button', { name: /^Sign in$/i }).click();
+  await page.locator('form').getByRole('button', { name: /^Sign in$/i }).click();
 
   await expect(page).not.toHaveURL(/\/login/, { timeout: 30_000 });
   await page.context().storageState({ path: authFile });
