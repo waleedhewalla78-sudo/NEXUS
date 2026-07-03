@@ -26,6 +26,7 @@ import {
 import { metaAppReviewUtils, type MetaAppReviewStatus } from '@/lib/workspace/meta-app-review';
 import { oauthReconnectPath } from '@/lib/oauth/reconnect-path';
 import { ConnectChannelDialog } from '@/components/settings/ConnectChannelDialog';
+import { HubSpotIntegrationStub } from '@/components/settings/HubSpotIntegrationStub';
 
 const SOCIAL_META: Record<
   SocialPlatform,
@@ -356,6 +357,8 @@ export default function SettingsHub() {
           </span>
         </div>
       </section>
+
+      <HubSpotIntegrationStub />
 
       {/* More settings */}
       <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">

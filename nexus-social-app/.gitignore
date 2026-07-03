@@ -38,6 +38,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!.env.production.template
+!.env.full-stack.example
+nexus-social-app.json
 
 # vercel
 .vercel

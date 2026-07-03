@@ -17,7 +17,8 @@
 | [plan.md](./plan.md) | Sprint 18–20 technical plan |
 | [implementation-plan.md](./implementation-plan.md) | Phases I–M detail |
 | [tasks.md](./tasks.md) | Actionable checklist (source of truth) |
-| [issues-backlog.md](./issues-backlog.md) | GitHub issue mapping |
+| [convergence.md](./convergence.md) | Remaining work + new tasks |
+| [SPECKIT-STATUS.md](./SPECKIT-STATUS.md) | Full Speckit cycle status |
 
 ---
 

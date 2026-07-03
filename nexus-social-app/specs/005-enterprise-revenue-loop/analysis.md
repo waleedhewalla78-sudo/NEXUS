@@ -1,17 +1,15 @@
 # Cross-Artifact Analysis — Nexus Social (Features 003 + 004 + 005)
 
-**Date:** 2026-06-25 (`/speckit.analyze`)  
+**Date:** 2026-07-03 (`/speckit.analyze` — doc alignment, Phase 1.1)  
 **Workspace:** `nexus-social-app`  
-**Inputs:** Feature 005 specify/clarify, CONSTITUTION v1.3, PRE-DEPLOYMENT-CHECKLIST, ABM wiring session, verification run 2026-06-25
+**Inputs:** Feature 005 Sprint 18–19 shipped, CONSTITUTION v1.3, Prompt A ops close-out, verification run 2026-07-03
 
-**Verification run (2026-06-25):**
+**Verification run (2026-07-03):**
 
-```text
-npm run test:unit        → 215 passed | 1 skipped (216)
-npm run uat:check-schema → 12/12 OK (incl. ABM tables)
-npm run verify:abm-seed  → PASS (5 accounts, 12 attribution, API 200)
-npm run typecheck        → pass (prior session)
-```
+npm run test:unit        → 231 passed | 1 skipped
+npm run uat:check-schema → 13/13 OK
+npm run verify:abm-seed  → PASS (activate 202, control plane 200)
+npm run typecheck        → PASS
 
 ---
 
@@ -19,24 +17,24 @@ npm run typecheck        → pass (prior session)
 
 | Dimension | Feature 003 | Feature 004 | Feature 005 | Combined |
 |-----------|-------------|-------------|-------------|----------|
-| **Engineering gates** | Pilot-ready | Demo-ready + live integration 5/5 | Sprint 18 started | **Staging-ready** |
-| **Human gates** | Meta Review, OAuth UAT open | Dify publish (S13-T012) | None new | **Production blocked** |
-| **FR coverage** | N/A (US1–11) | ~40% partial+ (004 spec) | 0% → Sprint 18 target 25% | ~42% platform |
-| **Tests** | In 216 suite | agent-mesh 5/5, integration 18/18 | TBD | **216 total** |
-| **Schema** | 18/18 | 11/11 + ABM 3 tables | +1 pending (`abm_playbook_runs`) | **15+ ABM live** |
-| **Enterprise narrative** | Publish truth | 8-agent mesh proven | ABM live API | **CTO-demo credible** |
+| **Engineering gates** | Pilot-ready | Demo-ready + live integration 5/5 | Sprint 18–19 **shipped** | **Staging-ready** |
+| **Human gates** | Meta Review, OAuth UAT open | Dify publish (S13-T012) | CRM webhook config (operator) | **Production blocked (Section B)** |
+| **FR coverage** | N/A (US1–11) | ~40% partial+ (004 spec) | Sprint 18–19 FRs **shipped** (~75% of 005 scope) | ~55% platform |
+| **Tests** | In 231 suite | agent-mesh 5/5, integration 18/18 | HubSpot/SFDC/compliance + ABM smoke | **231 passed \| 1 skipped** |
+| **Schema** | 18/18 | 11/11 + ABM tables | `abm_playbook_runs` **applied** | **13/13 UAT OK** |
+| **Enterprise narrative** | Publish truth | 8-agent mesh proven | ABM live API + CRM mirror | **CTO-demo credible** |
 
 ### Launch readiness verdict (updated)
 
 | Track | Score | Verdict |
 |-------|-------|---------|
 | **003 pilot UAT** | 8.0 | Engineering complete; Meta + OAuth human gates |
-| **004 autonomous demo** | 7.0 | ↑ from 4.5 — live integration 5/5, Inngest, FinOps ledger |
-| **004 production @ 5k ws** | 4.5 | Memory/Qdrant, agency hierarchy, OTel partial |
-| **005 ABM enterprise demo** | 8.5 | Live DB + API; activation + control plane in Sprint 18 |
-| **Combined go-live** | 7.0 | **Controlled enterprise pilot** OK; production needs Section B gates |
+| **004 autonomous demo** | 7.5 | Live integration 5/5, Inngest, FinOps ledger; 231 tests PASS |
+| **004 production @ 5k ws** | 4.5 | Memory/Qdrant, agency hierarchy (CL-029 blocked), OTel partial |
+| **005 ABM enterprise demo** | 9.0 | Sprint 18–19 shipped; activate 202 + control plane 200; ops runbooks ready |
+| **Combined go-live** | **7.8** | **Controlled enterprise pilot / staging deploy OK**; production blocked on Section B gates (Meta, OAuth UAT, exec sign-off, prod secrets) |
 
-**Critical path (updated):** Meta App Review → OAuth UAT → **005 Phase I (activation + control plane)** → HubSpot webhook → MENA pack → Agency 000014
+**Critical path (updated):** Meta App Review → OAuth UAT → Dify publish → **prod secrets + 8GB VPS deploy** → Agency 000014 (**CL-029 blocked — Sprint 20**)
 
 ---
 
@@ -52,7 +50,7 @@ npm run typecheck        → pass (prior session)
 | PRE-DEPLOYMENT 210/210 | Current tests | **Minor drift** | 215/216 pass |
 | 005 `clarifications` CL-023 vs constitution | Reuse campaign path | **Yes** | Aligns SoR/reconciler |
 | `docs/004-PROJECT-CLOSED-V1.md` vs 005 work | New speckit session | **Yes** | Explicit new `/speckit.specify` authorized |
-| ABM UI vs API | No demo fallback | **Yes** | Empty state only |
+| ABM UI vs API | No demo fallback | **Partial drift** | `page.tsx` uses `AbmStaticClient` mocks; live API client exists |
 | Strategic assessment vs 005 spec | 5 recommendations | **Yes** | Mapped to Phases I–IV |
 
 **Material drifts to fix:** 004 analysis test counts, CONSTITUTION migration list (documentation only — not blocking 005).
@@ -109,4 +107,5 @@ npm run typecheck        → pass (prior session)
 
 | Date | Author | Change |
 |------|--------|--------|
+| 2026-07-03 | speckit.analyze | Phase 1.1 — verification block, 231 tests, 13/13 schema, go-live 7.8 |
 | 2026-06-25 | speckit.analyze | Initial 005 cross-artifact + platform status |

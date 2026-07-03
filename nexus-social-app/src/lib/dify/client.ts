@@ -40,6 +40,7 @@ export async function sendDifyChatMessage(input: DifyChatMessageInput): Promise<
   }
 
   try {
+    // CLOSED: S16-T004 — circuit breaker wraps Dify HTTP (3 failures / 60s open)
     const breaker = getCircuitBreaker('dify', input.baseUrl);
     try {
       await breaker.assertClosed();

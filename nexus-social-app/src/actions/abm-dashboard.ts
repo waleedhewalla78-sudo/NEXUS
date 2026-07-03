@@ -117,26 +117,61 @@ export async function exportExecutiveAttributionSummary(): Promise<
   | { ok: true; filename: string; content: string }
   | { ok: false; error: string }
 > {
+  const { workspaceId } = await getUserWorkspaceContext();
+  const supabase = await createServerComponentClient();
   const { rows, chart } = await getAttributionChannels();
-  if (!rows.length) {
-    return { ok: false, error: 'No attribution report available' };
-  }
+
+  const periodEnd = new Date();
+  const periodStart = new Date(periodEnd);
+  periodStart.setUTCDate(periodStart.getUTCDate() - 30);
+
+  const { calculateAttributionMetrics } = await import('@/lib/ai-cmo/attribution/calculate');
+  const metrics = await calculateAttributionMetrics({
+    workspaceId,
+    userId: 'executive-export',
+    periodStart,
+    periodEnd,
+  });
+
+  const { data: crmRows } = await supabase
+    .from('crm_activity_mirror')
+    .select('deal_value, account_domain, activity_type, occurred_at')
+    .eq('workspace_id', workspaceId)
+    .eq('activity_type', 'closed_won')
+    .gte('occurred_at', periodStart.toISOString())
+    .lte('occurred_at', periodEnd.toISOString());
+
+  const crmClosedWonTotal = (crmRows ?? []).reduce(
+    (sum, r) => sum + Number(r.deal_value ?? 0),
+    0,
+  );
 
   const totalRevenue = chart.reduce((s, c) => s + c.revenue, 0);
   const totalTouches = chart.reduce((s, c) => s + c.touches, 0);
-  const months = [...new Set(rows.map((r) => r.month.slice(0, 7)))].sort();
+  const months = rows.length
+    ? [...new Set(rows.map((r) => r.month.slice(0, 7)))].sort()
+    : [periodStart.toISOString().slice(0, 7)];
 
   const lines = [
     'NEXUS SOCIAL — EXECUTIVE ATTRIBUTION SUMMARY',
     `Period: ${months[0] ?? 'n/a'} → ${months[months.length - 1] ?? 'n/a'}`,
     '',
     'CHANNEL ATTRIBUTION (social → revenue)',
-    ...chart.map(
-      (c) => `${c.channel}: ${c.touches} touches · $${c.revenue.toLocaleString()} attributed revenue`,
-    ),
+    ...(chart.length
+      ? chart.map(
+          (c) =>
+            `${c.channel}: ${c.touches} touches · $${c.revenue.toLocaleString()} attributed revenue`,
+        )
+      : ['(no channel rows — CRM totals below may still apply)']),
     '',
-    `Total touches: ${totalTouches}`,
-    `Total attributed revenue: $${totalRevenue.toLocaleString()}`,
+    'CRM CLOSED-WON (mirrored from HubSpot / Salesforce)',
+    `Total CRM closed-won value (30d): $${crmClosedWonTotal.toLocaleString()}`,
+    `ABM-linked accounts with CRM closed-won: ${metrics.crmLinkedAccounts}`,
+    `ABM-linked CRM closed-won value: $${metrics.crmLinkedClosedWonValue.toLocaleString()}`,
+    '',
+    `Total social touches: ${totalTouches}`,
+    `Total attributed social revenue: $${totalRevenue.toLocaleString()}`,
+    `Combined CRM + social signal value: $${(totalRevenue + crmClosedWonTotal).toLocaleString()}`,
     '',
     'Prepared for CFO review — immutable audit PDF available separately.',
   ];

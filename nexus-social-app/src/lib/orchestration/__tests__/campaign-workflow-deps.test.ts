@@ -15,6 +15,16 @@ vi.mock('@/lib/ai-cmo/strategic-brain', () => ({
   }),
 }));
 
+vi.mock('@/lib/ai-cmo/channel-risk/aggregator', () => ({
+  aggregateChannelRisk: vi.fn().mockResolvedValue({
+    workspaceId: '550e8400-e29b-41d4-a716-446655440000',
+    channels: [],
+    totalViolations: 0,
+    generatedAt: new Date().toISOString(),
+  }),
+  channelRiskAdvisories: vi.fn().mockReturnValue([]),
+}));
+
 vi.mock('@/lib/ai-cmo/agents/compliance-agent', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/ai-cmo/agents/compliance-agent')>();
   return {

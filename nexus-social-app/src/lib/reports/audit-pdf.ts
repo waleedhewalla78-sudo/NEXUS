@@ -4,6 +4,8 @@
 
 import crypto from 'node:crypto';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { getWorkspaceComplianceProfile } from '@/lib/governance/compliance-profile-store';
+import { MENA_V1_PROFILE_ID } from '@/lib/governance/compliance-profiles/mena-v1';
 
 export type AuditPdfInput = {
   workspaceId: string;
@@ -71,11 +73,18 @@ export async function generateAuditPdf(input: AuditPdfInput): Promise<{ pdf: Buf
     throw new Error(error.message);
   }
 
+  const compliance = await getWorkspaceComplianceProfile(input.workspaceId);
+  const complianceAttestation =
+    compliance.profileId === MENA_V1_PROFILE_ID
+      ? `MENA Compliance Pack v1 ACTIVE — jurisdictions: ${compliance.meta.jurisdictions.join(', ')}; Arabic register: ${compliance.meta.arabicRegister}`
+      : 'Compliance profile: global_default (no MENA pack attestation)';
+
   const header = [
     'Nexus Social — Immutable Audit Report',
     `Workspace: ${input.workspaceId}`,
     `Period: ${input.start.toISOString()} → ${input.end.toISOString()}`,
     `Entries: ${rows.length}`,
+    complianceAttestation,
     '---',
   ];
 

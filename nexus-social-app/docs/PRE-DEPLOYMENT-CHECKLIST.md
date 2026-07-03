@@ -1,7 +1,8 @@
 # Pre-Deployment Checklist
 
-**Updated:** 2026-06-28  
-**Verdict:** Code-ready for **staging**; production blocked on Section B human gates.
+**Updated:** 2026-07-03  
+**Verdict:** Code-ready for **staging**; production blocked on Section B human gates.  
+**Ops:** [`.env.production.template`](../.env.production.template) · [`GATES-REMAINING.md`](./GATES-REMAINING.md) · `npm run verify:production:*`
 
 ---
 
@@ -19,18 +20,21 @@ npm run uat:check-schema   # audit_logs + eval columns
 npm run verify:v2-stack      # Redis, Supabase, Qdrant, Ollama /api/tags
 npm run uat:postman-ab       # Test B budget + Test A published
 npm run test:live-integration  # 5/5 closed loop
+npm run verify:production:code   # typecheck + unit + schema (Prompt A)
+npm run verify:production:uat    # integration + uat:check-schema (+ optional abm/postman)
 npm run load-test            # k6 health-only smoke (:3005 default)
 ```
 
 | Gate | Expected | Last verified |
 |------|----------|---------------|
-| Unit tests (Vitest) | **210/210 PASS** | 2026-06-28 (DEF-001 fixed) |
+| Unit tests (Vitest) | **231+ or more PASS** | 2026-07-03 |
 | Integration tests | **18/18 PASS** | 2026-06-28 |
-| Typecheck | **PASS** | 2026-06-28 |
-| Schema UAT | **9/9 OK** | 2026-06-28 |
-| Postman A/B | **PASS** | 2026-06-27 |
-| Live integration | **5/5 PASS** | 2026-06-27 |
-| k6 smoke (health only) | **<5% failure** | Re-run after Loop 2 |
+| Typecheck | **PASS** | 2026-07-03 |
+| Schema UAT | **13/13 OK** | 2026-07-03 (incl. abm_playbook_runs) |
+| Postman A/B | **PASS** | 2026-06-30 |
+| Live integration | **5/5 PASS** | 2026-06-30 |
+| verify:abm-seed | **PASS** | 2026-07-03 |
+| k6 smoke (health only) | **<5% failure** | Re-run on staging |
 
 **Architecture note:** No changes to 9-layer agent mesh, reconciler, or webhook auth in this remediation — test/load/verify scripts only.
 

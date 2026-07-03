@@ -12,6 +12,8 @@ export type AgentControlPlaneEntry = {
   description: string;
   implementation: 'production' | 'mesh' | 'legacy';
   mtdCostUsd: number;
+  lastAuditAction: string | null;
+  lastAuditAt: string | null;
 };
 
 export type ControlPlaneSnapshot = {
@@ -78,6 +80,42 @@ const AGENT_META: Record<
   },
 };
 
+/** Maps audit_log action prefixes to agent ids for last-audit display (FR-066). */
+const AUDIT_ACTION_TO_AGENT: Array<{ prefix: string; agentId: string }> = [
+  { prefix: 'abm.crm', agentId: 'finance' },
+  { prefix: 'abm.attribution', agentId: 'quant' },
+  { prefix: 'abm.', agentId: 'strategic_brain' },
+  { prefix: 'policy.', agentId: 'compliance' },
+  { prefix: 'compliance.', agentId: 'compliance' },
+  { prefix: 'campaign.', agentId: 'creator' },
+  { prefix: 'creator.', agentId: 'creator' },
+  { prefix: 'optimizer.', agentId: 'optimizer' },
+  { prefix: 'radar.', agentId: 'radar' },
+  { prefix: 'finance.', agentId: 'finance' },
+  { prefix: 'sentinel.', agentId: 'sentinel' },
+  { prefix: 'brain.', agentId: 'strategic_brain' },
+];
+
+function resolveAgentFromAuditAction(action: string): string | null {
+  const lower = action.toLowerCase();
+  for (const { prefix, agentId } of AUDIT_ACTION_TO_AGENT) {
+    if (lower.startsWith(prefix)) return agentId;
+  }
+  return null;
+}
+
+function buildLastAuditByAgent(
+  auditRows: Array<{ action: string; created_at: string }>,
+): Record<string, { action: string; createdAt: string }> {
+  const map: Record<string, { action: string; createdAt: string }> = {};
+  for (const row of auditRows) {
+    const agentId = resolveAgentFromAuditAction(String(row.action));
+    if (!agentId || map[agentId]) continue;
+    map[agentId] = { action: String(row.action), createdAt: String(row.created_at) };
+  }
+  return map;
+}
+
 export async function queryControlPlaneSnapshot(
   supabase: SupabaseClient,
   workspaceId: string,
@@ -101,8 +139,10 @@ export async function queryControlPlaneSnapshot(
         .select('action, created_at')
         .eq('workspace_id', workspaceId)
         .order('created_at', { ascending: false })
-        .limit(10),
+        .limit(100),
     ]);
+
+  const lastAuditByAgent = buildLastAuditByAgent(auditRows ?? []);
 
   const breakdown = (costSummary?.agent_breakdown ?? {}) as Record<string, number>;
   const totalMtdCostUsd = Number(costSummary?.total_cost_usd ?? 0);
@@ -122,6 +162,8 @@ export async function queryControlPlaneSnapshot(
       id,
       ...meta,
       mtdCostUsd,
+      lastAuditAction: lastAuditByAgent[id]?.action ?? null,
+      lastAuditAt: lastAuditByAgent[id]?.createdAt ?? null,
     };
   });
 
@@ -132,7 +174,7 @@ export async function queryControlPlaneSnapshot(
     totalTokens,
     pendingApprovals: pendingApprovals ?? 0,
     failedJobs: failedJobs ?? 0,
-    recentAudit: (auditRows ?? []).map((r) => ({
+    recentAudit: (auditRows ?? []).slice(0, 10).map((r) => ({
       action: String(r.action),
       createdAt: String(r.created_at),
     })),

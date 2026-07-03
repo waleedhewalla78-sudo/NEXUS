@@ -83,6 +83,32 @@ async function main() {
   if (!accountsRes.ok || !accountsBody.configured) {
     process.exit(1);
   }
+
+  const topAccount = accountsBody.accounts?.[0];
+  if (topAccount?.id) {
+    console.log('\n=== ABM activation smoke (optional) ===');
+    const activateRes = await fetch(
+      `${baseUrl}/api/v1/ai-cmo/abm/accounts/${topAccount.id}/activate`,
+      {
+        method: 'POST',
+        headers: { 'x-api-key': apiKey, 'Content-Type': 'application/json' },
+        body: '{}',
+      },
+    );
+    const activateBody = await activateRes.json().catch(() => ({}));
+    console.log(`POST activate (${topAccount.accountName ?? topAccount.id}) → ${activateRes.status}`);
+    if (activateRes.status === 202 || activateRes.status === 200) {
+      console.log(`  jobId: ${activateBody.jobId ?? 'n/a'}`);
+    } else {
+      console.warn(`  activation skipped: ${activateBody.error ?? 'non-202'}`);
+    }
+  }
+
+  const cpRes = await fetch(`${baseUrl}/api/v1/ai-cmo/agents/control-plane`, {
+    headers: { 'x-api-key': apiKey },
+  });
+  console.log(`GET /api/v1/ai-cmo/agents/control-plane → ${cpRes.status}`);
+
   console.log('\n✓ ABM live data ready for demo');
 }
 

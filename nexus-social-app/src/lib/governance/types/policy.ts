@@ -40,6 +40,8 @@ export type PolicyResult = {
   reason: string;
   violations: PolicyViolation[];
   requiresApproval: boolean;
+  /** Advisory only — channel-risk heatmap hints; does not override riskTier routing. */
+  advisories?: string[];
 };
 
 export type StructuredPolicyRule = {

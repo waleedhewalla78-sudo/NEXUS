@@ -15,6 +15,7 @@ export async function generateChatCompletion({
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;
 
+  // CLOSED: S16-T004 — circuit breaker wraps OpenRouter HTTP (3 failures / 60s open)
   const breaker = getCircuitBreaker('openrouter', model);
 
   try {

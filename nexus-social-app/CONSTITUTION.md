@@ -178,11 +178,14 @@ Apply files in order under `supabase/migrations/`:
 |-------|------------|----------------|
 | 003 baseline | `000001`–`000010` | `npm run schema:verify` |
 | 004 AI CMO | `000011` hierarchy → `000012` foundation | `npm run schema:verify:004` |
+| 005 ABM | `20260630_enterprise_abm_tables.sql` | `npm run verify:abm-seed` |
+| 005 playbook runs | `20260701_abm_playbook_runs.sql` | `npm run uat:check-schema` |
 
 **SQL Editor bundles**
 
 - Full 004: `RUN_IN_SQL_EDITOR_004_sprint12.sql`
 - 000012 only (if 000011 applied): `RUN_IN_SQL_EDITOR_004_000012_only.sql`
+- ABM UAT bundle: `RUN_IN_SQL_EDITOR_UAT_ABM.sql`
 
 **After manual apply**
 

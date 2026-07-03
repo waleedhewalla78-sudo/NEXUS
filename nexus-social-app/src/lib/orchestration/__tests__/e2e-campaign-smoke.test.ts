@@ -66,6 +66,19 @@ vi.mock('@/lib/finops/cost-middleware', () => ({
   }),
 }));
 
+vi.mock('@/lib/governance/compliance-profile-store', () => ({
+  getWorkspaceComplianceProfile: vi.fn().mockResolvedValue({
+    profileId: 'global_default',
+    meta: {
+      id: 'global_default',
+      label: 'Global default',
+      description: 'Test',
+      jurisdictions: ['generic'],
+      arabicRegister: 'dialect_allowed',
+    },
+  }),
+}));
+
 vi.mock('@/lib/observability/trace-wrapper', () => ({
   traceAgentCall: vi.fn(async ({ fn }) => ({
     result: await fn(),
@@ -79,6 +92,16 @@ vi.mock('@/lib/ai-cmo/memory/memory-repository', () => ({
   memoryRepository: {
     retrieve: vi.fn().mockResolvedValue([{ action: 'prior', outcome: 'good ctr' }]),
   },
+}));
+
+vi.mock('@/lib/ai-cmo/channel-risk/aggregator', () => ({
+  aggregateChannelRisk: vi.fn().mockResolvedValue({
+    workspaceId: '550e8400-e29b-41d4-a716-446655440000',
+    channels: [],
+    totalViolations: 0,
+    generatedAt: new Date().toISOString(),
+  }),
+  channelRiskAdvisories: vi.fn().mockReturnValue([]),
 }));
 
 vi.mock('@/lib/governance/policy-engine-v2', () => ({

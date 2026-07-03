@@ -2,7 +2,8 @@
 
 Use this checklist before staging/production go-live. Feature spec: `specs/003-real-integrations-production/`.
 
-**Last verified:** 2026-06-24 — automated gates: typecheck, 94 unit tests, schema:verify (18/18), schema:verify:004 (11/11), build.
+**Last verified:** 2026-07-03 — typecheck PASS · 231 unit tests · schema:verify · uat:check-schema 13/13 · verify:abm-seed PASS  
+**Production ops:** [`.env.production.template`](./.env.production.template) · [`docs/OPS-PROD-CUTOVER.md`](./docs/OPS-PROD-CUTOVER.md) · [`docs/GATES-REMAINING.md`](./docs/GATES-REMAINING.md) · `npm run verify:production:*`
 
 ---
 
@@ -68,6 +69,22 @@ After apply: `NOTIFY pgrst, 'reload schema';` (included in bundle). Enables FinO
 
 Spec: `specs/004-ai-cmo-master-prd-v3/`. Notion: [Feature 004](https://www.notion.so/3886f21f521a8111aaacf9f2414b668e).
 
+### Feature 005 — Enterprise ABM (Sprint 18–19)
+
+| # | Migration | Required for |
+|---|-----------|--------------|
+| 20260630 | enterprise_abm_tables | ABM accounts, attribution, `crm_activity_mirror` |
+| 20260701 | abm_playbook_runs | Activation audit trail |
+
+SQL Editor bundle: `supabase/migrations/RUN_IN_SQL_EDITOR_UAT_ABM.sql` (includes NOTIFY).
+
+```powershell
+npm run verify:abm-seed      # seed + activate smoke
+npm run uat:check-schema     # 13/13 incl. abm_playbook_runs
+```
+
+Spec: `specs/005-enterprise-revenue-loop/`. Ops: `docs/OPS-HUBSPOT-LIVE-CONFIG.md`, `docs/OPS-SALESFORCE-WEBHOOK.md`.
+
 ---
 
 ## 2. Environment variables
@@ -83,6 +100,8 @@ Copy `.env.example` → `.env.local` (dev) or platform secrets (prod).
 | `SUPABASE_SERVICE_ROLE_KEY` | Server/worker admin |
 | `INTERNAL_TOOL_SECRET` | Tool proxy auth (≥32 chars) |
 | `REDIS_URL` | Queue, rate limits, worker heartbeat |
+| `DATABASE_URL` | Direct Postgres for migrations (ends `/postgres`) |
+| `INNGEST_SIGNING_KEY` / `INNGEST_EVENT_KEY` | Orchestration (prod: Inngest Cloud) |
 
 ### Required in production (`NODE_ENV=production`)
 
@@ -96,6 +115,8 @@ Copy `.env.example` → `.env.local` (dev) or platform secrets (prod).
 | `TOKEN_ENCRYPTION_KEY` | OAuth token vault (when `PUBLISHING_ENABLED=true`) |
 
 Generate token key: `openssl rand -hex 32`
+
+**Production template:** copy [`.env.production.template`](./.env.production.template) to secrets manager — never commit filled values.
 
 ### Publishing OAuth (Phase 1 UAT)
 

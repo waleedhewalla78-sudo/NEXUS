@@ -45,6 +45,19 @@ vi.mock('@/lib/ai-cmo/agents/finance-data', () => ({
   }),
 }));
 
+vi.mock('@/lib/governance/compliance-profile-store', () => ({
+  getWorkspaceComplianceProfile: vi.fn().mockResolvedValue({
+    profileId: 'global_default',
+    meta: {
+      id: 'global_default',
+      label: 'Global default',
+      description: 'Test',
+      jurisdictions: ['generic'],
+      arabicRegister: 'dialect_allowed',
+    },
+  }),
+}));
+
 vi.mock('@/lib/ai-cmo/providers/provider-router', () => ({
   providerRouter: {
     complete: mockLlm,

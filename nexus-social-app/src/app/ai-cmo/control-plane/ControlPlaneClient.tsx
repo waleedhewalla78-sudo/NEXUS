@@ -85,6 +85,7 @@ export function ControlPlaneClient() {
               <th className="py-3 px-6">Tier</th>
               <th className="py-3 px-6">Implementation</th>
               <th className="py-3 px-6">MTD cost</th>
+              <th className="py-3 px-6">Last audit</th>
             </tr>
           </thead>
           <tbody>
@@ -97,6 +98,16 @@ export function ControlPlaneClient() {
                 <td className="py-3 px-6 capitalize">{agent.tier}</td>
                 <td className="py-3 px-6 capitalize">{agent.implementation}</td>
                 <td className="py-3 px-6">${agent.mtdCostUsd.toFixed(2)}</td>
+                <td className="py-3 px-6 text-xs text-gray-500">
+                  {agent.lastAuditAction ? (
+                    <>
+                      <span className="font-mono block">{agent.lastAuditAction}</span>
+                      <span>{agent.lastAuditAt?.slice(0, 19).replace('T', ' ')}</span>
+                    </>
+                  ) : (
+                    '—'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

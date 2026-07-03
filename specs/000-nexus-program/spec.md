@@ -34,6 +34,21 @@
 | PII scrubber + uniqueness guard | ✅ |
 | V2.0 local bootstrap + verify scripts | ✅ |
 
+### Feature 005 — Enterprise Revenue Loop (Sprint 18–19 shipped)
+
+| Capability | Status |
+|------------|--------|
+| ABM dashboard + playbook activation | ✅ |
+| HubSpot + Salesforce inbound webhooks | ✅ |
+| HubSpot batch sync (`sync:hubspot-deals`) | ✅ |
+| CRM domain attribution + executive export | ✅ |
+| MENA compliance profile + settings UI | ✅ |
+| Control plane last-audit | ✅ |
+
+**Blocked:** Sprint 20 (agency switcher, FinOps rollup, client portal) — **A-GATE-003** / migration `000014`.
+
+**Ops close-out (2026-07-03):** [`.env.production.template`](../nexus-social-app/.env.production.template) · [`docs/GATES-REMAINING.md`](../nexus-social-app/docs/GATES-REMAINING.md) · `npm run verify:production:*`
+
 ### Feature 005 — Product Intelligence (Phase 7a)
 
 | Capability | Status |

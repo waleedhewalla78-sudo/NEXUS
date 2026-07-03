@@ -65,6 +65,7 @@
     "uat:human-gates": "powershell -ExecutionPolicy Bypass -File scripts/run-human-uat-gates.ps1",
     "uat:check-schema": "tsx scripts/check-uat-schema.ts",
     "verify:abm-seed": "tsx scripts/verify-abm-seed.ts",
+    "sync:hubspot-deals": "tsx scripts/sync-hubspot-deals.ts",
     "speckit:issues-005": "tsx scripts/create-github-issues-005.ts",
     "uat:apply-eval-columns": "powershell -ExecutionPolicy Bypass -File scripts/apply-uat-eval-columns.ps1",
     "test:paid-media": "vitest run src/lib/analytics/paid-media/__tests__",
@@ -73,6 +74,10 @@
     "walkthrough": "powershell -ExecutionPolicy Bypass -File scripts/full-walkthrough.ps1",
     "verify:local": "npm run typecheck && npm run test && npm run schema:verify && npm run walkthrough",
     "verify:staging": "npm run typecheck && npm run test && npm run schema:verify && npm run ai:verify",
+    "verify:production": "tsx scripts/verify-production.ts all",
+    "verify:production:code": "tsx scripts/verify-production.ts code",
+    "verify:production:uat": "tsx scripts/verify-production.ts uat",
+    "verify:production:deploy": "tsx scripts/verify-production.ts deploy",
     "otel:verify": "ts-node scripts/verify_otel.ts",
     "ci": "npm ci && npm run lint && npm test && npm run e2e:validate && npm run otel:verify"
   },

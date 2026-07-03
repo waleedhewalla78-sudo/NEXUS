@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 const LINKS = [
+  { href: '/settings/compliance', label: 'Compliance', icon: Shield },
   { href: '/settings', label: 'Integrations', icon: Globe, exact: true },
   { href: '/settings/profile', label: 'Profile', icon: User },
   { href: '/settings/security', label: 'Security', icon: Shield },

@@ -1,6 +1,9 @@
 /**
  * Feature 004 Phase 4 — Circuit breaker for external LLM providers.
  *
+ * CLOSED: S16-T004 — If HTTP failures exceed 3 in 60 seconds, throw CircuitOpenError
+ * to prevent infinite hangs on production cloud APIs.
+ *
  * [SPEC] CLOSED -> OPEN (3 consecutive failures) -> HALF_OPEN after 60s cooldown.
  * Redis key: circuit:{provider}:{model}
  */

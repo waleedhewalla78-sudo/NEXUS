@@ -10,6 +10,11 @@ import {
   EU_AI_ACT_RULES,
   MENA_PDPL_RULES,
 } from '@/lib/governance/policy-engine-v2';
+import {
+  getRulesForProfile,
+  MENA_V1_PROFILE_ID,
+} from '@/lib/governance/compliance-profiles/mena-v1';
+import { getWorkspaceComplianceProfile } from '@/lib/governance/compliance-profile-store';
 import type { StructuredContentPiece } from '@/lib/governance/types/policy';
 import {
   type ComplianceAdvisory,
@@ -55,6 +60,8 @@ function contentPieceFromComplianceInput(input: ComplianceRunInput): StructuredC
 function regionalRuleAdvisories(
   input: ComplianceRunInput,
   dataRegion: ComplianceDataRegion,
+  profileRules: ReturnType<typeof getRulesForProfile> = [],
+  profileLabel = 'MENA v1',
 ): ComplianceAdvisory['advisories'] {
   const piece = contentPieceFromComplianceInput(input);
   const advisories: ComplianceAdvisory['advisories'] = [];
@@ -73,6 +80,16 @@ function regionalRuleAdvisories(
       ruleId: rule.id,
       severity: rule.severity === 'critical' ? 'critical' : 'warning',
       message: rule.reason,
+    });
+  }
+
+  for (const rule of profileRules) {
+    if (!rule.condition(piece)) continue;
+    advisories.push({
+      jurisdiction: 'uae_pdpl',
+      ruleId: rule.id,
+      severity: rule.severity === 'critical' ? 'critical' : 'warning',
+      message: `[${profileLabel}] ${rule.reason}`,
     });
   }
 
@@ -123,6 +140,12 @@ export class ComplianceAgent extends AbstractBaseAgent<ComplianceRunInput, Compl
     }
 
     const dataRegion = inferDataRegion(parsed.data);
+    const workspaceProfile = await getWorkspaceComplianceProfile(parsed.data.workspaceId);
+    const profileRules =
+      workspaceProfile.profileId === MENA_V1_PROFILE_ID
+        ? getRulesForProfile(MENA_V1_PROFILE_ID)
+        : [];
+
     const localePrefix = parsed.data.content.locale.split('-')[0];
     const inferred =
       LOCALE_JURISDICTION[parsed.data.content.locale] ??
@@ -145,7 +168,12 @@ export class ComplianceAgent extends AbstractBaseAgent<ComplianceRunInput, Compl
     });
 
     let advisories = [
-      ...regionalRuleAdvisories(parsed.data, dataRegion),
+      ...regionalRuleAdvisories(
+        parsed.data,
+        dataRegion,
+        profileRules,
+        workspaceProfile.meta.label,
+      ),
       ...heuristicAdvisories({ ...parsed.data, jurisdictions }),
     ];
     let summary = advisories.length

@@ -68,4 +68,22 @@ describe('ProviderRouter', () => {
     expect(result.stubbed).toBe(true);
     expect(result.text).toBeNull();
   });
+
+  it('throws AIProviderUnavailableError in production when all providers fail', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const router = new ProviderRouter({}, [
+      new StubProvider('dify', 'fail'),
+      new StubProvider('openrouter', 'fail'),
+    ]);
+
+    await expect(
+      router.generate({
+        userPrompt: 'hello',
+        userId: 'user-1',
+        agentRole: 'creator',
+      }),
+    ).rejects.toMatchObject({ code: 'AI_PROVIDER_UNAVAILABLE' });
+
+    vi.unstubAllEnvs();
+  });
 });

@@ -22,9 +22,15 @@ export type AttributionMetrics = {
   lastTouch: { signups: number; revenue: number; touchpoints: number };
   linear: { signups: number; revenue: number; touchpoints: number };
   crmClosedWonValue: number;
+  crmLinkedAccounts: number;
+  crmLinkedClosedWonValue: number;
   linkedPosts: number;
   channelBreakdown: Record<string, { touches: number; revenue: number }>;
 };
+
+function normalizeDomain(domain: string): string {
+  return domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+}
 
 function signReportPayload(secret: string, payload: Record<string, unknown>): string {
   return crypto.createHmac('sha256', secret).update(JSON.stringify(payload)).digest('hex');
@@ -75,16 +81,41 @@ export async function calculateAttributionMetrics(
 
   const { data: crmData } = await supabaseAdmin
     .from('crm_activity_mirror')
-    .select('deal_value, activity_type')
+    .select('deal_value, activity_type, account_domain')
     .eq('workspace_id', input.workspaceId)
     .gte('occurred_at', startIso)
     .lte('occurred_at', endIso);
 
   const crmRows = crmData ?? [];
 
+  const { data: intentDomains } = await supabaseAdmin
+    .from('account_intent_scores')
+    .select('domain')
+    .eq('workspace_id', input.workspaceId);
+
+  const intentDomainSet = new Set(
+    (intentDomains ?? []).map((r) => normalizeDomain(String(r.domain))),
+  );
+
   const crmClosedWonValue = crmRows
     .filter((r) => r.activity_type === 'closed_won')
     .reduce((sum, r) => sum + Number(r.deal_value ?? 0), 0);
+
+  const linkedClosedWonRows = crmRows.filter(
+    (r) =>
+      r.activity_type === 'closed_won' &&
+      r.account_domain &&
+      intentDomainSet.has(normalizeDomain(String(r.account_domain))),
+  );
+
+  const crmLinkedAccounts = new Set(
+    linkedClosedWonRows.map((r) => normalizeDomain(String(r.account_domain))),
+  ).size;
+
+  const crmLinkedClosedWonValue = linkedClosedWonRows.reduce(
+    (sum, r) => sum + Number(r.deal_value ?? 0),
+    0,
+  );
 
   const linkedPosts = new Set(events.map((e) => e.content_id).filter(Boolean)).size;
 
@@ -115,6 +146,8 @@ export async function calculateAttributionMetrics(
       touchpoints: events.length,
     },
     crmClosedWonValue,
+    crmLinkedAccounts,
+    crmLinkedClosedWonValue,
     linkedPosts,
     channelBreakdown,
   };

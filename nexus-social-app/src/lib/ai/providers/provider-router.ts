@@ -4,6 +4,7 @@
  */
 
 import type { DataRegion } from '@/lib/db/schemas/agency-hierarchy';
+import { AIProviderUnavailableError } from '@/lib/ai/errors';
 import { isRegionCompliant } from '@/lib/governance/data-residency';
 import { CircuitOpenError } from '@/lib/resilience/circuit-breaker';
 import { DifyProvider } from '@/lib/ai/providers/dify-provider';
@@ -117,7 +118,15 @@ export class ProviderRouter {
           console.warn(`[ProviderRouter] ${providerId} circuit open — falling back`);
           continue;
         }
-        console.warn(`[ProviderRouter] ${providerId} failed:`, error);
+        console.error(`[ProviderRouter] ${providerId} failed:`, error);
+      }
+    }
+
+    // CLOSED: S16-T004 — fail fast in production so Inngest can retry safely
+    if (attemptedProviders.length > 0) {
+      console.error('[ProviderRouter] All AI providers unavailable', { attemptedProviders });
+      if (process.env.NODE_ENV === 'production') {
+        throw new AIProviderUnavailableError(attemptedProviders);
       }
     }
 

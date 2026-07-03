@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { AiCmoNav } from '../AiCmoNav';
-import { MOCK_TARGET_ACCOUNTS } from '@/data/abm-mocks';
-import { AbmStaticClient } from './AbmStaticClient';
+import { AbmDashboardClient } from './AbmDashboardClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +20,7 @@ export default async function AbmPage() {
           {tNav('backToAiOps')}
         </Link>
       </div>
-      <AbmStaticClient accounts={MOCK_TARGET_ACCOUNTS} />
+      <AbmDashboardClient />
     </section>
   );
 }

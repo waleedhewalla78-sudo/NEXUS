@@ -23,6 +23,10 @@ import {
 } from '@/lib/ai-cmo/agents/compliance-agent';
 import type { ComplianceDataRegion } from '@/lib/ai-cmo/agents/types/business';
 import {
+  aggregateChannelRisk,
+  channelRiskAdvisories,
+} from '@/lib/ai-cmo/channel-risk/aggregator';
+import {
   contentPieceFromPlanAndContent,
   policyEngineV2,
 } from '@/lib/governance/policy-engine-v2';
@@ -376,7 +380,10 @@ export function buildCampaignWorkflowDeps(input: BuildCampaignWorkflowDepsInput)
           dataRegion,
         });
 
-        return policyEngineV2.evaluate(piece, { dataRegion });
+        const channelRisk = await aggregateChannelRisk(input.workspaceId);
+        const advisories = channelRiskAdvisories(channelRisk, wrapper.content.platforms ?? []);
+        const policy = policyEngineV2.evaluate(piece, { dataRegion });
+        return advisories.length ? { ...policy, advisories } : policy;
       },
 
       runQualityEvaluation: async (contentWrapper, memoryItems) => {
