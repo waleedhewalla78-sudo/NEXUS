@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useTransition } from 'react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { signIn } from 'next-auth/react';
 import { LogIn, LogOut } from 'lucide-react';
 import { listUserWorkspaces, type UserWorkspace } from '@/actions/ensure-workspace';
 import { signOut } from '@/actions/auth';
@@ -153,13 +153,16 @@ export default function Navbar() {
             </button>
           </>
         ) : (
-          <Link
-            href="/login"
+          <button
+            type="button"
+            onClick={() => {
+              void signIn('github', { callbackUrl: '/' });
+            }}
             className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-500 transition"
           >
             <LogIn className="w-4 h-4" />
             {t('signIn')}
-          </Link>
+          </button>
         )}
       </div>
     </header>
