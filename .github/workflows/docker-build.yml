@@ -23,7 +23,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./nexus-social-app
-           file: ./nexus-social-app/Dockerfile
+          file: ./nexus-social-app/Dockerfile
           push: true
           tags: ghcr.io/waleedhewalla78-sudo/nexus-social-app:latest
-      
