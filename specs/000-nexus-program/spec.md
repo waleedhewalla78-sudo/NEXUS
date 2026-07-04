@@ -1,7 +1,8 @@
 # Nexus Social Platform — Program Specification
 
-**Speckit `/speckit.specify`** · **Date:** 2026-06-27  
-**Tracks:** 003 (Production) · 004 (AI CMO Enterprise) · 005 (Product Intelligence)
+**Speckit `/speckit.specify`** · **Date:** 2026-07-04  
+**Tracks:** 003 (Production) · 004 (AI CMO Enterprise) · 005 (Revenue / GTM) · Sprint 2–4 (Enterprise skin → Lighthouse)  
+**Full cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
 
 ---
 
@@ -48,6 +49,19 @@
 **Blocked:** Sprint 20 (agency switcher, FinOps rollup, client portal) — **A-GATE-003** / migration `000014`.
 
 **Ops close-out (2026-07-03):** [`.env.production.template`](../nexus-social-app/.env.production.template) · [`docs/GATES-REMAINING.md`](../nexus-social-app/docs/GATES-REMAINING.md) · `npm run verify:production:*`
+
+### Sprint 2–3 — Enterprise skin & GTM (shipped on `main`)
+
+| Capability | Status |
+|------------|--------|
+| `enterprise_leads` migration + inbound API | ✅ code |
+| `/enterprise` landing + lead form | ✅ |
+| Feature flags (SaaS UI / enterprise landing) | ✅ |
+| Meta Lead Ads webhook | ✅ |
+| LinkedIn OAuth + `/settings/integrations` | ✅ |
+| Hermes secrets + prod migration apply | ⬜ operator |
+
+**Sprint 4:** Sales motion only until signed pilot; then `provision-pilot-client.ts` (no self-serve UI).
 
 ### Feature 005 — Product Intelligence (Phase 7a)
 

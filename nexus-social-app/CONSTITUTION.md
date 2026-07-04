@@ -2,7 +2,7 @@
 
 > **Governing principles and development guidelines for `nexus-social-app`.**  
 > Canonical Speckit copy: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)  
-> **Version 1.3.0** · Ratified 2026-06-23 · Last amended 2026-06-27
+> **Version 1.4.0** · Ratified 2026-06-23 · Last amended 2026-07-04
 
 ---
 
@@ -34,8 +34,11 @@ Two feature tracks share one codebase:
 |---------|-------|--------|
 | **[003 — Real Integrations Production](specs/003-real-integrations-production/)** | OAuth, publish, analytics, worker, webhooks, billing | **Production baseline** (Sprints 1–11) |
 | **[004 — AI CMO Master PRD v3](specs/004-ai-cmo-master-prd-v3/spec.md)** | AI agents, hierarchy, orchestration, policy, FinOps, memory | **Additive** (Sprint 12+) |
+| **005 — Enterprise revenue / GTM** | ABM, CRM loop, enterprise skin, leads, LinkedIn/Meta ingest | **Sprints 18–19 + Sprint 2–3 shipped** |
 
 Feature 004 builds on 003. Nothing in 004 may break OAuth, publish, or worker behavior without regression proof.
+
+**GTM / Diligent AI skin:** Production may run with `NEXT_PUBLIC_ENABLE_SaaS_UI=false` and `NEXT_PUBLIC_ENABLE_ENTERPRISE_LANDING=true`. Pilot onboarding is **high-touch** (operator script + manual `workspace_members`) — **no self-serve signup UI** unless Product explicitly unblocks it.
 
 Sibling monorepo projects (`dify/`, `activepieces/`, `chatwoot/`) integrate with Nexus Social but do not own its core data or orchestration.
 
@@ -180,6 +183,7 @@ Apply files in order under `supabase/migrations/`:
 | 004 AI CMO | `000011` hierarchy → `000012` foundation | `npm run schema:verify:004` |
 | 005 ABM | `20260630_enterprise_abm_tables.sql` | `npm run verify:abm-seed` |
 | 005 playbook runs | `20260701_abm_playbook_runs.sql` | `npm run uat:check-schema` |
+| Sprint 2 LMM | `20260705_enterprise_leads.sql` | `uat:check-schema` includes `enterprise_leads` |
 
 **SQL Editor bundles**
 
@@ -256,6 +260,8 @@ Agency table (`000014`) and white-label billing await **A-GATE-003**. See [12-mu
 - Add unapproved orchestration/observability dependencies  
 - Change 003 publish/OAuth without regression tests  
 - Commit secrets or skip schema verification  
+- Build self-serve multi-tenant onboarding UI for pilots (Sprint 4 is sales + a provision script only)  
+- Modify `campaign-workflow.ts` step order or `reconciler.ts` validation (CL-030)  
 
 ---
 
@@ -313,4 +319,4 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 3. Propagate changes to affected spec artifacts and Notion hub.  
 4. PRs touching AI CMO or publish paths must cite compliance with this constitution.
 
-**Version 1.2.0** · Ratified 2026-06-23 · Last amended 2026-06-24
+**Version 1.4.0** · Ratified 2026-06-23 · Last amended 2026-07-04 (enterprise skin, LMM leads, GTM high-touch pilots)

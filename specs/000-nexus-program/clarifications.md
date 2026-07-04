@@ -69,6 +69,24 @@
 
 ---
 
+## CL-031 — Enterprise skin (Sprint 2)
+
+**Decision:** Use `NEXT_PUBLIC_ENABLE_SaaS_UI` and `NEXT_PUBLIC_ENABLE_ENTERPRISE_LANDING` env flags — not a separate deployable app. Integrations remain reachable at `/settings/integrations` when SaaS chrome is hidden.
+
+---
+
+## CL-032 — Meta Lead Ads vs App Review
+
+**Decision:** Lead Ads webhook ingest (`/api/v1/enterprise/leads/meta-ads`) does **not** require Meta App Review. B1 / T057 only blocks **publish** to Facebook/Instagram.
+
+---
+
+## CL-033 / CL-034 — Pilot onboarding (Sprint 4)
+
+**Decision:** High-touch only. Service-role provision script + manual `workspace_members`. **No self-serve onboarding UI.** Provision script (`S4-ENG-001`) is implemented **only after** a signed pilot and explicit `CLIENT_NAME` / `CLIENT_SLUG` / `CLIENT_DOMAIN`.
+
+---
+
 ## Open questions (non-blocking)
 
 | ID | Question | Owner |

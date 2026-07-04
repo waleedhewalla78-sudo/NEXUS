@@ -1,70 +1,75 @@
 # Program Tasks — Nexus Social Platform
 
-**Updated:** 2026-07-03 (full Speckit cycle)  
-**Source of truth for open work:** this file + [`005/tasks.md`](../../nexus-social-app/specs/005-enterprise-revenue-loop/tasks.md)
+**Updated:** 2026-07-04 (Speckit cycle — GTM)  
+**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
 
 ---
 
-## Automated gates — ALL PASS ✅
+## Automated engineering — DONE ✅
 
-- [x] T-R01–T-R15 SSCADA remediation
-- [x] T-D02 Schema check (13/13 UAT)
-- [x] T-D04 Live integration 5/5
-- [x] T-D05 Postman A
-- [x] T-D06 Postman B
-- [x] T067–T075 Phase 7b UI
-- [x] Track 1 ops (templates, runbooks, verify:production:*, CI schema-gate)
-- [x] S15-004-002 Channel risk API + liveSignals
-- [x] S16-T004 LLM circuit breakers
-- [x] S17-T005 Performance SLA doc
-- [x] TSC `npm run typecheck` — PASS (2026-07-03)
-- [x] Unit tests — **239 passed | 1 skipped** (2026-07-03)
+- [x] Feature 003 production baseline
+- [x] Feature 004 AI CMO (58/58 tasks)
+- [x] Feature 005 Sprint 18–19 (ABM, CRM, MENA, control plane)
+- [x] Sprint 2 — `enterprise_leads`, `/enterprise`, flags, leads dashboard
+- [x] Sprint 3 — Meta Lead Ads, LinkedIn OAuth hardening, `/settings/integrations`
+- [x] GitHub NextAuth sign-in (navbar)
+- [x] Dockerfile `--legacy-peer-deps`
+- [x] Typecheck PASS (2026-07-04)
 
 ---
 
-## Human / business gates — cannot automate
+## Operator / Hermes (P0)
 
-- [ ] **T-D07** Live OAuth UAT T053–T056 — [`docs/OPS-OAUTH-UAT-RUNBOOK.md`](../../nexus-social-app/docs/OPS-OAUTH-UAT-RUNBOOK.md)
-- [ ] **T-D08** Executive sign-off — [`docs/UAT-SIGNOFF-RESULTS.md`](../../nexus-social-app/docs/UAT-SIGNOFF-RESULTS.md)
-- [ ] **T-D09** Production deploy + secrets — [`.env.production.template`](../../nexus-social-app/.env.production.template) · [`docs/OPS-PROD-CUTOVER.md`](../../nexus-social-app/docs/OPS-PROD-CUTOVER.md)
-- [ ] **T-D10** Staging re-verify + E2E/k6 — [`docs/OPS-STAGING-VERIFICATION.md`](../../nexus-social-app/docs/OPS-STAGING-VERIFICATION.md)
-- [ ] **T-D11** Meta App Review — [`docs/OPS-META-APP-REVIEW.md`](../../nexus-social-app/docs/OPS-META-APP-REVIEW.md)
-- [ ] **T-D12** Dify publish S13-T012 — [`docs/OPS-DIFY-PUBLISH.md`](../../nexus-social-app/docs/OPS-DIFY-PUBLISH.md)
-
----
-
-## Doc / hygiene
-
-- [ ] **T-DOC-001** Close GitHub issues #7–#13, #15–#19 (shipped) — `scripts/close-sprint-18-19-issues.sh` (#14 stays open)
-- [ ] **T-DOC-002** Commit PRD v2.1.0 when approved
-- [ ] **T-DOC-003** Add Supabase GitHub Actions secrets for `schema-gate` job
+- [ ] **S3-OPS-001** Hermes: `git pull` through `60f7109`, rebuild (`docs/OPS-SPRINT-3-HERMES.md`)
+- [ ] **S3-OPS-002** Prod secrets: `LINKEDIN_CLIENT_ID/SECRET`, `LINKEDIN_OAUTH_REDIRECT_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, feature flags
+- [ ] **S3-OPS-003** Apply `supabase/migrations/20260705_enterprise_leads.sql` on prod Supabase
+- [ ] **S3-OPS-004** Verify LinkedIn Connect at https://nexussocial.tech/settings/integrations
+- [ ] **S3-OPS-005** Optional: Meta Lead Ads HMAC smoke into `enterprise_leads`
 
 ---
 
-## Blocked (A-GATE-003)
+## Human gates (Section B — still open)
 
-- [ ] P005-S20-T001 Migration `000014`
-- [ ] P005-S20-T002 Agency switcher UI
-- [ ] P005-S20-T003 FinOps rollup dashboard
-- [ ] P005-S20-T004 Client portal
+- [ ] **T-D07** Live OAuth UAT T053–T056
+- [ ] **T-D08** Executive names in `UAT-SIGNOFF-RESULTS.md`
+- [ ] **T-D11** Meta App Review (publish only — B1)
+- [ ] **T-DOC-001** Close stale GitHub issues #7–#19
 
 ---
 
-## Backlog (non-blocking)
+## Sprint 4 — Land lighthouse (sales-gated)
 
-- [ ] **T076–T078** Phase 7c (Higgsfield, XLSX, import persistence)
-- [ ] **#14** HubSpot full OAuth (stub shipped)
-- [ ] S15–S17 remainder (Radar live, eval UI, Playwright AI CMO E2E)
+### Phase A — Founder only (no Cursor)
+
+- [ ] **S4-SALES-001** Pitch PDF / overview
+- [ ] **S4-SALES-002** Warm outreach
+- [ ] **S4-SALES-003** Demo on Zoom
+- [ ] **S4-SALES-004** Written yes for $3k pilot
+
+### Phase B — Eng (ONLY after S4-SALES-004)
+
+- [ ] **S4-ENG-001** `scripts/provision-pilot-client.ts` + `npm run provision:pilot`
+- [ ] **S4-ENG-002** Document invite + `workspace_members` owner row
+
+### Phase C — Day-of onboard
+
+- [ ] **S4-OPS-001** Run provision with prod service role
+- [ ] **S4-OPS-002** Add CMO to workspace
+- [ ] **S4-OPS-003** Magic moment: ABM activate playbook
+
+---
+
+## Blocked (do not start)
+
+- [ ] Sprint 20 / Agency / `000014` — **A-GATE-003**
+- [ ] Self-serve onboarding UI — **constitution OUT OF SCOPE**
 
 ---
 
 ## Verification
 
 ```powershell
-cd e:\nexus-social-platform\nexus-social-app
+cd nexus-social-app
 npm run typecheck
 npm run test:unit
-npm run uat:check-schema
-npm run verify:abm-seed
-npm run verify:production:code
 ```
