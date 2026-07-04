@@ -15,7 +15,7 @@ WORKDIR /app
 
 # Copy all deps (including dev for build tooling)
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Copy source
 COPY . .
