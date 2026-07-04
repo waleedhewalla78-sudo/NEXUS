@@ -1,22 +1,24 @@
-# GitHub / Program Issues — GTM (Sprint 2–4)
+# Program Issues Backlog (GTM → Agency)
 
 **Updated:** 2026-07-04  
 **Repo:** `waleedhewalla78-sudo/NEXUS`
 
 | ID | Title | Owner | Status |
 |----|-------|-------|--------|
-| S3-OPS-001 | Hermes: pull `main` through `60f7109` and rebuild | DevOps | open |
-| S3-OPS-002 | Inject LinkedIn + NextAuth + feature-flag secrets on VPS | DevOps | open |
-| S3-OPS-003 | Apply `20260705_enterprise_leads.sql` on prod Supabase | DevOps | open |
-| S3-OPS-004 | Verify LinkedIn Connect at `/settings/integrations` | QA | open |
-| S3-OPS-005 | Meta Lead Ads HMAC smoke → `enterprise_leads` | QA | open |
-| S4-SALES-001 | Pitch PDF / overview for $3k pilot | Founder | open |
-| S4-SALES-002 | Warm outreach | Founder | open |
-| S4-SALES-003 | Demo Zoom | Founder | open |
-| S4-SALES-004 | Written yes / contract | Founder | open |
-| S4-ENG-001 | `scripts/provision-pilot-client.ts` | Eng | **blocked** on S4-SALES-004 |
-| LEGACY-005 | Close GitHub #7–#19 shipped issues | Eng | open |
+| G1 | Hermes pull `main` @ `e38d6f6` + rebuild | DevOps | open |
+| G2 | Apply `enterprise_leads` migration on prod | DevOps | open |
+| G3 | Inject LinkedIn / NextAuth / OpenRouter secrets | DevOps | open |
+| G7 | OAuth UAT T053–T056 | QA | open |
+| G8 | Executive UAT sign-off names | Leadership | open |
+| G9 | Close stale GitHub #7–#19 | Eng | open |
+| S4-ENG-001 | `provision-pilot-client.ts` | Eng | blocked (sale) |
+| S5-OPS | Run `generate:pilot-report` on pilot WS | Founder | open |
+| S6-PAY | Client #1 payment received | Founder | open |
+| S6-ENG-001 | `agency_client_roster` migration | Eng | **blocked on S6-PAY** |
+| S6-ENG-002 | `POST /api/admin/provision-client` | Eng | **blocked on S6-PAY** |
+| S6-ENG-003 | `/admin/margins` 55% gate | Eng | **blocked on S6-PAY** |
+| S6-ENG-004 | Admin `x-admin-secret` protection | Eng | **blocked on S6-PAY** |
+| B1 | Meta App Review (publish) | Product | open |
+| A-GATE-003 | Agency `000014` | Leadership | open |
 
-**Do not file S4-ENG-001 as an active GitHub issue until a client is signed.**
-
-Hermes runbook: [`docs/OPS-SPRINT-3-HERMES.md`](../../nexus-social-app/docs/OPS-SPRINT-3-HERMES.md)
+Do **not** open active GitHub issues for S6-ENG-* until founder replies **Sprint 6 Ready**.

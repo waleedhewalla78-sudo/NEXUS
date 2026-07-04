@@ -1,75 +1,64 @@
-# Program Tasks — Nexus Social Platform
+# Program Tasks — Day 0 → Now
 
-**Updated:** 2026-07-04 (Speckit cycle — GTM)  
-**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
-
----
-
-## Automated engineering — DONE ✅
-
-- [x] Feature 003 production baseline
-- [x] Feature 004 AI CMO (58/58 tasks)
-- [x] Feature 005 Sprint 18–19 (ABM, CRM, MENA, control plane)
-- [x] Sprint 2 — `enterprise_leads`, `/enterprise`, flags, leads dashboard
-- [x] Sprint 3 — Meta Lead Ads, LinkedIn OAuth hardening, `/settings/integrations`
-- [x] GitHub NextAuth sign-in (navbar)
-- [x] Dockerfile `--legacy-peer-deps`
-- [x] Typecheck PASS (2026-07-04)
+**Updated:** 2026-07-04  
+**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md) · **Tests:** [`TEST-PLAN.md`](./TEST-PLAN.md)
 
 ---
 
-## Operator / Hermes (P0)
+## Done ✅
 
-- [ ] **S3-OPS-001** Hermes: `git pull` through `60f7109`, rebuild (`docs/OPS-SPRINT-3-HERMES.md`)
-- [ ] **S3-OPS-002** Prod secrets: `LINKEDIN_CLIENT_ID/SECRET`, `LINKEDIN_OAUTH_REDIRECT_URI`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, feature flags
-- [ ] **S3-OPS-003** Apply `supabase/migrations/20260705_enterprise_leads.sql` on prod Supabase
-- [ ] **S3-OPS-004** Verify LinkedIn Connect at https://nexussocial.tech/settings/integrations
-- [ ] **S3-OPS-005** Optional: Meta Lead Ads HMAC smoke into `enterprise_leads`
-
----
-
-## Human gates (Section B — still open)
-
-- [ ] **T-D07** Live OAuth UAT T053–T056
-- [ ] **T-D08** Executive names in `UAT-SIGNOFF-RESULTS.md`
-- [ ] **T-D11** Meta App Review (publish only — B1)
-- [ ] **T-DOC-001** Close stale GitHub issues #7–#19
+- [x] 003 production baseline
+- [x] 004 AI CMO mesh
+- [x] 005 Sprint 18–19 ABM/CRM/MENA
+- [x] Sprint 2 enterprise skin + LMM leads
+- [x] Sprint 3 LinkedIn + Meta Lead Ads + integrations UI
+- [x] Sprint 5 `generate:pilot-report`
+- [x] `npm run verify:program` (Tier A orchestrator)
 
 ---
 
-## Sprint 4 — Land lighthouse (sales-gated)
+## Operator P0
 
-### Phase A — Founder only (no Cursor)
-
-- [ ] **S4-SALES-001** Pitch PDF / overview
-- [ ] **S4-SALES-002** Warm outreach
-- [ ] **S4-SALES-003** Demo on Zoom
-- [ ] **S4-SALES-004** Written yes for $3k pilot
-
-### Phase B — Eng (ONLY after S4-SALES-004)
-
-- [ ] **S4-ENG-001** `scripts/provision-pilot-client.ts` + `npm run provision:pilot`
-- [ ] **S4-ENG-002** Document invite + `workspace_members` owner row
-
-### Phase C — Day-of onboard
-
-- [ ] **S4-OPS-001** Run provision with prod service role
-- [ ] **S4-OPS-002** Add CMO to workspace
-- [ ] **S4-OPS-003** Magic moment: ABM activate playbook
+- [ ] **G1** Hermes pull through `e38d6f6` + rebuild
+- [ ] **G2** Apply `20260705_enterprise_leads.sql` on prod
+- [ ] **G3** LinkedIn, NextAuth, OpenRouter secrets on VPS
+- [ ] **G7** OAuth UAT T053–T056
+- [ ] **G8** Exec sign-off names
 
 ---
 
-## Blocked (do not start)
+## Commercial (founder)
 
-- [ ] Sprint 20 / Agency / `000014` — **A-GATE-003**
-- [ ] Self-serve onboarding UI — **constitution OUT OF SCOPE**
+- [ ] **S4-SALES** Close / onboard pilot (if not done)
+- [ ] **S5-OPS** Run `generate:pilot-report` with pilot workspace ID
+- [ ] **S6-PAY** Invoice Client #1 and receive payment
 
 ---
 
-## Verification
+## Eng blocked
+
+- [ ] **S4-ENG-001** `provision-pilot-client.ts` — after signed client
+- [ ] **S6-ENG-001** Migration `agency_client_roster`
+- [ ] **S6-ENG-002** `POST /api/admin/provision-client`
+- [ ] **S6-ENG-003** `/admin/margins` + API (55% gate)
+- [ ] **S6-ENG-004** Protect `/admin` with `x-admin-secret`
+
+**Unlock S6:** reply **Sprint 6 Ready** after payment.
+
+---
+
+## Backlog
+
+- [ ] Close GitHub #7–#19
+- [ ] Meta App Review (publish)
+- [ ] Sprint 20 / A-GATE-003
+- [ ] Authenticated Playwright settings reliability
+
+---
+
+## Verify
 
 ```powershell
-cd nexus-social-app
-npm run typecheck
-npm run test:unit
+npm run verify:program
+npm run verify:program:live   # optional
 ```

@@ -87,6 +87,18 @@
 
 ---
 
+## CL-036 — Sprint 6 Pit Crew (payment gate)
+
+**Decision:** Do **not** implement `/admin` provision API, `agency_client_roster`, or margin dashboard until Client #1 has been **invoiced and paid**. Unlock phrase: **Sprint 6 Ready**.
+
+---
+
+## CL-037 — S4 script vs S6 API
+
+**Decision:** Sprint 4 CLI provisioner and Sprint 6 admin API are alternate onboarding paths. Shipping S6 API can supersede S4 CLI; do not build both until payment unlocks S6.
+
+---
+
 ## Open questions (non-blocking)
 
 | ID | Question | Owner |

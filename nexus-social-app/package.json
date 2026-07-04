@@ -80,6 +80,8 @@
     "verify:production:code": "tsx scripts/verify-production.ts code",
     "verify:production:uat": "tsx scripts/verify-production.ts uat",
     "verify:production:deploy": "tsx scripts/verify-production.ts deploy",
+    "verify:program": "powershell -ExecutionPolicy Bypass -File scripts/run-full-program-verify.ps1",
+    "verify:program:live": "powershell -ExecutionPolicy Bypass -File scripts/run-full-program-verify.ps1 -IncludeLive",
     "otel:verify": "ts-node scripts/verify_otel.ts",
     "ci": "npm ci && npm run lint && npm test && npm run e2e:validate && npm run otel:verify"
   },

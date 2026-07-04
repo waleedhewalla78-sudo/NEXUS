@@ -40,6 +40,8 @@ Feature 004 builds on 003. Nothing in 004 may break OAuth, publish, or worker be
 
 **GTM / Diligent AI skin:** Production may run with `NEXT_PUBLIC_ENABLE_SaaS_UI=false` and `NEXT_PUBLIC_ENABLE_ENTERPRISE_LANDING=true`. Pilot onboarding is **high-touch** (operator script + manual `workspace_members`) — **no self-serve signup UI** unless Product explicitly unblocks it.
 
+**Agency scale (Sprint 6):** Internal Pit Crew Console (`/admin`) is **payment-gated** — implement only after Client #1 has paid (CL-036).
+
 Sibling monorepo projects (`dify/`, `activepieces/`, `chatwoot/`) integrate with Nexus Social but do not own its core data or orchestration.
 
 ---
