@@ -1,0 +1,29 @@
+# Production VPS — pull pre-built image from GHCR (no local Next.js build).
+# Image is built by .github/workflows/docker-build.yml on push to main.
+#
+# Usage on Hostinger:
+#   docker login ghcr.io -u waleedhewalla78-sudo -p <GITHUB_PAT with read:packages>
+#   docker compose -f docker-compose.prod.yml pull
+#   docker compose -f docker-compose.prod.yml up -d
+
+services:
+  nexus-app:
+    image: ghcr.io/waleedhewalla78-sudo/nexus-social-app:latest
+    container_name: nexus-social-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file:
+      - .env.production
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 1G
+    networks:
+      - internal-net
+
+networks:
+  internal-net:
+    driver: bridge
