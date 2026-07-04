@@ -40,6 +40,8 @@ async function main() {
     'crm_activity_mirror',
     'abm_playbook_runs',
     'enterprise_leads',
+    'intelligence_ingests',
+    'intelligence_briefs',
   ];
 
   for (const table of tables) {

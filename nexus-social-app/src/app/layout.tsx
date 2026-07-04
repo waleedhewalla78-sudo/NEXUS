@@ -74,7 +74,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             <ThemeProvider>
               <BrandingProvider>
                 <AppShell>{children}</AppShell>
-                {session?.user && (
+                {session?.user && process.env.NEXT_PUBLIC_ENABLE_SaaS_UI === 'true' && (
                   <OnboardingTour userId={session.user.id} hasCompleted={hasCompletedOnboarding} />
                 )}
               </BrandingProvider>

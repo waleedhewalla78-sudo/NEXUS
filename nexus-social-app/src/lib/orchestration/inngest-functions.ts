@@ -11,6 +11,7 @@ import { getSentinelCronInngestFunctions } from '@/lib/orchestration/workflows/s
 import { getQuantAnalyticsInngestFunctions } from '@/lib/orchestration/workflows/quant-analytics-consumer';
 import { getInngestDlqFunctions } from '@/lib/orchestration/dlq/inngest-failure-handler';
 import { getAttributionCalculationInngestFunctions } from '@/jobs/ai-cmo/attribution-calculation';
+import { getIntelligenceBriefingInngestFunctions } from '@/lib/orchestration/workflows/intelligence-briefing-workflow';
 
 export function getAllAiCmoInngestFunctions(): unknown[] {
   return [
@@ -23,6 +24,7 @@ export function getAllAiCmoInngestFunctions(): unknown[] {
     ...getQuantAnalyticsInngestFunctions(),
     ...getInngestDlqFunctions(),
     ...getAttributionCalculationInngestFunctions(),
+    ...getIntelligenceBriefingInngestFunctions(),
   ];
 }
 
