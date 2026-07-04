@@ -11,8 +11,10 @@ import { useWorkspaceStore } from '@/store/workspace';
 import NotificationBell from '@/components/NotificationBell';
 import GlobalSearch from '@/components/GlobalSearch';
 import LanguageToggle from '@/components/LanguageToggle';
+import { isSaasUiEnabled } from '@/lib/feature-flags';
 
 export default function Navbar() {
+  const saasUi = isSaasUiEnabled();
   const [workspaces, setWorkspaces] = useState<UserWorkspace[]>([]);
   const [current, setCurrent] = useState<string>('');
   const [loading, setLoading] = useState(true);
@@ -38,6 +40,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (!saasUi) {
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
 
     setBootstrapping(true);
@@ -73,7 +80,7 @@ export default function Navbar() {
     return () => {
       cancelled = true;
     };
-  }, [setWorkspaceId, setSetupError, setNeedsDatabaseSetup, setBootstrapping]);
+  }, [saasUi, setWorkspaceId, setSetupError, setNeedsDatabaseSetup, setBootstrapping]);
 
   const handleSwitch = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const nextId = e.target.value;
@@ -91,34 +98,40 @@ export default function Navbar() {
   return (
     <header className="w-full min-h-16 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg shadow-sm flex flex-wrap items-center justify-between gap-3 px-6 py-3 border-b border-gray-200">
       <div className="flex flex-wrap items-center gap-6">
-        <h1 className="text-xl font-semibold text-gray-800">Nexus Social</h1>
-        <div id="workspace-switcher" className="flex items-center space-x-2">
-          <label htmlFor="workspace-select" className="text-sm text-gray-600 font-medium">
-            {t('workspace')}:
-          </label>
-          <select
-            id="workspace-select"
-            value={current}
-            onChange={handleSwitch}
-            disabled={loading || workspaces.length === 0}
-            aria-label={t('workspaceSelect')}
-            className="rounded border border-gray-300 bg-white px-2 py-1 text-sm min-w-[160px] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:opacity-60"
-          >
-            {loading && <option value="">Loading…</option>}
-            {!loading && workspaces.length === 0 && <option value="">No workspace</option>}
-            {workspaces.map((ws) => (
-              <option key={ws.id} value={ws.id}>
-                {ws.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {workspaceError && (
-          <span className="text-xs text-amber-600 max-w-xs" title={workspaceError}>
-            {workspaceError}
-          </span>
+        <h1 className="text-xl font-semibold text-gray-800">
+          {saasUi ? 'Nexus Social' : 'Nexus Enterprise'}
+        </h1>
+        {saasUi && (
+          <>
+            <div id="workspace-switcher" className="flex items-center space-x-2">
+              <label htmlFor="workspace-select" className="text-sm text-gray-600 font-medium">
+                {t('workspace')}:
+              </label>
+              <select
+                id="workspace-select"
+                value={current}
+                onChange={handleSwitch}
+                disabled={loading || workspaces.length === 0}
+                aria-label={t('workspaceSelect')}
+                className="rounded border border-gray-300 bg-white px-2 py-1 text-sm min-w-[160px] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:opacity-60"
+              >
+                {loading && <option value="">Loading…</option>}
+                {!loading && workspaces.length === 0 && <option value="">No workspace</option>}
+                {workspaces.map((ws) => (
+                  <option key={ws.id} value={ws.id}>
+                    {ws.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {workspaceError && (
+              <span className="text-xs text-amber-600 max-w-xs" title={workspaceError}>
+                {workspaceError}
+              </span>
+            )}
+            <GlobalSearch />
+          </>
         )}
-        <GlobalSearch />
       </div>
 
       <div className="flex items-center gap-3 ms-auto">

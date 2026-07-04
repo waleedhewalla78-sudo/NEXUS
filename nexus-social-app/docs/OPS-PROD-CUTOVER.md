@@ -62,6 +62,26 @@ npm run uat:check-schema
 2. Fill **all** `${PROD_*}` placeholders — see inline comments.
 3. Confirm `NODE_ENV=production`, `DEMO_ANALYTICS_ENABLED=false`.
 
+### Environment variables — Enterprise Skin Flags (Sprint 2)
+
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `NEXT_PUBLIC_ENABLE_SaaS_UI` | `false` | Diligent AI enterprise skin — hides workspace switcher, SaaS sidebar (Dashboard/Inbox/etc.), and SaaS settings links |
+| `NEXT_PUBLIC_ENABLE_ENTERPRISE_LANDING` | `true` | Enables public `/enterprise` landing page and lead capture form |
+
+Also apply migration `supabase/migrations/20260705_enterprise_leads.sql` before enabling inbound leads.
+
+Optional: `ENTERPRISE_LEADS_WORKSPACE_ID` (defaults to `NEXT_PUBLIC_DEFAULT_WORKSPACE_ID` or walkthrough workspace UUID).
+
+**Hermes / Hostinger (later — do not run until code is on `main`):**
+
+```bash
+cd /opt/platform && git pull origin main
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+Add the two `NEXT_PUBLIC_ENABLE_*` variables to `.env.production` on the server via SSH after pull.
+
 ---
 
 ## 4. Deploy application + worker

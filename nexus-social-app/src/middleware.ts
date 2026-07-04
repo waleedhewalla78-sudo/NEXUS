@@ -7,6 +7,9 @@ const rateLimitMap = new Map<string, { count: number; start: number }>();
 const PUBLIC_PATH_PREFIXES = ['/login', '/setup', '/approve/', '/p/', '/_custom/'];
 
 function isPublicPath(pathname: string): boolean {
+  if (pathname === '/enterprise' || pathname === '/enterprise/') {
+    return true;
+  }
   return PUBLIC_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 

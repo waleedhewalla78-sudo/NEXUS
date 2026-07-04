@@ -1,4 +1,19 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
+
+vi.mock('@/lib/resilience/circuit-breaker', () => ({
+  CircuitOpenError: class CircuitOpenError extends Error {
+    constructor(provider: string, model: string) {
+      super(`Circuit open for ${provider}/${model}`);
+      this.name = 'CircuitOpenError';
+    }
+  },
+  getCircuitBreaker: () => ({
+    assertClosed: async () => undefined,
+    recordSuccess: async () => undefined,
+    recordFailure: async () => undefined,
+  }),
+}));
+
 import { sendDifyChatMessage, resolveDifyRuntimeConfig } from '@/lib/dify/client';
 
 describe('dify client', () => {

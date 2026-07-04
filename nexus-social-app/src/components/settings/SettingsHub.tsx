@@ -360,33 +360,34 @@ export default function SettingsHub() {
 
       <HubSpotIntegrationStub />
 
-      {/* More settings */}
-      <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Account &amp; admin</h2>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/settings/profile" className="text-sm text-indigo-600 hover:underline">
-            Profile
-          </Link>
-          <Link href="/settings/security" className="text-sm text-indigo-600 hover:underline">
-            Security
-          </Link>
-          <Link href="/settings/preferences" className="text-sm text-indigo-600 hover:underline">
-            Preferences
-          </Link>
-          <Link href="/settings/team" className="text-sm text-indigo-600 hover:underline">
-            Team
-          </Link>
-          <Link href="/admin" className="text-sm text-indigo-600 hover:underline">
-            Admin console
-          </Link>
-          <Link href="/settings/sso" className="text-sm text-indigo-600 hover:underline">
-            SSO / SAML
-          </Link>
-          <Link href="/settings/migration" className="text-sm text-indigo-600 hover:underline">
-            Data migration
-          </Link>
-        </div>
-      </section>
+      {process.env.NEXT_PUBLIC_ENABLE_SaaS_UI === 'true' && (
+        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">Account &amp; admin</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/settings/profile" className="text-sm text-indigo-600 hover:underline">
+              Profile
+            </Link>
+            <Link href="/settings/security" className="text-sm text-indigo-600 hover:underline">
+              Security
+            </Link>
+            <Link href="/settings/preferences" className="text-sm text-indigo-600 hover:underline">
+              Preferences
+            </Link>
+            <Link href="/settings/team" className="text-sm text-indigo-600 hover:underline">
+              Team
+            </Link>
+            <Link href="/admin" className="text-sm text-indigo-600 hover:underline">
+              Admin console
+            </Link>
+            <Link href="/settings/sso" className="text-sm text-indigo-600 hover:underline">
+              SSO / SAML
+            </Link>
+            <Link href="/settings/migration" className="text-sm text-indigo-600 hover:underline">
+              Data migration
+            </Link>
+          </div>
+        </section>
+      )}
 
       <div className="flex justify-end pb-8">
         <button

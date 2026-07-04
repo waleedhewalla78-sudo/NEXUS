@@ -39,6 +39,7 @@ async function main() {
     'attribution_reports',
     'crm_activity_mirror',
     'abm_playbook_runs',
+    'enterprise_leads',
   ];
 
   for (const table of tables) {
