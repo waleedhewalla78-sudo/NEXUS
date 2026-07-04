@@ -28,7 +28,8 @@ export default function AppShell({ children }: PropsWithChildren) {
 
   return (
     <>
-      {saasUi && <WorkspaceBootstrap />}
+      {/* Always bootstrap workspace — OAuth connect needs workspace_id even when SaaS chrome is hidden */}
+      <WorkspaceBootstrap />
       <Navbar />
       <div className="flex flex-1 overflow-hidden app-shell-row">
         <Sidebar />

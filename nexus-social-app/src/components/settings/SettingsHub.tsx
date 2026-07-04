@@ -101,6 +101,31 @@ export default function SettingsHub() {
     }
   }, [workspaceId, loadIntegrations]);
 
+  // Surface OAuth callback result (Sprint 3 LinkedIn connect)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const oauth = params.get('oauth');
+    const platform = params.get('platform');
+    const message = params.get('message');
+    if (oauth === 'success') {
+      toast.success(message ?? `${platform ?? 'Channel'} connected`);
+      params.delete('oauth');
+      params.delete('platform');
+      params.delete('message');
+      const next = `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', next);
+      if (workspaceId) void loadIntegrations();
+    } else if (oauth === 'error') {
+      toast.error(message ?? 'OAuth connection failed');
+      params.delete('oauth');
+      params.delete('platform');
+      params.delete('message');
+      const next = `${window.location.pathname}${params.toString() ? `?${params}` : ''}${window.location.hash}`;
+      window.history.replaceState({}, '', next);
+    }
+  }, [workspaceId, loadIntegrations]);
+
   useEffect(() => {
     const onFocus = () => {
       if (workspaceId) loadIntegrations();

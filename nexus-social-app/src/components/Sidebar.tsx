@@ -31,6 +31,7 @@ const saasNavItems = [
 
 const enterpriseNavItems = [
   { href: '/enterprise/leads', label: 'Enterprise leads', icon: Users },
+  { href: '/settings/integrations', label: 'Integrations', icon: Settings },
   { href: '/ai-cmo/control-plane', label: 'Control plane', icon: Bot },
 ];
 

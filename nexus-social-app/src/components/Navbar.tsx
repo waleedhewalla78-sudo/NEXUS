@@ -40,11 +40,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (!saasUi) {
-      setLoading(false);
-      return;
-    }
-
+    // Always resolve workspace membership (needed for LinkedIn/Meta OAuth start URLs).
+    // SaaS UI flag only controls whether the switcher is visible.
     let cancelled = false;
 
     setBootstrapping(true);
@@ -80,7 +77,7 @@ export default function Navbar() {
     return () => {
       cancelled = true;
     };
-  }, [saasUi, setWorkspaceId, setSetupError, setNeedsDatabaseSetup, setBootstrapping]);
+  }, [setWorkspaceId, setSetupError, setNeedsDatabaseSetup, setBootstrapping]);
 
   const handleSwitch = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const nextId = e.target.value;
