@@ -3,6 +3,14 @@
 **Last automated run:** 2026-07-03  
 **Section B tracker:** [`SECTION-B-CLOSURE.md`](./SECTION-B-CLOSURE.md)
 
+```text
+Automated Results (2026-07-03):
+- Unit Tests: 250 passed | 1 skipped
+- Typecheck: PASS
+- Enterprise Schema (LMM): APPLIED
+- Feature Flags: ACTIVE (SaaS UI hidden, Enterprise Landing live)
+```
+
 ---
 
 ## Automated gates — PASS
@@ -12,12 +20,14 @@
 | Postman Test A (Happy Path) | **PASS** | 2026-07-03 |
 | Postman Test B (Budget Block) | **PASS** | 2026-07-03 |
 | Live integration (5/5) | **PASS** | 2026-07-03 |
-| Unit tests (242+) | **PASS** | 2026-07-03 |
+| Unit tests (250 passed \| 1 skipped) | **PASS** | 2026-07-03 |
 | Integration tests (18/18) | **PASS** | 2026-07-03 |
 | Playwright E2E (23/23) | **PASS** | 2026-07-03 |
 | k6 smoke load test | **PASS** | 2026-07-03 |
 | ABM seed + control plane | **PASS** | 2026-07-03 |
 | Schema UAT (13/13) | **PASS** | 2026-07-03 |
+| Enterprise schema (LMM) | **APPLIED** | 2026-07-03 |
+| Feature flags (enterprise skin) | **ACTIVE** | 2026-07-03 |
 
 ### Postman detail
 
