@@ -66,6 +66,7 @@
     "uat:human-gates": "powershell -ExecutionPolicy Bypass -File scripts/run-human-uat-gates.ps1",
     "uat:check-schema": "tsx scripts/check-uat-schema.ts",
     "verify:abm-seed": "tsx scripts/verify-abm-seed.ts",
+    "generate:pilot-report": "tsx scripts/generate-pilot-case-study.ts",
     "sync:hubspot-deals": "tsx scripts/sync-hubspot-deals.ts",
     "speckit:issues-005": "tsx scripts/create-github-issues-005.ts",
     "uat:apply-eval-columns": "powershell -ExecutionPolicy Bypass -File scripts/apply-uat-eval-columns.ps1",
