@@ -99,6 +99,24 @@
 
 ---
 
+## CL-038 — Sprint 7 intelligence funnel
+
+**Decision:** No native GA4 / Meta Ads / WhatsApp **sync workers**. Ingest via CSV upload and existing Meta Lead Ads webhook. AI produces executive briefs (text-only feed V1).
+
+---
+
+## CL-039 — Intelligence write path
+
+**Decision:** Use `src/lib/intelligence/ingest-raw.ts` and briefing agent — **do not** modify `reconciler.ts` or `secure-reconciler-writer.ts` (CL-030).
+
+---
+
+## CL-040 — Intelligence UI V1
+
+**Decision:** Text-heavy timeline only. No chart libraries. PDF download is P2 backlog.
+
+---
+
 ## Open questions (non-blocking)
 
 | ID | Question | Owner |

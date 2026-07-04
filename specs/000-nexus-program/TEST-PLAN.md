@@ -69,6 +69,22 @@ Redirect URI must be exactly:
 
 ---
 
+## Tier C2 — Intelligence (Sprint 7)
+
+| # | Check | Expected |
+|---|-------|----------|
+| I1 | Migration `20260715_intelligence_feed.sql` applied | tables in schema cache |
+| I2 | `POST /api/v1/intelligence/ingest` (session + CSV) | 201 |
+| I3 | `POST /api/v1/intelligence/brief` | brief created |
+| I4 | `GET /api/v1/intelligence/feed` | briefs + ingests |
+| I5 | UI `/intelligence` | upload, badges, copy, empty state |
+
+```powershell
+npm run qa:enterprise:report   # flags missing intelligence tables
+```
+
+---
+
 ## Tier D — Pilot ROI simulation (Sprint 5)
 
 ```powershell

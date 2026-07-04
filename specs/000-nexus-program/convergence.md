@@ -1,7 +1,7 @@
 # Program Convergence
 
 **Date:** 2026-07-04  
-**HEAD:** `e38d6f6` (+ verify:program in this cycle)
+**HEAD:** `befc0c3`
 
 ---
 
@@ -9,20 +9,20 @@
 
 | Dimension | Verdict |
 |-----------|---------|
-| Day 0 → Sprint 5 code | ✅ Complete on `main` |
-| Test harness | ✅ `TEST-PLAN.md` + `verify:program` |
-| Live prod ops | ⬜ Hermes / secrets / migration |
-| Sprint 4 provision script | ❌ Not built (sales) |
+| Code through Sprint 7 | ✅ On `main` |
+| QA harness | ✅ Operational (16 PASS / 3 FAIL last run) |
+| Prod DB intelligence tables | ❌ Not applied (QA FAIL) |
 | Sprint 6 Pit Crew | 🔒 Payment gate |
-| Agency scale (000014) | 🔒 A-GATE-003 |
+| Sprint 4 provision CLI | ❌ Sales gate |
 
 ---
 
 ## Remaining (appended)
 
-See gaps G1–G12 in [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md) and [`tasks.md`](./tasks.md).
-
-**Next eng milestone:** Sprint 6 Ready (after Client #1 payment).
+1. Apply `20260715_intelligence_feed.sql` + `20260705_enterprise_leads.sql` on prod  
+2. Hermes pull + secrets (G1, G4)  
+3. Re-run `qa:enterprise:report`  
+4. Commercial path → **Sprint 6 Ready** for Pit Crew  
 
 ---
 
@@ -30,4 +30,4 @@ See gaps G1–G12 in [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md) and [`tasks.md`](.
 
 | Date | Change |
 |------|--------|
-| 2026-07-04 | Full day-0→now cycle; TEST-PLAN; Sprint 6 payment gate; verify:program |
+| 2026-07-04 | Sprint 7 + QA in cycle; G3 intelligence migration gap |

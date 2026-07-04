@@ -63,6 +63,16 @@
 
 **Sprint 4:** Sales motion only until signed pilot; then `provision-pilot-client.ts` (no self-serve UI).
 
+### Sprint 5–7 — Outcomes & intelligence
+
+| Capability | Status |
+|------------|--------|
+| Pilot case-study simulator | ✅ `generate:pilot-report` |
+| Intelligence CSV ingest + feed | ✅ `/intelligence` |
+| Executive briefing agent (Inngest + manual) | ✅ |
+| Enterprise QA harness | ✅ `qa:enterprise` |
+| Pit Crew `/admin` (Sprint 6) | 🔒 payment gate |
+
 ### Feature 005 — Product Intelligence (Phase 7a)
 
 | Capability | Status |

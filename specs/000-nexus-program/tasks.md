@@ -1,58 +1,53 @@
 # Program Tasks — Day 0 → Now
 
-**Updated:** 2026-07-04  
-**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md) · **Tests:** [`TEST-PLAN.md`](./TEST-PLAN.md)
+**Updated:** 2026-07-04 (post Sprint 7 + QA)  
+**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
 
 ---
 
 ## Done ✅
 
-- [x] 003 production baseline
-- [x] 004 AI CMO mesh
-- [x] 005 Sprint 18–19 ABM/CRM/MENA
-- [x] Sprint 2 enterprise skin + LMM leads
-- [x] Sprint 3 LinkedIn + Meta Lead Ads + integrations UI
+- [x] 003–005 core platform
+- [x] Sprint 2–3 GTM (skin, leads, LinkedIn, Meta Lead Ads)
 - [x] Sprint 5 `generate:pilot-report`
-- [x] `npm run verify:program` (Tier A orchestrator)
+- [x] Sprint 7 Intelligence feed + briefing agent (`ebd6222`)
+- [x] Enterprise QA master plan + `qa:enterprise` (`befc0c3`)
+- [x] `verify:program` Tier A orchestrator
 
 ---
 
-## Operator P0
+## Operator P0 (unblock prod)
 
-- [ ] **G1** Hermes pull through `e38d6f6` + rebuild
-- [ ] **G2** Apply `20260705_enterprise_leads.sql` on prod
-- [ ] **G3** LinkedIn, NextAuth, OpenRouter secrets on VPS
-- [ ] **G7** OAuth UAT T053–T056
-- [ ] **G8** Exec sign-off names
+- [ ] **G1** Hermes: `git pull` through `befc0c3`, rebuild
+- [ ] **G2** Apply `20260705_enterprise_leads.sql`
+- [ ] **G3** Apply `20260715_intelligence_feed.sql` ← **QA FAIL until done**
+- [ ] **G4** Secrets: LinkedIn, NextAuth, OpenRouter, feature flags
+- [ ] **G-QA** Re-run `npm run qa:enterprise:report` → target 0 FAIL
 
 ---
 
-## Commercial (founder)
+## Commercial
 
-- [ ] **S4-SALES** Close / onboard pilot (if not done)
-- [ ] **S5-OPS** Run `generate:pilot-report` with pilot workspace ID
-- [ ] **S6-PAY** Invoice Client #1 and receive payment
+- [ ] Pilot sale / onboard (if needed)
+- [ ] `PILOT_WORKSPACE_ID=… npm run generate:pilot-report`
+- [ ] Invoice + **payment** Client #1
 
 ---
 
 ## Eng blocked
 
 - [ ] **S4-ENG-001** `provision-pilot-client.ts` — after signed client
-- [ ] **S6-ENG-001** Migration `agency_client_roster`
-- [ ] **S6-ENG-002** `POST /api/admin/provision-client`
-- [ ] **S6-ENG-003** `/admin/margins` + API (55% gate)
-- [ ] **S6-ENG-004** Protect `/admin` with `x-admin-secret`
-
-**Unlock S6:** reply **Sprint 6 Ready** after payment.
+- [ ] **S6-ENG-001…004** Pit Crew Console — after **Sprint 6 Ready** (payment)
+- [ ] **S7-P2** PDF download for briefs (optional)
 
 ---
 
 ## Backlog
 
-- [ ] Close GitHub #7–#19
 - [ ] Meta App Review (publish)
-- [ ] Sprint 20 / A-GATE-003
-- [ ] Authenticated Playwright settings reliability
+- [ ] Close GH #7–#19
+- [ ] A-GATE-003 / Sprint 20
+- [ ] k6 full concurrent campaign profile on VPS
 
 ---
 
@@ -60,5 +55,5 @@
 
 ```powershell
 npm run verify:program
-npm run verify:program:live   # optional
+npm run qa:enterprise:report
 ```
