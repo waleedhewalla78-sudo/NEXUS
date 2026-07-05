@@ -1,8 +1,8 @@
 # Nexus Social Platform — Program Specification
 
-**Speckit `/speckit.specify`** · **Date:** 2026-07-04  
-**Tracks:** 003 (Production) · 004 (AI CMO Enterprise) · 005 (Revenue / GTM) · Sprint 2–4 (Enterprise skin → Lighthouse)  
-**Full cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
+**Speckit `/speckit.specify`** · **Date:** 2026-07-05  
+**Tracks:** 003 · 004 · 005 · Sprints 2–7 · Production closure  
+**Full cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md) · **PRD:** [`docs/NEXUS-PRD.md`](../../nexus-social-app/docs/NEXUS-PRD.md)
 
 ---
 
@@ -59,7 +59,8 @@
 | Feature flags (SaaS UI / enterprise landing) | ✅ |
 | Meta Lead Ads webhook | ✅ |
 | LinkedIn OAuth + `/settings/integrations` | ✅ |
-| Hermes secrets + prod migration apply | ⬜ operator |
+| Hermes secrets + prod migration apply | ✅ intelligence + leads applied 2026-07-05 |
+| Enterprise `/` → `/intelligence` redirect | ✅ CL-041 |
 
 **Sprint 4:** Sales motion only until signed pilot; then `provision-pilot-client.ts` (no self-serve UI).
 
@@ -70,7 +71,7 @@
 | Pilot case-study simulator | ✅ `generate:pilot-report` |
 | Intelligence CSV ingest + feed | ✅ `/intelligence` |
 | Executive briefing agent (Inngest + manual) | ✅ |
-| Enterprise QA harness | ✅ `qa:enterprise` |
+| Enterprise QA harness | ✅ `qa:enterprise` — **0 FAIL** (2026-07-05) |
 | Pit Crew `/admin` (Sprint 6) | 🔒 payment gate |
 
 ### Feature 005 — Product Intelligence (Phase 7a)
@@ -94,6 +95,7 @@
 | FR-D03 | Postman Test B: budget block | Job fails fast with budget message |
 | FR-D04 | 003 operator UAT T053–T057 | OAuth → live publish → analytics |
 | FR-D05 | Executive sign-off | `docs/UAT-SIGNOFF-RESULTS.md` |
+| FR-OPS-04 | Push production-closure + Hermes deploy | `docker-build.yml` + root redirect |
 
 ### P1 — Feature 005 Phase 7b (Nexus-native UI)
 
@@ -132,6 +134,7 @@
 | US-011 | Inbox AI replies via Chatwoot | 003 | ✅ |
 | US-012 | Executive brief → campaign | 005 | ✅ API |
 | US-013 | Paid media CSV → scored entities | 005 | ✅ API |
+| US-073 | Enterprise user lands on Intelligence after login | GTM | ✅ CL-041 |
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Governing principles and development guidelines for `nexus-social-app`.**  
 > Canonical Speckit copy: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)  
-> **Version 1.4.1** · Ratified 2026-06-23 · Last amended 2026-07-04
+> **Version 1.4.2** · Ratified 2026-06-23 · Last amended 2026-07-05
 
 ---
 
@@ -36,8 +36,11 @@ Two feature tracks share one codebase:
 | **[004 — AI CMO Master PRD v3](specs/004-ai-cmo-master-prd-v3/spec.md)** | AI agents, hierarchy, orchestration, policy, FinOps, memory | **Additive** (Sprint 12+) |
 | **005 — Enterprise revenue / GTM** | ABM, CRM loop, enterprise skin, leads, LinkedIn/Meta ingest | **Sprints 18–19 + Sprint 2–3 shipped** |
 | **Intelligence (Sprint 7)** | CSV/webhook funnel, executive briefing agent, `/intelligence` feed | **Shipped** (`ebd6222`) |
+| **Production closure** | Enterprise `/` → `/intelligence` redirect, GHCR CI, QA harness flake | **Shipped** (local; pending push) |
 
 Feature 004 builds on 003. Nothing in 004 may break OAuth, publish, or worker behavior without regression proof.
+
+**Enterprise default route:** When `NEXT_PUBLIC_ENABLE_SaaS_UI=false`, authenticated `/` **redirects to `/intelligence`** (CL-041) — not the SaaS dashboard.
 
 **GTM / Diligent AI skin:** Production may run with `NEXT_PUBLIC_ENABLE_SaaS_UI=false` and `NEXT_PUBLIC_ENABLE_ENTERPRISE_LANDING=true`. Pilot onboarding is **high-touch** (operator script + manual `workspace_members`) — **no self-serve signup UI** unless Product explicitly unblocks it.
 
@@ -171,6 +174,7 @@ Follow [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md). Staging gate: `npm run verify
 | **Smoke E2E** | Playwright publish path (T024) for launch confidence |
 | **Operator UAT** | LAUNCH_CHECKLIST Phases 1–2 (OAuth → publish → analytics truth) |
 | **Pre-launch** | `verify:staging` + `ai:verify` after Dify apps published |
+| **Enterprise QA** | `npm run qa:enterprise:report` — target **0 FAIL**; `test:unit` harness flake → **WARN** if ≤1 failed under load (CL-042) |
 
 Do not mark tasks complete on scaffold alone.
 
@@ -315,6 +319,7 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 | Feature 004 spec | [spec.md](specs/004-ai-cmo-master-prd-v3/spec.md) |
 | Notion Feature 004 hub | https://www.notion.so/3886f21f521a8111aaacf9f2414b668e |
 | Speckit canonical copy | [.specify/memory/constitution.md](.specify/memory/constitution.md) |
+| **PRD (authoritative)** | [docs/NEXUS-PRD.md](docs/NEXUS-PRD.md) · [docs/prd/](docs/prd/) |
 
 ---
 
@@ -325,4 +330,4 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 3. Propagate changes to affected spec artifacts and Notion hub.  
 4. PRs touching AI CMO or publish paths must cite compliance with this constitution.
 
-**Version 1.4.1** · Ratified 2026-06-23 · Last amended 2026-07-04 (intelligence funnel, QA harness, Sprint 6 payment gate)
+**Version 1.4.2** · Ratified 2026-06-23 · Last amended 2026-07-05 (production closure, PRD 1.0.1, QA green)

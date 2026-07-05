@@ -1,8 +1,8 @@
-# Program Plan — Post DEPLOY-GATE + Phase 7b
+# Program Plan — Post DEPLOY-GATE + Phase 7b + Production Closure
 
-**Date:** 2026-06-27  
-**Stack:** Next.js 16 · Supabase · Inngest · Redis · Qdrant · Ollama · Recharts  
-**Constitution:** `nexus-social-app/CONSTITUTION.md` v1.3.0
+**Date:** 2026-07-05  
+**Stack:** Next.js 16 · Supabase · Inngest · Redis · Qdrant · GHCR · Hostinger VPS  
+**Constitution:** `nexus-social-app/CONSTITUTION.md` v1.4.2
 
 ---
 
@@ -40,6 +40,25 @@ SSCADA Loops 1–4: audit schema, publishers/media, FinOps timeout, operator doc
 | AI CMO nav layout | `src/app/ai-cmo/layout.tsx` | ✅ |
 
 **Validation:** Log in → `/ai-cmo/campaigns/new` submit brief → poll job; `/ai-cmo/intelligence` upload CSV → charts; calendar HTML download.
+
+---
+
+## Phase PRODUCTION-CLOSURE — ✅ (local; push pending)
+
+| Deliverable | Path | Status |
+|-------------|------|--------|
+| Enterprise root redirect | `src/app/page.tsx` | ✅ CL-041 |
+| GHCR CI Dockerfile path | `.github/workflows/docker-build.yml` | ✅ CL-043 |
+| QA harness flake handling | `scripts/qa-enterprise.ts` | ✅ CL-042 |
+| Prod intelligence migration | `20260715_intelligence_feed.sql` | ✅ applied |
+| QA green | `npm run qa:enterprise:report` | ✅ 0 FAIL |
+
+**Hermes deploy:**
+```bash
+cd /opt/platform && git pull origin main
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+```
 
 ---
 

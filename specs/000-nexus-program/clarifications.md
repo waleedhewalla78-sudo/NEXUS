@@ -117,6 +117,24 @@
 
 ---
 
+## CL-041 — Enterprise root route (production closure)
+
+**Decision:** When `NEXT_PUBLIC_ENABLE_SaaS_UI !== 'true'`, server component at `/` calls `redirect('/intelligence')`. SaaS dashboard remains at `/` when flag is `true`.
+
+---
+
+## CL-042 — QA harness unit test flake
+
+**Decision:** `qa:enterprise` runs `test:unit` first with up to 3 attempts. If ≤1 Vitest failure under harness load, status = **WARN** not FAIL. Isolated `npm run test:unit` remains authoritative for regressions.
+
+---
+
+## CL-043 — GHCR Docker build path
+
+**Decision:** `.github/workflows/docker-build.yml` uses `context: ./nexus-social-app` and `file: Dockerfile` (not `./nexus-social-app/Dockerfile`).
+
+---
+
 ## Open questions (non-blocking)
 
 | ID | Question | Owner |

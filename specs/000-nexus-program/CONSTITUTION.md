@@ -1,51 +1,59 @@
 # Nexus Program Constitution (Speckit Canonical Summary)
 
-**Version:** 1.3.0 · **Ratified:** 2026-06-23 · **Amended:** 2026-06-27  
+**Version:** 1.4.2 · **Ratified:** 2026-06-23 · **Amended:** 2026-07-05  
 **Full text:** [`nexus-social-app/CONSTITUTION.md`](../../nexus-social-app/CONSTITUTION.md)  
-**Speckit memory:** [`nexus-social-app/.specify/memory/constitution.md`](../../nexus-social-app/.specify/memory/constitution.md)
+**PRD:** [`docs/NEXUS-PRD.md`](../../nexus-social-app/docs/NEXUS-PRD.md)
 
 ---
 
 ## Governing principles (non-negotiable)
 
-1. **SoR / SoI** — Agents propose; only reconciler + `secure-reconciler-writer` persist to Postgres.
-2. **Risk tier > confidence** — CRITICAL/HIGH policy never auto-publishes on LLM score alone.
-3. **003 isolation** — Do not break OAuth, publish worker, or `reconciler.ts` without regression proof.
+1. **SoR / SoI** — Reconciler-only Postgres writes; intelligence via `ingest-raw.ts` (CL-039).
+2. **Risk tier > confidence** — CRITICAL/HIGH never auto-publishes on LLM score alone.
+3. **CL-030** — Do not modify `campaign-workflow.ts` step order or `reconciler.ts` validation.
 4. **Dify = runtime, Inngest = orchestrator** — Not the reverse.
 5. **202 + poll** — Long AI work never blocks HTTP.
-6. **RLS on every tenant table** — Workspace/agency boundaries enforced before APIs.
-7. **No standalone artifact apps** — External UI ideas adapt into Nexus APIs, auth, and agent mesh (Feature 005).
-8. **Secrets never in repo** — `.env.example` documents keys only.
+6. **RLS on every tenant table** — Workspace isolation before APIs.
+7. **Agency-led GTM** — No self-serve pilot UI; high-touch onboarding (CL-033/034).
+8. **Payment gate** — No Pit Crew `/admin` before Client #1 paid (CL-036).
+9. **Intelligence funnel** — CSV + webhooks only; no native GA4/Meta sync workers (CL-038).
+10. **Enterprise UX** — SaaS UI off → `/` redirects to `/intelligence` (CL-041).
+11. **Secrets never in repo** — `.env.example` documents keys only.
 
 ---
 
-## Development guidelines
+## Feature tracks
 
-| Area | Rule |
-|------|------|
-| **Namespace 004** | New AI CMO code under `src/lib/ai-cmo/`, `src/lib/orchestration/`, `src/lib/observability/` |
-| **Namespace analytics** | Paid media under `src/lib/analytics/` (005) |
-| **Migrations** | Additive only; SQL Editor bundles for remote Supabase |
-| **Before `[x]` task** | `typecheck` + `test` + schema verify + `build` |
-| **UAT** | Live integration + Postman A/B before production sign-off |
-| **Publishing** | Meta blocked until `meta_app_review_status = approved` |
-
----
-
-## Amendment log (v1.3.0 — 2026-06-27)
-
-| Change | Detail |
-|--------|--------|
-| **Inngest** | **Shipped** — A-GATE-001 satisfied in code; dev + production path documented |
-| **Feature 005** | Product extensions integrate Claude *ideas* as Nexus APIs — not embedded artifacts |
-| **UAT schema** | `auto_rejected` + eval columns required in Supabase |
-| **audit_logs** | Required for reconciler audit trail (see UAT audit SQL) |
+| Track | Status |
+|-------|--------|
+| 003 Real integrations | Production baseline |
+| 004 AI CMO mesh | Shipped |
+| 005 Revenue / ABM / CRM | Shipped |
+| Sprint 2–3 GTM | Shipped |
+| Sprint 5 pilot report | Shipped |
+| Sprint 7 Intelligence | Shipped + prod DB applied |
+| Sprint 4 provision | Sales gate |
+| Sprint 6 Pit Crew | Payment gate |
 
 ---
 
-## Authority order
+## Testing gates
 
-1. This constitution  
-2. Feature `clarifications.md` (recorded decisions)  
-3. Feature `spec.md`  
-4. Master PRD v3 (historical FR inventory)
+```powershell
+npm run typecheck
+npm run test:unit          # 257+ pass
+npm run qa:enterprise:report   # target 0 FAIL
+```
+
+`test:unit` harness flake under load → **WARN** (CL-042), not FAIL.
+
+---
+
+## What we do NOT do
+
+- Build S4/S6 before commercial unlock
+- Apply migration `000014` without A-GATE-003
+- Native GA4/Meta/WhatsApp background sync workers
+- Modify reconciler/campaign workflow (CL-030)
+
+**Full decision log:** [`clarifications.md`](./clarifications.md) · [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
