@@ -134,7 +134,7 @@
 | G6 | Sprint 6 Pit Crew | Med | payment gate |
 | G7 | Meta App Review (B1) | High | open |
 | G8 | OAuth UAT + exec sign-off | Med | open |
-| G9 | Stale GH issues #7–#19 | Low | **closing** — shipped Sprint 18–19 |
+| G9 | Stale GH issues #7–#19 | Low | **closed** ✅ 2026-07-07 |
 | G10 | Unit harness flake | Low | **mitigated** (CL-042 WARN) |
 | G11 | Phase 3 app SKIP (dev server down) | Low | open |
 | G12 | Hostinger Track 2 paused | Info | — |

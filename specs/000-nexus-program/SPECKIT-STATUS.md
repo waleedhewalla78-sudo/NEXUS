@@ -1,9 +1,9 @@
 # Nexus Program — Speckit Status
 
-**Updated:** 2026-07-06 (Phase D cycle)  
+**Updated:** 2026-07-07  
 **Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)  
 **Phase D:** [`phase-d-spec.md`](./phase-d-spec.md)  
-**Verdict:** **CONDITIONAL PRODUCTION** — Phase D tooling shipped; human gates open
+**Verdict:** **CONDITIONAL PRODUCTION** — pushed `29ef8be`; operator gates [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d)
 
 ---
 
@@ -16,7 +16,7 @@
 | `/speckit.analyze` | ✅ | Overall **8.0**; coverage matrix |
 | `/speckit.plan` | ✅ | Operator weeks 1–4 + eng shipped |
 | `/speckit.tasks` | ✅ | PD-ENG done; PD-OPS-001–009 open |
-| `/speckit.taskstoissues` | ✅ | GitHub issues `phase-d` label |
+| `/speckit.taskstoissues` | ✅ | GitHub [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d); closed #7–#19 |
 | `/speckit.implement` | ✅ | Template + verifier + runbook |
 | `/speckit.converge` | ✅ | Human gates remain; new PD-OPS-010–011 |
 

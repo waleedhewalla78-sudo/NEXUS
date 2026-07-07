@@ -24,7 +24,7 @@
 | G1 | Hermes deploy | DevOps | **superseded** | → #20 |
 | G2/G3 | Prod migrations | DevOps | **closed** ✅ | — |
 | G-QA | QA 0 FAIL | QA | **closed** ✅ | — |
-| G9 | Stale GH #7–#19 | Eng | open | batch close below |
+| G9 | Stale GH #7–#19 | Eng | **closed** ✅ | Sprint 18–19 shipped |
 
 **Unlock S6:** reply **Sprint 6 Ready** after PD-COM-003.
 
