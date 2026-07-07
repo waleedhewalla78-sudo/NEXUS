@@ -126,7 +126,7 @@
 
 | # | Gap | Severity | Status |
 |---|-----|----------|--------|
-| G1 | Hermes deploy production-closure | High | **open** |
+| G1 | Hermes deploy production-closure | High | **superseded** → [#20](https://github.com/waleedhewalla78-sudo/NEXUS/issues/20) |
 | G2 | `enterprise_leads` on prod | — | ✅ applied |
 | G3 | `intelligence_*` on prod | — | ✅ applied 2026-07-05 |
 | G4 | LinkedIn / NextAuth / OpenRouter secrets | High | open |
@@ -134,7 +134,7 @@
 | G6 | Sprint 6 Pit Crew | Med | payment gate |
 | G7 | Meta App Review (B1) | High | open |
 | G8 | OAuth UAT + exec sign-off | Med | open |
-| G9 | Stale GH issues #7–#19 | Low | open |
+| G9 | Stale GH issues #7–#19 | Low | **closing** — shipped Sprint 18–19 |
 | G10 | Unit harness flake | Low | **mitigated** (CL-042 WARN) |
 | G11 | Phase 3 app SKIP (dev server down) | Low | open |
 | G12 | Hostinger Track 2 paused | Info | — |

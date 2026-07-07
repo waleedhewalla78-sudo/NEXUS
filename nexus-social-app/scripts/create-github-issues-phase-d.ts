@@ -4,6 +4,7 @@
  * Usage: npm run speckit:issues-phase-d
  */
 import { spawnSync } from 'node:child_process';
+import { join } from 'node:path';
 
 const issues: Array<{
   title: string;
@@ -136,13 +137,47 @@ Reply **Sprint 6 Ready** to enable Pit Crew build (CL-036)`,
   },
 ];
 
+const REPO = 'waleedhewalla78-sudo/NEXUS';
+
+const LABELS: Array<{ name: string; color: string; description: string }> = [
+  { name: 'phase-d', color: '1D76DB', description: 'Phase D human/commercial gates' },
+  { name: 'human-gate', color: 'B60205', description: 'Requires human operator' },
+  { name: 'commercial', color: 'FBCA04', description: 'Commercial unlock' },
+  { name: 'devops', color: '0E8A16', description: 'DevOps' },
+  { name: 'founder', color: '5319E7', description: 'Founder/commercial' },
+  { name: 'qa', color: 'C5DEF5', description: 'QA' },
+  { name: 'product', color: 'D4C5F9', description: 'Product' },
+  { name: 'leadership', color: 'FEF2C0', description: 'Leadership' },
+];
+
+function ghEnv(): NodeJS.ProcessEnv {
+  const repoRoot = join(process.cwd(), '..');
+  return {
+    ...process.env,
+    GIT_CONFIG_COUNT: '1',
+    GIT_CONFIG_KEY_0: 'safe.directory',
+    GIT_CONFIG_VALUE_0: repoRoot.replace(/\\/g, '/'),
+  };
+}
+
+function ensureLabels() {
+  for (const label of LABELS) {
+    spawnSync(
+      'gh',
+      ['label', 'create', label.name, '--color', label.color, '--description', label.description, '--repo', REPO],
+      { stdio: 'ignore', env: ghEnv() },
+    );
+  }
+}
+
 function main() {
+  ensureLabels();
   for (const issue of issues) {
     const labelArgs = issue.labels.flatMap((l) => ['--label', l]);
     const result = spawnSync(
       'gh',
-      ['issue', 'create', '--title', issue.title, '--body', issue.body, ...labelArgs],
-      { stdio: 'inherit', cwd: process.cwd() },
+      ['issue', 'create', '--repo', REPO, '--title', issue.title, '--body', issue.body, ...labelArgs],
+      { stdio: 'inherit', cwd: process.cwd(), env: ghEnv() },
     );
     if (result.status !== 0) {
       console.error(`Failed: ${issue.title}`);

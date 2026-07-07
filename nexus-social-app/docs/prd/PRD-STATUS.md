@@ -10,7 +10,7 @@
 | Field | Value |
 |-------|-------|
 | **PRD version** | 1.0.1 |
-| **Codebase HEAD** | `71d4d99+` on `main` (production closure + Phase D tooling pending push) |
+| **Codebase HEAD** | `2d5db19` on `main` |
 | **Product verdict** | **Agency + Intelligence code complete** |
 | **Production verdict** | **Conditional** — QA 0 FAIL; human gates B1–B4 open |
 | **Commercial verdict** | **Pre-revenue** — Sprint 4/6 gated |
