@@ -96,6 +96,10 @@ Production is **code-ready for staging**; external production traffic blocked un
 
 npm run verify:production:code
 
+npm run verify:phase-d
+
+npm run verify:phase-d:report   # on VPS with .env.production loaded
+
 npx playwright install chromium
 
 npm run test:e2e

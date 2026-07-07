@@ -9,6 +9,7 @@ Write-Host "`n=== Section B — Automated Gate Sequence ===" -ForegroundColor Cy
 
 $steps = @(
   @{ Name = 'verify:production:code'; Cmd = 'npm run verify:production:code' },
+  @{ Name = 'verify:phase-d'; Cmd = 'npm run verify:phase-d' },
   @{ Name = 'test:integration'; Cmd = 'npm run test:integration' },
   @{ Name = 'test:e2e'; Cmd = 'npm run test:e2e' },
   @{ Name = 'load-test (k6 smoke)'; Cmd = 'npm run load-test' }
@@ -37,6 +38,7 @@ Human gates still required (see docs/SECTION-B-CLOSURE.md):
   B2 OAuth UAT        → docs/OPS-OAUTH-UAT-RUNBOOK.md
   B3 Exec sign-off    → docs/UAT-SIGNOFF-RESULTS.md
   B4 Prod secrets     → docs/OPS-PROD-SECRETS-CHECKLIST.md
+  Phase D integration → docs/OPS-PHASE-D-INTEGRATION.md
 
 "@
 

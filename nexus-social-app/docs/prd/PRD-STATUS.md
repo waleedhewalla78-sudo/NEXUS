@@ -1,7 +1,7 @@
 # NEXUS PRD — Status Tracker
 
-**Updated:** 2026-07-05  
-← [PRD Index](./README.md) · [QA Results](./QA-RESULTS.md)
+**Updated:** 2026-07-07  
+← [PRD Index](./README.md) · [QA Results](./QA-RESULTS.md) · [Phase D Integration](../OPS-PHASE-D-INTEGRATION.md)
 
 ---
 
@@ -9,10 +9,10 @@
 
 | Field | Value |
 |-------|-------|
-| **PRD version** | 1.0.0 |
-| **Codebase HEAD** | `befc0c3` on `main` |
+| **PRD version** | 1.0.1 |
+| **Codebase HEAD** | `71d4d99+` on `main` (production closure + Phase D tooling pending push) |
 | **Product verdict** | **Agency + Intelligence code complete** |
-| **Production verdict** | **Not production-ready** — ops + human gates open |
+| **Production verdict** | **Conditional** — QA 0 FAIL; human gates B1–B4 open |
 | **Commercial verdict** | **Pre-revenue** — Sprint 4/6 gated |
 
 ---
@@ -112,12 +112,13 @@ Latest run: **2026-07-05** — see [QA-RESULTS.md](./QA-RESULTS.md)
 |---|--------|-------|----------|
 | 1 | ~~Apply `20260715_intelligence_feed.sql`~~ | Operator | ✅ Done 2026-07-05 |
 | 2 | ~~Fix test:unit harness flake~~ | Engineering | ✅ WARN handling 2026-07-05 |
-| 3 | Start dev server or point QA at staging URL | Operator | P3-app SKIP |
-| 4 | Hermes: `git pull` through `befc0c3` + `docker compose pull` | Operator | Prod code parity |
-| 5 | Inject LinkedIn, NextAuth, OpenRouter secrets | Operator | GTM demos |
-| 6 | Re-run `npm run qa:enterprise:report` | QA | PRD prod-verified % |
-| 7 | Run `generate:pilot-report` on prod workspace | Founder | Client PDF |
-| 8 | Close pilot sale → payment | Commercial | Sprint 4/6 |
+| 3 | Hermes deploy + `verify:phase-d:report` | Operator | PD-OPS-001–002 |
+| 4 | Inject LinkedIn, NextAuth, OpenRouter secrets | Operator | B4/G4 |
+| 5 | Connect LinkedIn + X OAuth on live URL | QA | B2 fast path |
+| 6 | Meta App Review (parallel) | Product | B1 |
+| 7 | Re-run `npm run qa:enterprise:report` vs live URL | QA | PD-OPS-009 |
+| 8 | Run `generate:pilot-report` on prod workspace | Founder | S5 |
+| 9 | Close pilot sale → payment | Commercial | Sprint 4/6 |
 
 ---
 
@@ -125,14 +126,14 @@ Latest run: **2026-07-05** — see [QA-RESULTS.md](./QA-RESULTS.md)
 
 | Command | Status |
 |---------|--------|
-| `/speckit.constitution` | ✅ v1.4.1 |
-| `/speckit.specify` | ✅ |
-| `/speckit.clarify` | ✅ CL-038–040 |
-| `/speckit.analyze` | ✅ G1–G14 documented |
-| `/speckit.plan` | ✅ |
-| `/speckit.tasks` | ✅ |
-| `/speckit.implement` | ✅ S7; S6 not built |
-| `/speckit.converge` | ✅ |
+| `/speckit.constitution` | ✅ v1.4.2 |
+| `/speckit.specify` | ✅ Phase D `phase-d-spec.md` |
+| `/speckit.clarify` | ✅ CL-041–047 |
+| `/speckit.analyze` | ✅ Overall 8.0 |
+| `/speckit.plan` | ✅ Phase D operator plan |
+| `/speckit.tasks` | ✅ PD-ENG done; PD-OPS open |
+| `/speckit.implement` | ✅ Phase D verifier + template |
+| `/speckit.converge` | ✅ Conditional production |
 
 ---
 
@@ -140,6 +141,7 @@ Latest run: **2026-07-05** — see [QA-RESULTS.md](./QA-RESULTS.md)
 
 | Date | Change |
 |------|--------|
+| 2026-07-07 | Phase D Speckit cycle; verify:phase-d; integration runbook |
 | 2026-07-05 | Speckit cycle refresh; QA 0 FAIL; production closure |
 | 2026-07-04 | Sprint 7 + QA harness on `main` |
 | 2026-07-03 | Sprint 5 pilot report; auth fix; GHCR pivot |

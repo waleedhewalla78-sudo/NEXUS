@@ -1,13 +1,14 @@
 # Nexus Program — Full Speckit Cycle
 
-**Date:** 2026-07-05 (post production closure + prod DB migrations)  
+**Date:** 2026-07-06 (Phase D human/commercial gates cycle)  
 **Workspace:** `nexus-social-app`  
-**GitHub:** `waleedhewalla78-sudo/NEXUS` @ `main` (local: production-closure uncommitted)  
+**GitHub:** `waleedhewalla78-sudo/NEXUS` @ `main`  
 **Prod:** `https://nexussocial.tech`  
-**Verdict:** **AGENCY + INTELLIGENCE PRODUCTION-CLOSURE READY** — human gates + commercial unlock remain
+**Verdict:** **CONDITIONAL PRODUCTION** — Phase D tooling shipped; B1–B4 + commercial open
 
+**Phase D:** [`phase-d-spec.md`](./phase-d-spec.md) · [`docs/OPS-PHASE-D-INTEGRATION.md`](../../nexus-social-app/docs/OPS-PHASE-D-INTEGRATION.md)  
 **PRD:** [`docs/NEXUS-PRD.md`](../../nexus-social-app/docs/NEXUS-PRD.md) · [`docs/prd/`](../../nexus-social-app/docs/prd/)  
-**Tests:** [`TEST-PLAN.md`](./TEST-PLAN.md) · `npm run qa:enterprise:report` → **15 PASS · 0 FAIL · 2 WARN · 2 SKIP**
+**Tests:** `npm run verify:phase-d` · `npm run qa:enterprise:report` → **0 FAIL**
 
 ---
 
@@ -139,7 +140,24 @@
 | G12 | Hostinger Track 2 paused | Info | — |
 | G13 | Intelligence PDF (S7-P2) | Low | backlog |
 | G14 | k6 full concurrent on VPS | Med | open |
-| G15 | Production-closure commit not pushed | High | **open** |
+| G15 | Production-closure commit not pushed | High | **closed** ✅ |
+
+---
+
+## Phase D cycle (2026-07-06)
+
+| Command | Deliverable |
+|---------|-------------|
+| `/speckit.specify` | [`phase-d-spec.md`](./phase-d-spec.md) |
+| `/speckit.clarify` | CL-044–047 |
+| `/speckit.analyze` | Overall **8.0** — [`analysis.md`](./analysis.md) |
+| `/speckit.plan` | Operator weeks 1–4 — [`plan.md`](./plan.md) |
+| `/speckit.tasks` | PD-ENG ✅ · PD-OPS open — [`tasks.md`](./tasks.md) |
+| `/speckit.taskstoissues` | `npm run speckit:issues-phase-d` |
+| `/speckit.implement` | `.env.production.template`, `verify-phase-d`, integration runbook |
+| `/speckit.converge` | Human gates remain — [`convergence.md`](./convergence.md) |
+
+**Verify:** `npm run verify:phase-d:report`
 
 ---
 
@@ -176,7 +194,8 @@ See [`tasks.md`](./tasks.md) · [`issues-backlog-gtm.md`](./issues-backlog-gtm.m
 |-------|--------|
 | 003–005 + Sprints 2–3, 5, 7 | ✅ `main` |
 | Enterprise QA + PRD | ✅ |
-| Production closure (3 fixes) | ✅ local; **push pending** |
+| Production closure (3 fixes) | ✅ pushed `main` (71d4d99) |
+| Phase D tooling | ✅ this commit |
 | Prod intelligence migration | ✅ operator applied |
 | Sprint 6 Pit Crew | ❌ CL-036 |
 | Sprint 4 provision | ❌ CL-033 |
@@ -185,13 +204,10 @@ See [`tasks.md`](./tasks.md) · [`issues-backlog-gtm.md`](./issues-backlog-gtm.m
 
 ## `/speckit.converge`
 
-**Aligned:** Code, PRD, constitution, QA harness, prod DB schema for intelligence + leads.
+**Production closure:** ✅ pushed `main` (CL-041–043)
 
-**Remaining:** Hermes deploy + secrets (G1, G4), human gates (B1–B3), commercial unlock (S4/S6), push closure commit (G15).
+**Phase D engineering:** ✅ template + verifier + runbook
 
-**Next unlocks:**
-1. `git push` production-closure → Hermes `docker compose pull && up -d`
-2. Run `generate:pilot-report` on prod workspace
-3. **Sprint 6 Ready** after Client #1 payment
+**Remaining:** PD-OPS-001–009 (human), PD-COM-001–003 (commercial)
 
-**Verdict:** **CONDITIONAL PRODUCTION** — engineering green on QA; certification blocked on human gates + deploy parity.
+**Verdict:** **CONDITIONAL PRODUCTION** — run `verify:phase-d:report` on VPS after secrets fill.

@@ -1,58 +1,63 @@
-# Program Convergence
+# Program Convergence — Phase D Assessment
 
-**Date:** 2026-07-05  
-**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
-
----
-
-## Assessment
-
-| Dimension | Verdict |
-|-----------|---------|
-| Code through Sprint 7 + production closure | ✅ Local / pending push |
-| PRD 1.0.1 + Speckit cycle | ✅ Aligned |
-| Prod DB intelligence + leads tables | ✅ Applied |
-| QA harness | ✅ **0 FAIL** (15 PASS, 2 WARN, 2 SKIP) |
-| Sprint 6 Pit Crew | 🔒 Payment gate (CL-036) |
-| Sprint 4 provision CLI | ❌ Sales gate (CL-033) |
-| Human production gates B1–B4 | ⬜ Open |
-| Hermes deploy parity | ⬜ Lag local commits |
-
-**Overall:** **CONDITIONAL PRODUCTION** — engineering QA green; certification needs deploy + human gates + commercial path.
+**Date:** 2026-07-06  
+**Verdict:** **CONDITIONAL PRODUCTION** — Phase D engineering complete; human/commercial gates open
 
 ---
 
-## Aligned ✅
+## Spec / plan / tasks alignment
 
-- Constitution v1.4.2 principles (CL-030, CL-038–043)
-- Intelligence funnel architecture
-- Enterprise skin + GTM endpoints
-- ABM/CRM/MENA revenue loop
-- QA enterprise harness + master plan
-- Root redirect for enterprise users (CL-041)
-
----
-
-## Remaining (appended tasks)
-
-| Priority | Task | Owner |
-|----------|------|-------|
-| P0 | Push + Hermes deploy production closure | DevOps |
-| P0 | Complete B4 prod secrets vault | DevOps |
-| P0 | B1 Meta App Review (if FB/IG publish needed) | Product |
-| P1 | B2 OAuth UAT T053–T056 | QA |
-| P1 | B3 Executive sign-off | Leadership |
-| P1 | `generate:pilot-report` on prod workspace | Founder |
-| P2 | Phase 3 QA with live app URL | QA |
-| Gated | S4 provision CLI after signed pilot | Eng |
-| Gated | S6 Pit Crew after payment | Eng |
+| Layer | Phase D status |
+|-------|----------------|
+| `phase-d-spec.md` | ✅ FR-PD + US-PD defined |
+| `plan.md` | ✅ Eng shipped; operator weeks 1–4 planned |
+| `tasks.md` | ✅ PD-ENG done; PD-OPS open |
+| `issues-backlog-gtm.md` | ✅ Mapped to GH issues |
+| Codebase | ✅ Verifier + template + runbook |
 
 ---
 
-## Changelog
+## Implemented vs remaining
 
-| Date | Change |
-|------|--------|
-| 2026-07-05 | Production closure; prod intelligence migration; QA 0 FAIL |
-| 2026-07-04 | Sprint 7 + QA harness; PRD split |
-| 2026-07-03 | Sprint 5 pilot report; auth fix; GHCR pivot |
+### Shipped (this cycle)
+
+- `.env.production.template` (was referenced but missing)
+- `verify-phase-d-gates.ts` with `--live --report`
+- `OPS-PHASE-D-INTEGRATION.md` with LLM + social alternatives
+- `phase-d-spec.md`, CL-044–047
+- `npm run verify:phase-d` / `verify:phase-d:report`
+
+### Not implementable without humans (by design)
+
+- B1 Meta App Review submission
+- B2 live OAuth browser consent flows
+- B3 executive signatures
+- B4 vault population on VPS
+- S5 pilot report execution on prod host
+- S4/S6 commercial unlock
+
+---
+
+## New tasks appended
+
+| ID | Task | Priority |
+|----|------|----------|
+| PD-OPS-010 | Add `verify:phase-d` to `close-section-b.ps1` optional step | P2 |
+| PD-OPS-011 | Staging re-verify B5/B6 on `nexussocial.tech` | P1 |
+| PD-ENG-007 | `provision-pilot-client.ts` after signed pilot | Blocked |
+| PD-ENG-008 | Pit Crew admin routes after payment | Blocked |
+
+---
+
+## Convergence verdict
+
+| Criterion | Met? |
+|-----------|------|
+| Phase D spec exists | ✅ |
+| Integration alternatives documented | ✅ |
+| Automated readiness checker | ✅ |
+| All human gates closed | ❌ |
+| Commercial unlock | ❌ |
+| Production certified | ❌ |
+
+**Next operator action:** PD-OPS-001 → PD-OPS-002 → `verify:phase-d:report` until 0 FAIL.

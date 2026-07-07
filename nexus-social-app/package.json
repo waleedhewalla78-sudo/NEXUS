@@ -84,6 +84,9 @@
     "verify:program:live": "powershell -ExecutionPolicy Bypass -File scripts/run-full-program-verify.ps1 -IncludeLive",
     "qa:enterprise": "tsx scripts/qa-enterprise.ts",
     "qa:enterprise:report": "tsx scripts/qa-enterprise.ts --report",
+    "verify:phase-d": "tsx scripts/verify-phase-d-gates.ts",
+    "verify:phase-d:report": "tsx scripts/verify-phase-d-gates.ts --report --live",
+    "speckit:issues-phase-d": "tsx scripts/create-github-issues-phase-d.ts",
     "otel:verify": "ts-node scripts/verify_otel.ts",
     "ci": "npm ci && npm run lint && npm test && npm run e2e:validate && npm run otel:verify"
   },

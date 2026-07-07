@@ -135,6 +135,36 @@
 
 ---
 
+## CL-044 — Phase D gate automation boundary
+
+**Question:** Can B1–B3 human gates be closed by engineering?
+
+**Decision:** **No.** B1 (Meta App Review), B2 (live OAuth connect), B3 (executive names), S5/S6 (commercial) require human operators. Engineering ships **`verify:phase-d`**, **`.env.production.template`**, and **`OPS-PHASE-D-INTEGRATION.md`** with integration alternatives. Script reports `HUMAN` status — never auto-passes human gates.
+
+---
+
+## CL-045 — Production LLM default
+
+**Question:** Should Ollama run on Hermes VPS (8GB RAM)?
+
+**Decision:** **No.** Production uses **Dify → OpenRouter** (`USE_LOCAL_OLLAMA=false`). Ollama remains dev/UAT only. OpenRouter-only fallback acceptable if Dify unavailable (Option B in Phase D integration guide).
+
+---
+
+## CL-046 — Social UAT fast path
+
+**Question:** Must all four platforms pass T053 before any production traffic?
+
+**Decision:** **No.** **LinkedIn + X** can certify publish path while B1 (Meta) is pending. Meta Lead Ads ingest works without App Review (CL-032). FB/IG publish remains blocked until `meta_app_review_status=approved`.
+
+---
+
+## CL-047 — Phase D verifier exit code
+
+**Decision:** `verify:phase-d` exits **1** only on automated **FAIL** (missing required secrets, no approved Meta workspace when checking prod DB). **HUMAN** gates do not fail the script — they are reported for operator action.
+
+---
+
 ## Open questions (non-blocking)
 
 | ID | Question | Owner |

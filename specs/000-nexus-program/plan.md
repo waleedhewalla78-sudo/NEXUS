@@ -1,109 +1,78 @@
-# Program Plan — Post DEPLOY-GATE + Phase 7b + Production Closure
+# Program Plan — Phase D Implementation
 
-**Date:** 2026-07-05  
-**Stack:** Next.js 16 · Supabase · Inngest · Redis · Qdrant · GHCR · Hostinger VPS  
-**Constitution:** `nexus-social-app/CONSTITUTION.md` v1.4.2
-
----
-
-## Phase REMEDIATE — ✅ Complete
-
-SSCADA Loops 1–4: audit schema, publishers/media, FinOps timeout, operator docs.
+**Date:** 2026-07-06  
+**Tech stack:** Next.js 16 · Supabase · Inngest Cloud · Upstash Redis · GHCR · Hermes VPS · Dify · OpenRouter
 
 ---
 
-## Phase DEPLOY-GATE — Automated ✅ / Human ⏳
+## Phase D engineering (shipped this cycle)
 
-| Gate | Command | Status |
-|------|---------|--------|
-| Schema | `npm run uat:check-schema` | PASS |
-| Postman B→A | `npm run uat:postman-ab` | PASS |
-| Live integration | `npm run test:live-integration` | PASS 5/5 |
-| 003 live OAuth | `npm run uat:t053` | Human |
-| Meta review | `docs/OPERATOR-GATES.md` | Human |
-| Sign-off | `docs/UAT-SIGNOFF-RESULTS.md` | Partial |
-
----
-
-## Phase 005-7b — Product Intelligence UI ✅
-
-| Deliverable | Path | Status |
-|-------------|------|--------|
-| Brief wizard UI | `src/app/ai-cmo/campaigns/new/` | ✅ |
-| Session brief enqueue | `src/actions/campaign-brief-ui.ts` | ✅ |
-| Shared brief enqueue | `src/lib/ai-cmo/campaign-brief/enqueue-from-brief.ts` | ✅ |
-| Intelligence dashboard | `src/app/ai-cmo/intelligence/` | ✅ |
-| CSV import (session) | `src/actions/analytics-import-ui.ts` | ✅ |
-| Shared import report | `src/lib/analytics/paid-media/import-report.ts` | ✅ |
-| Quant ANALYTICS_SYNCED | `src/lib/analytics/paid-media/emit-quant-hints.ts` | ✅ |
-| Calendar HTML export | `src/lib/ai-cmo/exports/content-calendar-html.ts` | ✅ |
-| AI CMO nav layout | `src/app/ai-cmo/layout.tsx` | ✅ |
-
-**Validation:** Log in → `/ai-cmo/campaigns/new` submit brief → poll job; `/ai-cmo/intelligence` upload CSV → charts; calendar HTML download.
+| Task | Deliverable | Status |
+|------|-------------|--------|
+| PD-ENG-001 | `.env.production.template` | ✅ |
+| PD-ENG-002 | `scripts/verify-phase-d-gates.ts` | ✅ |
+| PD-ENG-003 | `docs/OPS-PHASE-D-INTEGRATION.md` | ✅ |
+| PD-ENG-004 | `specs/000-nexus-program/phase-d-spec.md` | ✅ |
+| PD-ENG-005 | `npm run verify:phase-d` scripts | ✅ |
+| PD-ENG-006 | CL-044–047 clarifications | ✅ |
 
 ---
 
-## Phase PRODUCTION-CLOSURE — ✅ (local; push pending)
+## Phase D operator plan (not code)
 
-| Deliverable | Path | Status |
-|-------------|------|--------|
-| Enterprise root redirect | `src/app/page.tsx` | ✅ CL-041 |
-| GHCR CI Dockerfile path | `.github/workflows/docker-build.yml` | ✅ CL-043 |
-| QA harness flake handling | `scripts/qa-enterprise.ts` | ✅ CL-042 |
-| Prod intelligence migration | `20260715_intelligence_feed.sql` | ✅ applied |
-| QA green | `npm run qa:enterprise:report` | ✅ 0 FAIL |
+### Week 1 — Deploy + secrets
 
-**Hermes deploy:**
-```bash
-cd /opt/platform && git pull origin main
-docker compose -f docker-compose.prod.yml pull
-docker compose -f docker-compose.prod.yml up -d
+1. Hermes: `git pull` + `docker compose -f docker-compose.prod.yml up -d`
+2. Copy `.env.production.template` → `.env.production`; fill vault
+3. `npm run verify:phase-d:report` → resolve FAILs
+4. Inngest sync + `verify:inngest-cloud`
+
+### Week 1–2 — OAuth fast path
+
+1. Register LinkedIn + X prod OAuth apps
+2. Connect at `https://nexussocial.tech/settings`
+3. Schedule test publish; confirm worker logs
+4. Record T053/T055 in UAT-SIGNOFF
+
+### Week 2–4 — Meta (parallel)
+
+1. Submit App Review (B1)
+2. On approval: connect Meta OAuth + SQL `meta_app_review_status=approved`
+3. FB/IG publish smoke test
+
+### Week 2 — Certification
+
+1. `qa:enterprise:report` with live URL
+2. `close-section-b.ps1`
+3. B3 executive sign-off
+
+### Commercial (founder-led)
+
+1. `generate:pilot-report` on prod workspace
+2. Close sale → S4 provision script (eng, post-sign)
+3. Payment → Sprint 6 Ready → Pit Crew build
+
+---
+
+## Integration architecture (production)
+
+```
+Hermes VPS
+├── nexus-social-app (Next.js) ──► Supabase / Inngest / Redis
+├── nexus-social-worker ──────────► publish-due-posts + analytics
+├── otel-collector ───────────────► Sentry
+└── Caddy ────────────────────────► SSL → :3000
+
+LLM: Dify (primary) → OpenRouter (fallback) — no Ollama
+Social: OAuth tokens in workspace_social_connections (encrypted)
 ```
 
 ---
 
-## Phase PRODUCTION — Next (human + DevOps)
+## Deferred (gated)
 
-1. Meta App Review + token mapping
-2. Populate `.env.production.template` → prod env
-3. Inngest Cloud signing key + serve URL
-4. Sentry DSN
-5. Staging smoke on prod Supabase
-
----
-
-## Phase 005-7c — Backlog
-
-| Item | Path |
-|------|------|
-| Higgsfield prompt contract | `src/lib/ai-cmo/creative/higgsfield-prompt.ts` |
-| XLSX parse (optional `xlsx` dep) | import route |
-| Persist import snapshots | `ai_cmo_media_imports` table |
-
----
-
-## Phase PLATFORM-P2 — Deferred
-
-- TikTok/Snapchat live publisher adapters
-- SAML IdP production
-- Pentest (S17)
-
----
-
-## Constitution Check (Phase 7b)
-
-| Gate | Result |
-|------|--------|
-| Reconciler-only writes | PASS — UI reads + enqueue only |
-| 003 isolation | PASS |
-| No agent rewrites | PASS |
-
----
-
-## Tech stack (unchanged)
-
-- **Frontend:** Next.js App Router, Tailwind, Recharts (existing dep)
-- **Auth UI:** Supabase session via server actions
-- **Auth API:** Workspace API keys (`x-api-key`) for Postman/UAT
-- **Jobs:** Inngest L3 mesh + Redis campaign job store
-- **DB:** Supabase Postgres + RLS
+| Item | Gate | Plan reference |
+|------|------|----------------|
+| `provision-pilot-client.ts` | Signed pilot CL-033 | PD-COM-002 |
+| Pit Crew `/admin` | Payment CL-036 | PD-COM-004 |
+| Migration `000014` | A-GATE-003 | Sprint 20 |

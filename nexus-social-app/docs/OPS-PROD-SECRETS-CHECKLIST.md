@@ -18,6 +18,8 @@ Copy each row into your secrets manager (1Password, AWS SM, Hostinger env, etc.)
 | `INNGEST_EVENT_KEY` | DevOps | ⬜ | |
 | `DIFY_API_KEY` | DevOps | ⬜ | Published app key |
 | `OPENROUTER_API_KEY` | DevOps | ⬜ | Fallback LLM |
+| `NEXTAUTH_SECRET` | DevOps | ⬜ | `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | DevOps | ⬜ | Same as `NEXT_PUBLIC_APP_URL` |
 | `INTERNAL_TOOL_SECRET` | Security | ⬜ | `openssl rand -hex 32` |
 | `TOKEN_ENCRYPTION_KEY` | Security | ⬜ | 64 hex chars |
 | `APPROVAL_HMAC_SECRET` | Security | ⬜ | OAuth state + HITL |

@@ -1,100 +1,77 @@
-# Program Analysis — Cross-Artifact Consistency & Coverage
+# Program Analysis — Phase D Cross-Artifact Review
 
-**Date:** 2026-07-05 (Speckit refresh)  
-**Scope:** Program `000-nexus-program` + tracks 003 / 004 / 005 + Sprints 2–7 + production closure  
-**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
-
----
-
-## Executive summary
-
-| Dimension | Score | Trend |
-|-----------|-------|-------|
-| Platform engineering | 9.0 | Stable |
-| GTM + Intelligence | 9.5 | ↑ migrations applied |
-| Live prod ops | 7.0 | ↑ QA green; deploy lag |
-| Commercial | 2.0 | Unchanged |
-| Documentation | 9.0 | PRD + Speckit aligned |
-| **Overall** | **7.8** | ↑ from 7.2 |
-
-**Verdict:** Engineering **CONDITIONAL PRODUCTION**. QA harness **0 FAIL**. Human gates B1–B4 and Hermes deploy push remain.
+**Date:** 2026-07-06  
+**Scope:** Phase D human/commercial gates  
+**Spec:** [`phase-d-spec.md`](./phase-d-spec.md)
 
 ---
 
-## Specification Analysis Report
+## Coverage matrix
 
-| ID | Category | Severity | Summary | Status |
-|----|----------|----------|---------|--------|
-| A1 | QA | — | Intelligence tables missing on prod | **RESOLVED** 2026-07-05 |
-| A2 | QA | — | `test:unit` harness FAIL | **MITIGATED** CL-042 WARN |
-| A3 | UX | High | Enterprise `/` 404 | **RESOLVED** CL-041 redirect |
-| A4 | CI/CD | High | GHCR wrong Dockerfile path | **RESOLVED** CL-043 |
-| A5 | Deploy | High | Production-closure not pushed | **OPEN** G15 |
-| A6 | Commercial | High | S4/S6 gated | **BY DESIGN** |
-| A7 | Human | High | B1 Meta, B2 OAuth UAT, B3 sign-off | **OPEN** |
-| A8 | Secrets | High | B4 prod vault incomplete | **OPEN** |
-
----
-
-## Coverage Summary
-
-| Requirement | Has Task? | Status |
-|-------------|-----------|--------|
-| Intelligence feed | ✅ | Shipped + DB applied |
-| Enterprise leads | ✅ | Shipped + DB applied |
-| Pilot report CLI | ✅ | Shipped; ops pending |
-| Pit Crew S6 | ✅ task | Blocked payment |
-| Provision S4 | ✅ task | Blocked sales |
-| Meta publish | ✅ B1 | Human gate |
-| PRD authoritative | ✅ | `docs/NEXUS-PRD.md` |
-| QA 0 FAIL | ✅ | 2026-07-05 |
-
-**Coverage:** 94% requirements have tasks; commercial/human gates intentionally open.
+| Artifact | Phase D coverage | Gap |
+|----------|------------------|-----|
+| `phase-d-spec.md` | FR-PD-* + US-PD-01–09 | ✅ Complete |
+| `OPS-PHASE-D-INTEGRATION.md` | LLM + social alternatives | ✅ Complete |
+| `.env.production.template` | B4/G4 keys | ✅ Was missing — now shipped |
+| `verify-phase-d-gates.ts` | B1–B4, G4, commercial, deploy | ✅ New |
+| `GATES-REMAINING.md` | B1–B6 | ✅ Aligned |
+| `UAT-SIGNOFF-RESULTS.md` | B2/B3 tables empty | ⬜ Operator fill |
+| `CONSTITUTION.md` v1.4.2 | CL-033/036 commercial gates | ✅ Aligned |
+| `qa-enterprise.ts` | Phase 3 live URL | ⬜ Needs PD-OPS-009 |
+| GitHub issues | Phase D labels | 🟡 Creating this cycle |
 
 ---
 
-## Constitution Alignment
+## Consistency checks
 
-| Principle | Status |
-|-----------|--------|
-| CL-030 respected in closure sprint | ✅ |
-| CL-036 S6 not built | ✅ |
-| CL-038 no native sync workers | ✅ |
-| CL-039 intelligence ingest path | ✅ |
-| RLS on new tables | ✅ |
-
-**No CRITICAL constitution violations.**
-
----
-
-## Artifact consistency matrix
-
-| Artifact | Aligned with CONSTITUTION v1.4.2 | Aligned with PRD 1.0.1 |
-|----------|--------------------------------|------------------------|
-| SPECKIT-CYCLE.md | ✅ | ✅ |
-| spec.md | ✅ | ✅ |
-| tasks.md | ✅ | ✅ |
-| clarifications.md | ✅ | ✅ |
-| TEST-PLAN.md | 🟡 | Phase 3 live URL pending |
-| GATES-REMAINING.md | ✅ | B1–B4 still open |
+| Check | Result |
+|-------|--------|
+| CL-030 reconciler untouched | ✅ PASS |
+| CL-032 Lead Ads ≠ App Review | ✅ Consistent across spec + runbook |
+| CL-041 enterprise redirect | ✅ Shipped on `main` |
+| Ollama disabled prod (CL-045) | ✅ Template + verifier enforce |
+| Worker in docker-compose.prod | ✅ Documented PD-OPS-004 |
+| S4/S6 not prematurely built | ✅ Blocked per CL-033/036 |
 
 ---
 
-## Metrics
+## Project status scores
 
-| Metric | Value |
-|--------|-------|
-| Open operator P0 tasks | 5 |
-| Open commercial tasks | 3 |
-| Blocked eng tasks | 2 tracks (S4, S6) |
-| QA FAIL count | **0** |
-| Prod DB migrations pending | **0** |
+| Track | Score | Δ | Notes |
+|-------|-------|---|-------|
+| Platform engineering | 9.2 | +0.2 | Phase D verifier + template |
+| GTM + Intelligence | 9.5 | — | Prod DB applied |
+| Live prod ops | 7.5 | +0.5 | Closure pushed; secrets pending |
+| Human gates (B1–B4) | 3.0 | +1.0 | Tooling shipped; humans pending |
+| Commercial (S4–S6) | 2.0 | — | Payment gated |
+| **Overall** | **8.0** | +0.2 | Conditional production |
 
 ---
 
-## Recommended next cycle focus
+## Gate readiness (automated snapshot)
 
-1. **Deploy:** Push closure commit → Hermes  
-2. **Commercial:** Pilot report PDF + payment path  
-3. **Human:** B1–B3 closure  
-4. **Do not build:** S4/S6 until gates unlock
+Run: `npm run verify:phase-d:report`
+
+Expected until operators act:
+- **B4:** FAIL on unset `${PROD_*}` placeholders
+- **B2 OAuth DB:** HUMAN until live connect
+- **B1:** HUMAN + FAIL on `meta_app_review_status`
+- **B3:** HUMAN executive pending
+- **Commercial:** HUMAN S5/S6
+
+---
+
+## Risks
+
+| Risk | Mitigation |
+|------|------------|
+| Meta App Review 2–4 week delay | LinkedIn+X fast path (CL-046) |
+| Missing worker on VPS | PD-OPS-004 + compose `worker` service |
+| Dify outage | OpenRouter fallback (CL-045 Option B) |
+| 8GB VPS RAM | No Ollama on prod (CL-045) |
+
+---
+
+## Verdict
+
+**CONDITIONAL PRODUCTION** — Engineering Phase D tooling complete. Certification requires PD-OPS-001 through PD-OPS-008.

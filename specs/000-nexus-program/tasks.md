@@ -1,65 +1,55 @@
-# Program Tasks — Day 0 → Now
+# Program Tasks — Phase D Focus
 
-**Updated:** 2026-07-05 (post production closure + prod migrations)  
-**Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)
+**Updated:** 2026-07-06 (Phase D Speckit cycle)  
+**Spec:** [`phase-d-spec.md`](./phase-d-spec.md) · **Integration:** [`docs/OPS-PHASE-D-INTEGRATION.md`](../../nexus-social-app/docs/OPS-PHASE-D-INTEGRATION.md)
 
 ---
 
 ## Done ✅
 
-- [x] 003–005 core platform
-- [x] Sprint 2–3 GTM (skin, leads, LinkedIn, Meta Lead Ads)
-- [x] Sprint 5 `generate:pilot-report`
-- [x] Sprint 7 Intelligence feed + briefing agent
-- [x] Enterprise QA master plan + `qa:enterprise`
-- [x] PRD 1.0.1 + topic split (`docs/prd/`)
-- [x] Apply `20260715_intelligence_feed.sql` on prod Supabase (2026-07-05)
-- [x] QA harness green: **15 PASS · 0 FAIL** (2026-07-05)
-- [x] Production closure — root redirect (CL-041)
-- [x] Production closure — GHCR `file: Dockerfile` (CL-043)
-- [x] Production closure — harness `test:unit` flake → WARN (CL-042)
+- [x] 003–005 core platform + Sprint 2–7
+- [x] Production closure CL-041–043 pushed `main`
+- [x] QA harness **0 FAIL**
+- [x] Prod DB: intelligence + enterprise_leads
+- [x] **PD-ENG-001** `.env.production.template`
+- [x] **PD-ENG-002** `verify-phase-d-gates.ts` + npm scripts
+- [x] **PD-ENG-003** `OPS-PHASE-D-INTEGRATION.md` (alternatives matrix)
+- [x] **PD-ENG-004** `phase-d-spec.md` requirements + user stories
 
 ---
 
-## Operator P0 (deploy + certify)
+## P0 — Operator (human gates)
 
-- [ ] **G15** Commit + push production-closure to `main`
-- [ ] **G1** Hermes: `git pull` + `docker compose pull && up -d`
-- [ ] **G4** Secrets: LinkedIn, NextAuth, OpenRouter, feature flags
-- [ ] **G11** Re-run `qa:enterprise:report` with `NEXT_PUBLIC_APP_URL=https://nexussocial.tech` (Phase 3)
-- [ ] **B1–B3** Meta App Review, OAuth UAT, exec sign-off
-
----
-
-## Commercial
-
-- [ ] Pilot sale / onboard (if needed)
-- [ ] `PILOT_WORKSPACE_ID=… npm run generate:pilot-report` on prod
-- [ ] Invoice + **payment** Client #1 → **Sprint 6 Ready**
+| Task | Owner | Verify |
+|------|-------|--------|
+| **PD-OPS-001** Hermes deploy latest `main` | DevOps | `verify:phase-d --live` health PASS |
+| **PD-OPS-002** Fill `.env.production` from template | DevOps | B4 keys SET in `verify:phase-d` |
+| **PD-OPS-003** Inngest Cloud sync `/api/inngest` | DevOps | `verify:inngest-cloud` |
+| **PD-OPS-004** Confirm `nexus-social-worker` running | DevOps | `docker compose ps` |
+| **PD-OPS-005** B2 OAuth — connect LinkedIn + X on live URL | QA | T053 in UAT-SIGNOFF |
+| **PD-OPS-006** B1 Meta App Review submission | Product | `OPS-META-APP-REVIEW.md` |
+| **PD-OPS-007** B1 set `meta_app_review_status=approved` | Product | B1-db PASS |
+| **PD-OPS-008** B3 executive sign-off names | Leadership | UAT-SIGNOFF-RESULTS.md |
+| **PD-OPS-009** `qa:enterprise:report` vs live URL | QA | Phase 3 PASS |
 
 ---
 
-## Eng blocked
+## P1 — Commercial (gated)
 
-- [ ] **S4-ENG-001** `provision-pilot-client.ts` — after signed client
-- [ ] **S6-ENG-001…004** Pit Crew Console — after payment
-- [ ] **S7-P2** PDF download for briefs (optional)
-
----
-
-## Backlog
-
-- [ ] Close GH #7–#19
-- [ ] A-GATE-003 / Sprint 20
-- [ ] k6 full concurrent campaign profile on VPS
-- [ ] A-GATE-002 Langfuse decision
+| Task | Owner | Gate |
+|------|-------|------|
+| **PD-COM-001** `generate:pilot-report` on prod workspace | Founder | S5 |
+| **PD-COM-002** Signed pilot → `provision-pilot-client.ts` | Eng | CL-033 |
+| **PD-COM-003** Client #1 payment | Founder | S6-PAY |
+| **PD-COM-004** Pit Crew `/admin` | Eng | CL-036 after payment |
 
 ---
 
 ## Verify
 
 ```powershell
-npm run verify:program
-npm run qa:enterprise:report   # target: 0 FAIL
-npm run test:unit              # 257+ pass in isolation
+npm run verify:phase-d
+npm run verify:phase-d:report    # --live --report
+npm run qa:enterprise:report
+powershell -File scripts/close-section-b.ps1
 ```

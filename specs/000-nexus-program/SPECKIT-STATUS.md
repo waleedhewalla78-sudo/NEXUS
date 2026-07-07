@@ -1,24 +1,24 @@
 # Nexus Program — Speckit Status
 
-**Updated:** 2026-07-05 (production closure + prod migrations + QA green)  
+**Updated:** 2026-07-06 (Phase D cycle)  
 **Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)  
-**Verdict:** **CONDITIONAL PRODUCTION** — QA 0 FAIL; human gates + deploy push remain
+**Phase D:** [`phase-d-spec.md`](./phase-d-spec.md)  
+**Verdict:** **CONDITIONAL PRODUCTION** — Phase D tooling shipped; human gates open
 
 ---
 
-## Command execution
+## Command execution (Phase D)
 
 | Command | Status | Output |
 |---------|--------|--------|
-| `/speckit.constitution` | ✅ | v1.4.2 |
-| `/speckit.specify` | ✅ | Built/want + US-073 |
-| `/speckit.clarify` | ✅ | CL-041–043 |
-| `/speckit.analyze` | ✅ | Overall 7.8; G1–G15 |
-| `/speckit.plan` | ✅ | Production closure phase |
-| `/speckit.tasks` | ✅ | `tasks.md` |
-| `/speckit.taskstoissues` | ✅ | `issues-backlog-gtm.md` |
-| `/speckit.implement` | ✅ | Closure local; S6/S4 not built |
-| `/speckit.converge` | ✅ | Conditional production |
+| `/speckit.specify` | ✅ | `phase-d-spec.md` — FR-PD + US-PD-01–09 |
+| `/speckit.clarify` | ✅ | CL-044–047 |
+| `/speckit.analyze` | ✅ | Overall **8.0**; coverage matrix |
+| `/speckit.plan` | ✅ | Operator weeks 1–4 + eng shipped |
+| `/speckit.tasks` | ✅ | PD-ENG done; PD-OPS-001–009 open |
+| `/speckit.taskstoissues` | ✅ | GitHub issues `phase-d` label |
+| `/speckit.implement` | ✅ | Template + verifier + runbook |
+| `/speckit.converge` | ✅ | Human gates remain; new PD-OPS-010–011 |
 
 ---
 
@@ -26,17 +26,19 @@
 
 | Check | Result |
 |-------|--------|
-| `qa:enterprise:report` | **15 PASS · 0 FAIL · 2 WARN · 2 SKIP** |
-| `intelligence_*` prod tables | ✅ Applied |
-| `enterprise_leads` prod | ✅ |
-| Production closure commit | ⬜ Not pushed |
+| `qa:enterprise:report` | **15 PASS · 0 FAIL** |
+| Production closure on `main` | ✅ Pushed |
+| Phase D verifier | ✅ `npm run verify:phase-d` |
+| `.env.production.template` | ✅ Shipped |
+| B1–B4 human gates | ⬜ Open |
 
 ---
 
 ## Next actions
 
-1. Commit + push production-closure → Hermes deploy  
-2. Inject prod secrets (G4)  
-3. `generate:pilot-report` on prod workspace  
-4. Close B1–B3 human gates  
-5. Payment → **Sprint 6 Ready**
+1. `PD-OPS-001` Hermes deploy  
+2. `PD-OPS-002` Fill `.env.production`  
+3. `npm run verify:phase-d:report`  
+4. `PD-OPS-005` OAuth LinkedIn + X  
+5. `PD-OPS-006` Meta App Review (parallel)  
+6. `PD-COM-001` Pilot report
