@@ -57,15 +57,22 @@ export async function getMessages(conversationId: string | number) {
   return res.json();
 }
 
-export async function sendMessage(conversationId: string | number, content: string) {
+export async function sendMessage(
+  conversationId: string | number,
+  content: string,
+  options?: { private?: boolean },
+) {
   const { BASE_URL, API_TOKEN, ACCOUNT_ID, isConfigured } = getConfig();
 
   if (!isConfigured || String(conversationId).startsWith('demo-')) {
-    return { content, demoMode: true };
+    return { content, demoMode: true, private: Boolean(options?.private) };
   }
 
   const url = `${BASE_URL}/api/v1/accounts/${ACCOUNT_ID}/conversations/${conversationId}/messages`;
-  const body = JSON.stringify({ content });
+  const body = JSON.stringify({
+    content,
+    ...(options?.private ? { private: true } : {}),
+  });
   const res = await fetch(url, { method: 'POST', headers: getHeaders(API_TOKEN), body });
   if (!res.ok) {
     const txt = await res.text();

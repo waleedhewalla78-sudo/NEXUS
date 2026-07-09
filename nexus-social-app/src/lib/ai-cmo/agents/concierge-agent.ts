@@ -98,7 +98,12 @@ export class ConciergeAgent extends AbstractBaseAgent<ConciergeRunInput, Concier
       }
 
       const { score, band, reasons } = scoreSlots(slots);
-      const mode = resolveConversationMode(null);
+      const modeHint = input.metadata?.conversationMode;
+      const mode = resolveConversationMode(
+        typeof modeHint === 'string'
+          ? { mode: modeHint as 'shadow' | 'ai_active' | 'off' }
+          : null,
+      );
       const autoSend = mode === 'ai_active';
       const accountDomain = domainFromEmail(slots.contactEmail ?? null);
 

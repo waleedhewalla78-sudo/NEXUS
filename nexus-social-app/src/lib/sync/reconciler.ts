@@ -29,6 +29,7 @@ export const SorTableNames = {
   CONVERSATION_ESCALATIONS: 'conversation_escalations',
   QUALIFIED_LEADS: 'qualified_leads',
   WORKSPACE_CONVERSATION_SETTINGS: 'workspace_conversation_settings',
+  COST_TO_SERVE_SNAPSHOTS: 'cost_to_serve_snapshots',
 } as const;
 
 export type SorTableName = (typeof SorTableNames)[keyof typeof SorTableNames];
@@ -327,6 +328,24 @@ const sorWriteSchemas: Record<SorTableName, z.ZodType<Record<string, unknown>>> 
       mode: z.enum(['shadow', 'ai_active', 'off']).optional(),
       locale_default: z.string().optional(),
       compliance_profile: z.string().optional(),
+    })
+    .passthrough(),
+  [SorTableNames.COST_TO_SERVE_SNAPSHOTS]: z
+    .object({
+      ...workspaceScoped,
+      period_month: z.string().min(1),
+      mrr_usd: z.number(),
+      llm_api_usd: z.number().optional(),
+      whatsapp_message_usd: z.number().optional(),
+      bsp_fee_usd: z.number().optional(),
+      pit_crew_labor_usd: z.number().optional(),
+      infra_alloc_usd: z.number().optional(),
+      total_cost_usd: z.number().optional(),
+      gross_margin_usd: z.number().optional(),
+      gross_margin_pct: z.number().optional(),
+      passes_margin_gate: z.boolean().optional(),
+      stop_scale: z.boolean().optional(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
     })
     .passthrough(),
 };

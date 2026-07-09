@@ -43,33 +43,35 @@ Legend: `[x]` done · `[ ]` open · `[~]` blocked/gated
 
 ---
 
-## Phase 2 — Escalation + AI-Active
+## Phase 2 — Escalation + AI-Active ✅
 
-- [~] **T016** Escalation engine → Chatwoot assignment with context (FR-087)
-- [~] **T017** Annotation capture → Memory/Qdrant (FR-088)
-- [~] **T018** AI-Active mode flip + oversight runbook (FR-089)
+- [x] **T016** Escalation engine → Chatwoot assignment with context (FR-087)
+- [x] **T017** Annotation capture → Memory/Qdrant (FR-088)
+- [x] **T018** AI-Active mode flip + oversight runbook (FR-089)
 
 ---
 
-## Phase 3 — Close loop + Margin Gate
+## Phase 3 — Close loop + Margin Gate ✅
 
-- [~] **T019** Wire ABM activate → Concierge → attribution demo thread (FR-090)
-- [~] **T020** Margin gate report + FAIL stop-scale (FR-091)
-- [~] **T021** AR/EN case study pack (FR-092) — commercial
+- [x] **T019** Wire ABM activate → Concierge → attribution demo thread (FR-090)
+- [x] **T020** Margin gate report + FAIL stop-scale (FR-091)
+- [x] **T021** AR/EN case study pack (FR-092) — checklist + generators (commercial fill)
+- [x] **T023** Persist cost-to-serve monthly snapshots (table + reconciler)
 
 ---
 
 ## Convergence append (2026-07-09)
 
-- [ ] **T022** Confirm Settings → Compliance UI lists `mena_conversational_v1` from catalog (smoke)
-- [~] **T023** Persist cost-to-serve monthly snapshots (table + reconciler) — with T020
+- [x] **T022** Confirm Settings → Compliance UI lists `mena_conversational_v1` from catalog (smoke)
+- [x] **T023** Persist cost-to-serve monthly snapshots — with T020
 
 ---
 
 ## Parallel (not 006 code — Phase D)
 
-- [~] **PD-OPS** B1–B4, Hermes, secrets — see program issues #20–#30
+- [~] **PD-OPS** B1–B4, Hermes (skipped), secrets — see program issues #20–#30
 - [~] **A-GATE-005** Publish Dify app; `npm run ai:verify`
+- [~] **T009** Complete human verification V1–V4 (US-082) — **operator**
 
 ---
 

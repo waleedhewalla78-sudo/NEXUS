@@ -80,3 +80,67 @@ export async function persistConversationQualification(
     },
   });
 }
+
+export type PersistEscalationInput = {
+  workspaceId: string;
+  userId: string;
+  qualificationId: string;
+  reason: string;
+  sentiment?: 'negative' | 'neutral' | 'positive' | 'hostile' | null;
+  contextPayload: Record<string, unknown>;
+  chatwootAssignmentId?: string | null;
+  status?: 'open' | 'accepted' | 'resolved' | 'cancelled';
+};
+
+export async function persistConversationEscalation(
+  input: PersistEscalationInput,
+): Promise<SyncToSoRResult> {
+  return secureSyncToSoR({
+    table: SorTableNames.CONVERSATION_ESCALATIONS,
+    workspaceId: input.workspaceId,
+    userId: input.userId,
+    auditAction: 'conversation.escalation.created',
+    auditMetadata: { reason: input.reason },
+    data: {
+      workspace_id: input.workspaceId,
+      qualification_id: input.qualificationId,
+      reason: input.reason,
+      sentiment: input.sentiment ?? null,
+      context_payload: input.contextPayload,
+      chatwoot_assignment_id: input.chatwootAssignmentId ?? null,
+      status: input.status ?? 'open',
+    },
+  });
+}
+
+export type PersistAnnotationLearningInput = {
+  workspaceId: string;
+  userId: string;
+  context: Record<string, unknown>;
+  action: Record<string, unknown>;
+  outcome: Record<string, unknown>;
+  confidence?: number | null;
+};
+
+/** Pit Crew annotation → Memory (tone bucket + conversation_annotation in context). */
+export async function persistConversationAnnotationLearning(
+  input: PersistAnnotationLearningInput,
+): Promise<SyncToSoRResult> {
+  return secureSyncToSoR({
+    table: SorTableNames.AI_CMO_LEARNINGS,
+    workspaceId: input.workspaceId,
+    userId: input.userId,
+    auditAction: 'conversation.annotation.captured',
+    data: {
+      workspace_id: input.workspaceId,
+      learning_type: 'tone',
+      context: {
+        ...input.context,
+        annotation_kind: 'conversation_annotation',
+      },
+      action: input.action,
+      outcome: input.outcome,
+      confidence: input.confidence ?? null,
+    },
+  });
+}

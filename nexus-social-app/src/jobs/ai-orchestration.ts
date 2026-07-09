@@ -241,20 +241,9 @@ async function handleDifyResponse(workspaceId: string, conversationId: number, a
   }
 }
 
-async function assignToHuman(conversationId: number, noteContent: string, aiBotUserId: number) {
-  const { BASE_URL, API_TOKEN, ACCOUNT_ID } = getConfig();
-  
-  await fetch(`${BASE_URL}/api/v1/accounts/${ACCOUNT_ID}/conversations/${conversationId}/messages`, {
-    method: 'POST',
-    headers: getHeaders(API_TOKEN),
-    body: JSON.stringify({ content: noteContent, private: true })
-  });
-
-  await fetch(`${BASE_URL}/api/v1/accounts/${ACCOUNT_ID}/conversations/${conversationId}/assignments`, {
-    method: 'POST',
-    headers: getHeaders(API_TOKEN),
-    body: JSON.stringify({ assignee_id: 0 }) 
-  });
+async function assignToHuman(conversationId: number, noteContent: string, _aiBotUserId: number) {
+  const { escalateToHuman } = await import('@/lib/chatwoot/escalation-adapter');
+  await escalateToHuman({ conversationId, noteContent });
 }
 
 async function logConversation(workspaceId: string, conversationId: number, query: string, response: string, confidence: number, tokens: number = 0) {

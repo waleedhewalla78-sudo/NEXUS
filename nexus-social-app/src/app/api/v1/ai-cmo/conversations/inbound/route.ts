@@ -19,6 +19,8 @@ const postBodySchema = z.object({
   channel: z.enum(['whatsapp', 'chatwoot', 'web', 'other']).optional(),
   locale: z.string().optional(),
   messageId: z.string().optional(),
+  /** ABM / audit thread metadata (FR-090). */
+  metadata: z.record(z.string(), z.unknown()).optional(),
   /** When true, run inline (dev/UAT) instead of Inngest enqueue. */
   sync: z.boolean().optional(),
 });

@@ -19,6 +19,14 @@ export type ActivatePlaybookInput = {
   locale?: string;
 };
 
+export type AbmConversationSeed = {
+  abmPlaybookRunId: string;
+  accountIntentId: string;
+  accountDomain: string;
+  campaignJobId: string;
+  accountName: string;
+};
+
 export type ActivatePlaybookResult =
   | {
       ok: true;
@@ -26,6 +34,8 @@ export type ActivatePlaybookResult =
       pollUrl: string;
       objectivePreview: string;
       playbookRunId: string;
+      /** Pass into conversation inbound metadata for FR-090 audited thread. */
+      conversationSeed: AbmConversationSeed;
     }
   | { ok: false; error: string; code?: 'not_found' | 'rate_limited' };
 
@@ -162,12 +172,22 @@ export async function activateAbmPlaybook(
     return { ok: false, error: syncResult.error };
   }
 
+  // Feature 006 T019 — conversation seed metadata for audited ABM → Concierge → CRM thread
+  const conversationSeed = {
+    abmPlaybookRunId: syncResult.id,
+    accountIntentId: input.accountId,
+    accountDomain: account.domain,
+    campaignJobId: jobId,
+    accountName: account.accountName,
+  };
+
   return {
     ok: true,
     jobId,
     pollUrl: `/api/v1/ai-cmo/campaigns/jobs/${jobId}`,
     objectivePreview: objective.slice(0, 500),
     playbookRunId: syncResult.id,
+    conversationSeed,
   };
 }
 

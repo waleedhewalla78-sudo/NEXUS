@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { captureConversationAnnotation } from '@/lib/ai-cmo/conversation/annotations';
 import { verifyChatwootWebhook } from '@/lib/webhook-auth';
 
 const supabaseAdmin = createClient(
@@ -8,8 +9,8 @@ const supabaseAdmin = createClient(
 );
 
 /**
- * Task 3: Human Feedback Loop
- * Listens for message_updated webhooks to capture human edits to AI drafts.
+ * Task 3 + Feature 006 T017: Human Feedback Loop
+ * Captures human edits to AI drafts → ai_feedback + Memory (ai_cmo_learnings → Qdrant).
  */
 export async function POST(req: Request) {
   try {
@@ -38,42 +39,78 @@ export async function POST(req: Request) {
 
     if (!mapping) return NextResponse.json({ status: 'unmapped_inbox' }, { status: 200 });
 
-    // 2. Fetch the original AI draft for this conversation
-    const { data: log, error: logError } = await supabaseAdmin
+    // 2. Prefer Concierge qualification draft; fall back to legacy ai_conversation_logs
+    const { data: qual } = await supabaseAdmin
+      .from('conversation_qualifications')
+      .select('id, draft_reply')
+      .eq('workspace_id', mapping.workspace_id)
+      .eq('conversation_id', String(conversationId))
+      .maybeSingle();
+
+    const { data: log } = await supabaseAdmin
       .from('ai_conversation_logs')
       .select('id, ai_response')
       .eq('workspace_id', mapping.workspace_id)
       .eq('external_conversation_id', String(conversationId))
       .order('created_at', { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle();
 
-    if (logError || !log) return NextResponse.json({ status: 'no_ai_log_found' }, { status: 200 });
+    if (!qual && !log) {
+      return NextResponse.json({ status: 'no_ai_log_found' }, { status: 200 });
+    }
 
-    // 3. Prevent duplicate feedback entries for the same log
-    const { data: existingFeedback } = await supabaseAdmin
-      .from('ai_feedback')
-      .select('id')
-      .eq('log_id', log.id)
-      .single();
+    // 3. Prevent duplicate feedback entries for the same log (legacy path)
+    if (log) {
+      const { data: existingFeedback } = await supabaseAdmin
+        .from('ai_feedback')
+        .select('id')
+        .eq('log_id', log.id)
+        .maybeSingle();
 
-    if (existingFeedback) return NextResponse.json({ status: 'already_captured' }, { status: 200 });
+      if (existingFeedback) {
+        return NextResponse.json({ status: 'already_captured' }, { status: 200 });
+      }
+    }
 
-    // 4. Calculate Similarity
-    const originalDraft = log.ai_response.replace('[ESCALATE_TO_HUMAN]', '').trim();
+    // 4. Calculate Similarity against Concierge draft or legacy AI response
+    const originalDraft = (
+      (qual?.draft_reply as string | null) ??
+      (log?.ai_response as string | undefined) ??
+      ''
+    )
+      .replace('[ESCALATE_TO_HUMAN]', '')
+      .trim();
     const similarityScore = calculateSimilarity(originalDraft, finalMessageText.trim());
-    const humanEdited = similarityScore < 0.95; // 95% similarity threshold
+    const humanEdited = similarityScore < 0.95;
 
-    // 5. Insert Feedback
-    await supabaseAdmin.from('ai_feedback').insert({
-      workspace_id: mapping.workspace_id,
-      log_id: log.id,
-      human_edited: humanEdited,
-      similarity_score: similarityScore,
-      final_message_text: finalMessageText
+    // 5. Insert Feedback (legacy table when log exists)
+    if (log) {
+      await supabaseAdmin.from('ai_feedback').insert({
+        workspace_id: mapping.workspace_id,
+        log_id: log.id,
+        human_edited: humanEdited,
+        similarity_score: similarityScore,
+        final_message_text: finalMessageText,
+      });
+    }
+
+    // 6. Feature 006 — Memory annotation (triggers Qdrant via reconciler hook)
+    const annotation = await captureConversationAnnotation({
+      workspaceId: mapping.workspace_id,
+      conversationId: String(conversationId),
+      finalMessageText,
+      humanEdited,
+      similarityScore,
+      logId: log?.id ?? null,
     });
 
-    return NextResponse.json({ status: 'feedback_captured', similarity: similarityScore });
+    return NextResponse.json({
+      status: 'feedback_captured',
+      similarity: similarityScore,
+      annotationLearningId: annotation.learningId ?? null,
+      qualificationId: annotation.qualificationId ?? qual?.id ?? null,
+    });
 
   } catch (error: any) {
     console.error('[Webhook AI Feedback Error]', error);

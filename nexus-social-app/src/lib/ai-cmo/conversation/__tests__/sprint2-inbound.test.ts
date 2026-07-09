@@ -13,6 +13,13 @@ const maybeSingle = vi.hoisted(() => vi.fn().mockResolvedValue({ data: null }));
 vi.mock('@/lib/ai-cmo/conversation/persist', () => ({
   persistConversationQualification: persistQual,
   persistQualifiedLead: persistLead,
+  persistConversationEscalation: vi.fn().mockResolvedValue({ ok: true, id: 'esc-1' }),
+}));
+
+vi.mock('@/lib/chatwoot/escalation-adapter', () => ({
+  escalateToHuman: vi.fn().mockResolvedValue({ ok: true, demoMode: true, assignmentId: 'demo' }),
+  deliverConciergeDraft: vi.fn().mockResolvedValue({ ok: true, demoMode: true, channel: 'private_note' }),
+  buildEscalationNote: vi.fn().mockReturnValue('note'),
 }));
 
 vi.mock('@/lib/supabase/server', () => ({

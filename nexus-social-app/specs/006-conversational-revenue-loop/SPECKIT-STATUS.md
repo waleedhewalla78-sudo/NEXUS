@@ -2,32 +2,49 @@
 
 **Updated:** 2026-07-09  
 **Track:** [`specs/006-conversational-revenue-loop/`](./)  
-**Verdict:** **PHASE 1 COMPLETE (eng)** — S1–S4 done · Shadow Mode Concierge path  
+**Verdict:** **PHASE 2 + 3 ENG COMPLETE** — Concierge Shadow/AI-Active + escalation + margin gate + audited thread helpers  
 **Hermes:** Skipped (founder direction)
 
 ---
 
-## Phase 1 sprint board
+## Phase board
 
-| Sprint | Status | Notes |
-|--------|--------|-------|
-| **S1 Foundation** | ✅ | Migration, Concierge scaffold, reconciler, Shadow config |
-| **S2 Orchestration** | ✅ | Inngest inbound, Chatwoot fan-out, sync/poll API |
-| **S3 Qualify → CRM** | ✅ | ProviderRouter enrichment + accountDomain on leads |
-| **S4 Harden + UAT** | ✅ | Failure resilience tests + [phase-1-uat.md](./checklists/phase-1-uat.md) |
+| Phase | Status | Notes |
+|-------|--------|-------|
+| **0** De-risk | ✅ | Profile + cost calculator |
+| **1** Concierge Shadow | ✅ | S1–S4 |
+| **2** Escalation + AI-Active | ✅ | T016–T018 |
+| **3** Close loop + Margin | ✅ | T019–T023 eng; T021 commercial checklist |
 
-**Unit tests:** 26 passed (sprint1–4 + agent-mesh)
-
----
-
-## Phase 2 (next track — not started)
-
-Escalation → Chatwoot assign (T016), annotations (T017), AI-Active flip (T018)
+**Unit tests:** conversation + finops Phase 2/3 suites green
 
 ---
 
-## Operator before live Shadow UAT
+## Phase 2 deliverables
 
-1. Apply `20260720_conversation_qualification_tables.sql`  
-2. Optional: Dify publish for LLM enrichment  
-3. Smoke: `POST /api/v1/ai-cmo/conversations/inbound` with `"sync": true`  
+| Task | Status |
+|------|--------|
+| T016 Escalation → Chatwoot | ✅ `escalation-adapter.ts` + `escalation.ts` + persist |
+| T017 Annotations → Memory | ✅ `annotations.ts` + feedback webhook |
+| T018 AI-Active + runbook | ✅ mode API + `phase-2-oversight.md` |
+
+---
+
+## Phase 3 deliverables
+
+| Task | Status |
+|------|--------|
+| T019 Audited thread | ✅ ABM `conversationSeed` + `audited-thread.ts` + script |
+| T020/T023 Margin gate | ✅ `margin-gate-report.ts` + migration + API |
+| T021 Case study | ✅ Checklist (commercial fill) |
+| T022 Compliance catalog | ✅ Smoke test |
+
+---
+
+## Operator (parallel — not eng-blocked)
+
+1. Apply `20260720_conversation_qualification_tables.sql` + `20260721_cost_to_serve_snapshots.sql`
+2. T009 V1–V4 in clarifications.md
+3. Dify publish → `npm run ai:verify`
+4. Client sign-off before production `ai_active` flip
+5. Hermes: still skipped unless un-skipped

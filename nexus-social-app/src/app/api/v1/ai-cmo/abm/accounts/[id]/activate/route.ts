@@ -57,6 +57,7 @@ export async function POST(req: NextRequest, context: RouteContext) {
       pollUrl: result.pollUrl,
       objectivePreview: result.objectivePreview,
       playbookRunId: result.playbookRunId,
+      conversationSeed: result.conversationSeed,
       status: 'processing',
     },
     { status: 202 },
