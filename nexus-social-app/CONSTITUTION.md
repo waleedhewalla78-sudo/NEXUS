@@ -2,7 +2,7 @@
 
 > **Governing principles and development guidelines for `nexus-social-app`.**  
 > Canonical Speckit copy: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)  
-> **Version 1.4.2** · Ratified 2026-06-23 · Last amended 2026-07-05
+> **Version 1.5.0** · Ratified 2026-06-23 · Last amended 2026-07-09
 
 ---
 
@@ -37,6 +37,7 @@ Two feature tracks share one codebase:
 | **005 — Enterprise revenue / GTM** | ABM, CRM loop, enterprise skin, leads, LinkedIn/Meta ingest | **Sprints 18–19 + Sprint 2–3 shipped** |
 | **Intelligence (Sprint 7)** | CSV/webhook funnel, executive briefing agent, `/intelligence` feed | **Shipped** (`ebd6222`) |
 | **Production closure** | Enterprise `/` → `/intelligence` redirect, GHCR CI, QA harness flake | **Shipped** (local; pending push) |
+| **006 — Conversational Revenue Loop** | Concierge agent, dialect profile, cost-to-serve margin gate, Chatwoot HITL | **Phase 0** — [specs/006](specs/006-conversational-revenue-loop/) |
 
 Feature 004 builds on 003. Nothing in 004 may break OAuth, publish, or worker behavior without regression proof.
 
@@ -272,6 +273,9 @@ Agency table (`000014`) and white-label billing await **A-GATE-003**. See [12-mu
 - Modify `campaign-workflow.ts` step order or `reconciler.ts` validation (CL-030)  
 - Build native GA4 / Meta Ads / WhatsApp **sync workers** (Sprint 7 funnel = CSV + existing webhooks only; 8GB RAM)  
 - Build Pit Crew `/admin` before Client #1 payment (CL-036)  
+- Build a parallel mid-market WhatsApp SDR product (CL-048 — one Diligent AI motion)  
+- Build a second Pit Crew console for 006 (CL-049 — reuse Chatwoot)  
+- Start Concierge agent code before staging + committed conversational pilot (CL-052)  
 
 ---
 
@@ -302,6 +306,21 @@ Resolved in [clarifications.md](specs/004-ai-cmo-master-prd-v3/clarifications.md
 | **PDPL review** | Pending | A-GATE-005 — memory/FinOps data flows |
 | **Dify role** | **Decided** | Runtime only (CL-005) |
 | **Meta App Review** | Gate live | T057 — flag must be `approved` |
+| **Feature 006** | Phase 0 | Conversational loop — CL-048–CL-054 |
+
+### Feature 006 clarifications (CL-048 – CL-054)
+
+Resolved in [006 clarifications](specs/006-conversational-revenue-loop/clarifications.md).
+
+| ID | Topic | Decision |
+|----|-------|----------|
+| **CL-048** | GTM | One Diligent AI enterprise motion — no parallel mid-market SDR product |
+| **CL-049** | Pit Crew UI | Reuse Chatwoot; no second console in 006 |
+| **CL-050** | Wedge | Prefer existing enterprise ABM demo (telecom/banking) for first E2E |
+| **CL-051** | Meta gate | Inbound WhatsApp qualify independent of FB/IG publish App Review |
+| **CL-052** | Sequencing | Concierge build only after staging + committed conversational pilot |
+| **CL-053** | Margin | ≥55% gross margin/client; FAIL = stop scale |
+| **CL-054** | Profiles | `mena_v1` = MSA publish; `mena_conversational_v1` = dialect replies + CRITICAL retained |
 
 Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md) and [IMPLEMENT_PLAN_ALL_OPEN.md](specs/004-ai-cmo-master-prd-v3/IMPLEMENT_PLAN_ALL_OPEN.md).
 
@@ -330,4 +349,4 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 3. Propagate changes to affected spec artifacts and Notion hub.  
 4. PRs touching AI CMO or publish paths must cite compliance with this constitution.
 
-**Version 1.4.2** · Ratified 2026-06-23 · Last amended 2026-07-05 (production closure, PRD 1.0.1, QA green)
+**Version 1.5.0** · Ratified 2026-06-23 · Last amended 2026-07-09 (Feature 006 Phase 0, CL-048–CL-054)

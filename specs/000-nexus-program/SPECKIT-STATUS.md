@@ -1,10 +1,10 @@
 # Nexus Program — Speckit Status
 
-**Updated:** 2026-07-07  
+**Updated:** 2026-07-09  
 **Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)  
 **Phase D:** [`phase-d-spec.md`](./phase-d-spec.md)  
-**Verdict:** **CONDITIONAL PRODUCTION** — pushed `29ef8be`; operator gates [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d)
-
+**Feature 006:** [`../../nexus-social-app/specs/006-conversational-revenue-loop/SPECKIT-STATUS.md`](../../nexus-social-app/specs/006-conversational-revenue-loop/SPECKIT-STATUS.md)  
+**Verdict:** **CONDITIONAL PRODUCTION** + **006 Phase 0 eng complete**; operator gates [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d); 006 [#31–#35](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Afeature-006)
 ---
 
 ## Command execution (Phase D)
@@ -36,9 +36,10 @@
 
 ## Next actions
 
-1. `PD-OPS-001` Hermes deploy  
-2. `PD-OPS-002` Fill `.env.production`  
-3. `npm run verify:phase-d:report`  
+1. ~~`PD-OPS-001` Hermes deploy~~ — **deferred** (founder skip this phase)  
+2. `PD-OPS-002` Fill `.env.production` (when deploy path chosen)  
+3. `npm run verify:phase-d:report` (local / non-Hermes target)  
 4. `PD-OPS-005` OAuth LinkedIn + X  
 5. `PD-OPS-006` Meta App Review (parallel)  
-6. `PD-COM-001` Pilot report
+6. `PD-COM-001` Pilot report  
+7. **Feature 006 Phase 0** pushed — ready for Feature 007 Phase 1 on founder go
