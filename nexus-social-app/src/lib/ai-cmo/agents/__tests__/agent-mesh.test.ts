@@ -89,11 +89,12 @@ describe('agent mesh', () => {
     mockLlm.mockResolvedValue(buildMeshMockLlmResponse());
   });
 
-  it('registers all 8 agent names', () => {
+  it('registers all mesh agent names including concierge', () => {
     const names = listMeshAgents();
-    expect(names).toHaveLength(8);
+    expect(names).toHaveLength(9);
     expect(names).toContain('radar');
     expect(names).toContain('compliance');
+    expect(names).toContain('concierge');
     expect(getMeshAgent('radar')).toBe(radarAgent);
   });
 

@@ -12,6 +12,7 @@ import { getQuantAnalyticsInngestFunctions } from '@/lib/orchestration/workflows
 import { getInngestDlqFunctions } from '@/lib/orchestration/dlq/inngest-failure-handler';
 import { getAttributionCalculationInngestFunctions } from '@/jobs/ai-cmo/attribution-calculation';
 import { getIntelligenceBriefingInngestFunctions } from '@/lib/orchestration/workflows/intelligence-briefing-workflow';
+import { getConversationInboundInngestFunctions } from '@/lib/orchestration/workflows/conversation-inbound-workflow';
 
 export function getAllAiCmoInngestFunctions(): unknown[] {
   return [
@@ -25,6 +26,7 @@ export function getAllAiCmoInngestFunctions(): unknown[] {
     ...getInngestDlqFunctions(),
     ...getAttributionCalculationInngestFunctions(),
     ...getIntelligenceBriefingInngestFunctions(),
+    ...getConversationInboundInngestFunctions(),
   ];
 }
 

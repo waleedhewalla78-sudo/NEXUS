@@ -14,6 +14,7 @@ export const agentNameSchema = z.enum([
   'sentinel',
   'finance',
   'compliance',
+  'concierge',
 ]);
 
 export type AgentName = z.infer<typeof agentNameSchema>;

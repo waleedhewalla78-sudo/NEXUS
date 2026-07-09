@@ -1,5 +1,6 @@
 /**
- * Feature 004 Phase 7 — Agent mesh registry (all 8 L6 agents).
+ * Feature 004 Phase 7 — Agent mesh registry (L6 agents).
+ * Feature 006: Concierge (9th) for conversational qualification.
  */
 
 import type { AgentName, BaseAgent, AgentRunInput } from '@/lib/ai-cmo/agents/types/base';
@@ -9,6 +10,7 @@ import { quantAgent } from '@/lib/ai-cmo/agents/quant-agent';
 import { sentinelAgent } from '@/lib/ai-cmo/agents/sentinel-agent';
 import { financeAgent } from '@/lib/ai-cmo/agents/finance-agent';
 import { complianceAgent } from '@/lib/ai-cmo/agents/compliance-agent';
+import { conciergeAgent } from '@/lib/ai-cmo/agents/concierge-agent';
 
 export type RegisteredAgent = BaseAgent<AgentRunInput, unknown>;
 
@@ -21,6 +23,7 @@ export const AGENT_MESH: Record<AgentName, RegisteredAgent | 'legacy_module'> = 
   sentinel: sentinelAgent,
   finance: financeAgent,
   compliance: complianceAgent,
+  concierge: conciergeAgent as unknown as RegisteredAgent,
 };
 
 export const MESH_AGENT_NAMES = Object.keys(AGENT_MESH) as AgentName[];

@@ -21,16 +21,25 @@ Legend: `[x]` done · `[ ]` open · `[~]` blocked/gated
 
 ---
 
-## Phase 1 — Concierge MVP + Shadow (gated CL-052)
+## Phase 1 — Concierge MVP + Shadow
 
-- [~] **T010** Migration `20260720_conversation_qualification_tables.sql` + RLS
-- [~] **T011** Extend `AgentName` + Concierge agent scaffold (FR-083)
-- [~] **T012** Inngest `CONVERSATION_INBOUND` function (FR-084)
-- [~] **T013** Reconciler path for `qualified_leads` (FR-085)
-- [~] **T014** Shadow Mode workspace flag + draft-only path (FR-086)
-- [~] **T015** Unit/integration tests for Concierge + Shadow
+**Sprint plan:** [phase-1-sprints.md](./phase-1-sprints.md) (S1–S4)  
+**Founder authorized eng start 2026-07-09** (Hermes skipped; V1–V4 + Dify remain parallel ops).
 
-**Unblock when:** staging healthy + committed conversational pilot + Dify published.
+### Sprint 1 — Foundation ✅
+
+- [x] **T010** Migration `20260720_conversation_qualification_tables.sql` + RLS
+- [x] **T011** Extend `AgentName` + Concierge agent scaffold (FR-083) — rules-based; LLM in S3
+- [x] **T013** Reconciler path for `qualified_leads` + qualification tables (FR-085) — schemas + persist helpers
+- [x] **T014** Shadow Mode workspace config helper (FR-086) — default `shadow`
+- [x] **T015a** Unit tests Sprint 1 foundation (slots, concierge, reconciler schemas, mesh)
+
+### Sprint 2–4 ✅
+
+- [x] **T012** Inngest `CONVERSATION_INBOUND` + Chatwoot fan-out + inbound API — **Sprint 2**
+- [x] **T011b** ProviderRouter Concierge LLM path + accountDomain — **Sprint 3**
+- [x] **T015b** Harden tests + UAT checklist — **Sprint 4**
+- [x] **T015** Unit tests Phase 1 (26 passing)
 
 ---
 

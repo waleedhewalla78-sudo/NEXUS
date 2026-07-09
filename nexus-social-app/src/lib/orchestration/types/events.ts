@@ -4,6 +4,7 @@
  */
 
 import { z } from 'zod';
+import { uuidLikeSchema } from '@/lib/validation/uuid-like';
 
 export const AI_CMO_INNGEST_EVENT_NAMES = {
   CAMPAIGN_REQUESTED: 'ai-cmo/campaign.requested',
@@ -14,6 +15,7 @@ export const AI_CMO_INNGEST_EVENT_NAMES = {
   ANALYTICS_SYNCED: 'ai-cmo/analytics.synced',
   SIGNAL_DETECTED: 'ai-cmo/signal.detected',
   ANOMALY_DETECTED: 'ai-cmo/anomaly.detected',
+  CONVERSATION_INBOUND: 'ai-cmo/conversation.inbound',
 } as const;
 
 export type AiCmoInngestEventName =
@@ -122,6 +124,24 @@ export const aiCmoAnomalyDetectedEventSchema = z.object({
 
 export type AiCmoAnomalyDetectedEvent = z.infer<typeof aiCmoAnomalyDetectedEventSchema>;
 
+export const aiCmoConversationInboundEventSchema = z.object({
+  name: z.literal(AI_CMO_INNGEST_EVENT_NAMES.CONVERSATION_INBOUND),
+  data: z.object({
+    /** Walkthrough demo workspace IDs allowed (uuid-like). */
+    workspaceId: uuidLikeSchema,
+    conversationId: z.string().min(1),
+    inboundText: z.string().min(1),
+    userId: z.string().min(1).optional(),
+    channel: z.enum(['whatsapp', 'chatwoot', 'web', 'other']).optional(),
+    locale: z.string().optional(),
+    messageId: z.string().optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+    requestedAt: isoTimestamp.optional(),
+  }),
+});
+
+export type AiCmoConversationInboundEvent = z.infer<typeof aiCmoConversationInboundEventSchema>;
+
 export type AiCmoReplanRequestedEvent = z.infer<typeof aiCmoReplanRequestedEventSchema>;
 
 export const aiCmoCampaignUnderperformingEventSchema = z.object({
@@ -148,6 +168,7 @@ export const aiCmoInngestEventSchema = z.discriminatedUnion('name', [
   aiCmoAnalyticsSyncedEventSchema,
   aiCmoSignalDetectedEventSchema,
   aiCmoAnomalyDetectedEventSchema,
+  aiCmoConversationInboundEventSchema,
 ]);
 
 export type AiCmoInngestEvent = z.infer<typeof aiCmoInngestEventSchema>;

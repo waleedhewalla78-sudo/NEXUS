@@ -2,40 +2,32 @@
 
 **Updated:** 2026-07-09  
 **Track:** [`specs/006-conversational-revenue-loop/`](./)  
-**Verdict:** **PHASE 0 COMPLETE (eng)** — Phase 1+ gated on CL-052 + Dify publish + pilot
+**Verdict:** **PHASE 1 COMPLETE (eng)** — S1–S4 done · Shadow Mode Concierge path  
+**Hermes:** Skipped (founder direction)
 
 ---
 
-## Command execution
+## Phase 1 sprint board
 
-| Command | Status | Output |
-|---------|--------|--------|
-| `/speckit.constitution` | ✅ | CONSTITUTION.md **v1.5.0** — Feature 006 + CL-048–054 |
-| `/speckit.specify` | ✅ | [spec.md](./spec.md) · [user-stories.md](./user-stories.md) |
-| `/speckit.clarify` | ✅ | [clarifications.md](./clarifications.md) CL-048–054 |
-| `/speckit.analyze` | ✅ | [analysis.md](./analysis.md) — overall **7.6** |
-| `/speckit.plan` | ✅ | [plan.md](./plan.md) |
-| `/speckit.tasks` | ✅ | [tasks.md](./tasks.md) |
-| `/speckit.taskstoissues` | ✅ | [#31–#35](./issues-backlog.md) |
-| `/speckit.implement` | ✅ | Phase 0: profile + cost-to-serve + tests |
-| `/speckit.converge` | ✅ | [convergence.md](./convergence.md) |
+| Sprint | Status | Notes |
+|--------|--------|-------|
+| **S1 Foundation** | ✅ | Migration, Concierge scaffold, reconciler, Shadow config |
+| **S2 Orchestration** | ✅ | Inngest inbound, Chatwoot fan-out, sync/poll API |
+| **S3 Qualify → CRM** | ✅ | ProviderRouter enrichment + accountDomain on leads |
+| **S4 Harden + UAT** | ✅ | Failure resilience tests + [phase-1-uat.md](./checklists/phase-1-uat.md) |
+
+**Unit tests:** 26 passed (sprint1–4 + agent-mesh)
 
 ---
 
-## Phase 0 code
+## Phase 2 (next track — not started)
 
-| Deliverable | Path |
-|-------------|------|
-| Conversational profile | `src/lib/governance/compliance-profiles/mena-v1.ts` (+ re-export) |
-| Cost-to-serve | `src/lib/ai-cmo/finops/cost-to-serve.ts` |
-| Tests | `__tests__/mena-conversational-v1.test.ts`, `cost-to-serve.test.ts` |
+Escalation → Chatwoot assign (T016), annotations (T017), AI-Active flip (T018)
 
 ---
 
-## Next actions
+## Operator before live Shadow UAT
 
-1. ~~Hermes deploy~~ — **deferred** (founder skip for this phase)  
-2. Publish Dify → `npm run ai:verify`  
-3. Complete verification V1–V4 (US-082)  
-4. Sign conversational pilot → unlock T010+ / Feature 007 Phase 1  
-5. Continue Phase D ops issues #20–#30 **except Hermes** (PD-OPS-001 deferred)  
+1. Apply `20260720_conversation_qualification_tables.sql`  
+2. Optional: Dify publish for LLM enrichment  
+3. Smoke: `POST /api/v1/ai-cmo/conversations/inbound` with `"sync": true`  

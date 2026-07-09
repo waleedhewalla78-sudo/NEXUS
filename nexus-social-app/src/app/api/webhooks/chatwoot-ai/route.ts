@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import Redis from 'ioredis';
 import { trace } from '@opentelemetry/api';
 import { verifyChatwootWebhook } from '@/lib/webhook-auth';
+import { requestConversationInbound } from '@/lib/orchestration/workflows/conversation-inbound-workflow';
 
 const tracer = trace.getTracer('nexus-ai-webhook');
 
@@ -133,6 +134,25 @@ export async function POST(req: Request) {
         { status: 'failed_closed', reason: 'queue_unavailable' },
         { status: 503 }
       );
+    }
+
+    // Feature 006 Sprint 2 — fan-out Concierge qualification (Shadow Mode) via Inngest.
+    // Failures here must not block the existing inbox AI queue path.
+    const inboundText =
+      typeof payload.message?.content === 'string' ? payload.message.content.trim() : '';
+    if (inboundText && mapping.workspace_id !== 'e2e-workspace') {
+      try {
+        await requestConversationInbound({
+          workspaceId: mapping.workspace_id,
+          conversationId: String(conversationId),
+          inboundText,
+          channel: 'chatwoot',
+          messageId: payload.message?.id != null ? String(payload.message.id) : undefined,
+          metadata: { inboxId, source: 'chatwoot_webhook' },
+        });
+      } catch (conciergeError) {
+        console.warn('[Chatwoot Webhook] Concierge inbound enqueue skipped:', conciergeError);
+      }
     }
 
     return NextResponse.json({ status: 'enqueued', workspaceId: mapping.workspace_id });

@@ -24,6 +24,11 @@ export const SorTableNames = {
   CRM_ACTIVITY_MIRROR: 'crm_activity_mirror',
   ABM_PLAYBOOK_RUNS: 'abm_playbook_runs',
   POSTS: 'posts',
+  CONVERSATION_QUALIFICATIONS: 'conversation_qualifications',
+  LEAD_SCORES: 'lead_scores',
+  CONVERSATION_ESCALATIONS: 'conversation_escalations',
+  QUALIFIED_LEADS: 'qualified_leads',
+  WORKSPACE_CONVERSATION_SETTINGS: 'workspace_conversation_settings',
 } as const;
 
 export type SorTableName = (typeof SorTableNames)[keyof typeof SorTableNames];
@@ -260,6 +265,68 @@ const sorWriteSchemas: Record<SorTableName, z.ZodType<Record<string, unknown>>> 
       status: z.enum(['draft', 'scheduled', 'published', 'failed']).optional(),
       scheduled_at: z.string().optional(),
       brand_id: uuidSchema.optional().nullable(),
+    })
+    .passthrough(),
+  [SorTableNames.CONVERSATION_QUALIFICATIONS]: z
+    .object({
+      ...workspaceScoped,
+      conversation_id: z.string().min(1),
+      channel: z.enum(['whatsapp', 'chatwoot', 'web', 'other']).optional(),
+      locale: z.string().optional(),
+      mode: z.enum(['shadow', 'ai_active', 'off']).optional(),
+      status: z
+        .enum(['drafting', 'pending_human', 'qualified', 'escalated', 'discarded'])
+        .optional(),
+      inbound_text: z.string().optional(),
+      draft_reply: z.string().optional().nullable(),
+      slots: z.record(z.string(), z.unknown()).optional(),
+      confidence: z.number().min(0).max(1).optional().nullable(),
+      lead_score_id: uuidSchema.optional().nullable(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
+    })
+    .passthrough(),
+  [SorTableNames.LEAD_SCORES]: z
+    .object({
+      ...workspaceScoped,
+      qualification_id: uuidSchema.optional().nullable(),
+      score: z.number().int().min(0).max(100),
+      band: z.enum(['cold', 'warm', 'hot', 'qualified']),
+      reasons: z.array(z.unknown()).optional(),
+    })
+    .passthrough(),
+  [SorTableNames.CONVERSATION_ESCALATIONS]: z
+    .object({
+      ...workspaceScoped,
+      qualification_id: uuidSchema,
+      reason: z.string().min(1),
+      sentiment: z.enum(['negative', 'neutral', 'positive', 'hostile']).optional().nullable(),
+      context_payload: z.record(z.string(), z.unknown()).optional(),
+      chatwoot_assignment_id: z.string().optional().nullable(),
+      status: z.enum(['open', 'accepted', 'resolved', 'cancelled']).optional(),
+    })
+    .passthrough(),
+  [SorTableNames.QUALIFIED_LEADS]: z
+    .object({
+      ...workspaceScoped,
+      qualification_id: uuidSchema.optional().nullable(),
+      lead_score_id: uuidSchema.optional().nullable(),
+      contact_name: z.string().optional().nullable(),
+      contact_email: z.string().optional().nullable(),
+      contact_phone: z.string().optional().nullable(),
+      company: z.string().optional().nullable(),
+      slots: z.record(z.string(), z.unknown()).optional(),
+      account_domain: z.string().optional().nullable(),
+      crm_mirror_id: uuidSchema.optional().nullable(),
+      status: z.enum(['new', 'synced', 'booked', 'lost']).optional(),
+      metadata: z.record(z.string(), z.unknown()).optional(),
+    })
+    .passthrough(),
+  [SorTableNames.WORKSPACE_CONVERSATION_SETTINGS]: z
+    .object({
+      ...workspaceScoped,
+      mode: z.enum(['shadow', 'ai_active', 'off']).optional(),
+      locale_default: z.string().optional(),
+      compliance_profile: z.string().optional(),
     })
     .passthrough(),
 };
