@@ -63,9 +63,9 @@ Full text: [`nexus-social-app/CONSTITUTION.md`](../../nexus-social-app/CONSTITUT
 | analyze | ✅ | 007 analysis + program status |
 | plan | ✅ | 007 `plan.md` |
 | tasks | ✅ | 007 `tasks.md` |
-| taskstoissues | 🟡 | create GH issues |
-| implement | 🟡 | Phase 0 commercial pack |
-| converge | 🟡 | after pack |
+| taskstoissues | ✅ | GitHub #36–#39 |
+| implement | ✅ | Phase 0 commercial pack (no eng) |
+| converge | ✅ | T009 human; T010+ gated CL-055 |
 
 ---
 
