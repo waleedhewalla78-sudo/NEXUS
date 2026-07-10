@@ -2,7 +2,7 @@
 
 > **Governing principles and development guidelines for `nexus-social-app`.**  
 > Canonical Speckit copy: [`.specify/memory/constitution.md`](.specify/memory/constitution.md)  
-> **Version 1.5.0** · Ratified 2026-06-23 · Last amended 2026-07-09
+> **Version 1.5.1** · Ratified 2026-06-23 · Last amended 2026-07-10
 
 ---
 
@@ -37,7 +37,8 @@ Two feature tracks share one codebase:
 | **005 — Enterprise revenue / GTM** | ABM, CRM loop, enterprise skin, leads, LinkedIn/Meta ingest | **Sprints 18–19 + Sprint 2–3 shipped** |
 | **Intelligence (Sprint 7)** | CSV/webhook funnel, executive briefing agent, `/intelligence` feed | **Shipped** (`ebd6222`) |
 | **Production closure** | Enterprise `/` → `/intelligence` redirect, GHCR CI, QA harness flake | **Shipped** (local; pending push) |
-| **006 — Conversational Revenue Loop** | Concierge agent, dialect profile, cost-to-serve margin gate, Chatwoot HITL | **Phase 0** — [specs/006](specs/006-conversational-revenue-loop/) |
+| **006 — Conversational Revenue Loop** | Concierge, dialect profile, margin gate, Chatwoot HITL | **Eng 0–3 ✅** — [specs/006](specs/006-conversational-revenue-loop/); ops finish open |
+| **007 — Skill Registry** | Versioned SKILL.md packs (Voice, Strategy Audit, GEO) on L6.5 | **Phase 0 commercial** — [specs/007](specs/007-skill-registry/); eng gated CL-055 |
 
 Feature 004 builds on 003. Nothing in 004 may break OAuth, publish, or worker behavior without regression proof.
 
@@ -276,6 +277,8 @@ Agency table (`000014`) and white-label billing await **A-GATE-003**. See [12-mu
 - Build a parallel mid-market WhatsApp SDR product (CL-048 — one Diligent AI motion)  
 - Build a second Pit Crew console for 006 (CL-049 — reuse Chatwoot)  
 - Start Concierge agent code before staging + committed conversational pilot (CL-052)  
+- Start Feature 007 Skill Registry **engineering** before first-release gates + paying pilot (CL-055) — Phase 0 commercial audit may proceed without code  
+- Treat the Claude Marketing OS proposal as a 33-module greenfield rebuild (CL-056)  
 
 ---
 
@@ -306,7 +309,8 @@ Resolved in [clarifications.md](specs/004-ai-cmo-master-prd-v3/clarifications.md
 | **PDPL review** | Pending | A-GATE-005 — memory/FinOps data flows |
 | **Dify role** | **Decided** | Runtime only (CL-005) |
 | **Meta App Review** | Gate live | T057 — flag must be `approved` |
-| **Feature 006** | Phase 0 | Conversational loop — CL-048–CL-054 |
+| **Feature 006** | Eng 0–3 ✅ | Ops finish pack + live Shadow UAT; Hermes skipped |
+| **Feature 007** | Phase 0 only | Skill Registry — CL-055/056; eng after paying pilot |
 
 ### Feature 006 clarifications (CL-048 – CL-054)
 
@@ -322,6 +326,15 @@ Resolved in [006 clarifications](specs/006-conversational-revenue-loop/clarifica
 | **CL-053** | Margin | ≥55% gross margin/client; FAIL = stop scale |
 | **CL-054** | Profiles | `mena_v1` = MSA publish; `mena_conversational_v1` = dialect replies + CRITICAL retained |
 
+### Feature 007 clarifications (CL-055 – CL-056)
+
+Resolved in [007 clarifications](specs/007-skill-registry/clarifications.md).
+
+| ID | Topic | Decision |
+|----|-------|----------|
+| **CL-055** | 007 eng gate | No Skill Registry tables/Inngest until first-release progress + paying pilot; Phase 0 = sell Strategy Audit manually |
+| **CL-056** | Scope | Registry pattern + **3 flagships** (Voice, Strategy Audit, GEO) — defer 30+ modules |
+
 Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md) and [IMPLEMENT_PLAN_ALL_OPEN.md](specs/004-ai-cmo-master-prd-v3/IMPLEMENT_PLAN_ALL_OPEN.md).
 
 ---
@@ -336,6 +349,8 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 | Launch checklist | [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) |
 | Feature 003 | [specs/003-real-integrations-production/](specs/003-real-integrations-production/) |
 | Feature 004 spec | [spec.md](specs/004-ai-cmo-master-prd-v3/spec.md) |
+| Feature 006 | [specs/006-conversational-revenue-loop/](specs/006-conversational-revenue-loop/) |
+| Feature 007 | [specs/007-skill-registry/](specs/007-skill-registry/) |
 | Notion Feature 004 hub | https://www.notion.so/3886f21f521a8111aaacf9f2414b668e |
 | Speckit canonical copy | [.specify/memory/constitution.md](.specify/memory/constitution.md) |
 | **PRD (authoritative)** | [docs/NEXUS-PRD.md](docs/NEXUS-PRD.md) · [docs/prd/](docs/prd/) |
@@ -349,4 +364,4 @@ Updates belong in [convergence.md](specs/004-ai-cmo-master-prd-v3/convergence.md
 3. Propagate changes to affected spec artifacts and Notion hub.  
 4. PRs touching AI CMO or publish paths must cite compliance with this constitution.
 
-**Version 1.5.0** · Ratified 2026-06-23 · Last amended 2026-07-09 (Feature 006 Phase 0, CL-048–CL-054)
+**Version 1.5.1** · Ratified 2026-06-23 · Last amended 2026-07-10 (006 eng complete; Feature 007 Phase 0 + CL-055/056)

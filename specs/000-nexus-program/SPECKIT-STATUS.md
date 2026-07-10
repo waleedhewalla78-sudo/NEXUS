@@ -1,45 +1,44 @@
 # Nexus Program — Speckit Status
 
-**Updated:** 2026-07-09  
+**Updated:** 2026-07-10  
 **Cycle:** [`SPECKIT-CYCLE.md`](./SPECKIT-CYCLE.md)  
-**Phase D:** [`phase-d-spec.md`](./phase-d-spec.md)  
-**Feature 006:** [`../../nexus-social-app/specs/006-conversational-revenue-loop/SPECKIT-STATUS.md`](../../nexus-social-app/specs/006-conversational-revenue-loop/SPECKIT-STATUS.md)  
-**Verdict:** **CONDITIONAL PRODUCTION** + **006 Phase 0 eng complete**; operator gates [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d); 006 [#31–#35](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Afeature-006)
----
+**Constitution:** [`../../nexus-social-app/CONSTITUTION.md`](../../nexus-social-app/CONSTITUTION.md) **v1.5.1**  
+**006:** [eng 0–3 ✅](../../nexus-social-app/specs/006-conversational-revenue-loop/SPECKIT-STATUS.md) · ops finish open  
+**007:** [Phase 0](../../nexus-social-app/specs/007-skill-registry/SPECKIT-STATUS.md) · eng gated CL-055  
 
-## Command execution (Phase D)
-
-| Command | Status | Output |
-|---------|--------|--------|
-| `/speckit.specify` | ✅ | `phase-d-spec.md` — FR-PD + US-PD-01–09 |
-| `/speckit.clarify` | ✅ | CL-044–047 |
-| `/speckit.analyze` | ✅ | Overall **8.0**; coverage matrix |
-| `/speckit.plan` | ✅ | Operator weeks 1–4 + eng shipped |
-| `/speckit.tasks` | ✅ | PD-ENG done; PD-OPS-001–009 open |
-| `/speckit.taskstoissues` | ✅ | GitHub [#20–#30](https://github.com/waleedhewalla78-sudo/NEXUS/issues?q=label%3Aphase-d); closed #7–#19 |
-| `/speckit.implement` | ✅ | Template + verifier + runbook |
-| `/speckit.converge` | ✅ | Human gates remain; new PD-OPS-010–011 |
+**Verdict:** **CONDITIONAL PRODUCTION** · 006 eng finished · 007 Phase 0 commercial · B1–B4 + Dify + 006 ops still human
 
 ---
 
-## Verification snapshot
+## Track rollup
+
+| Track | Eng | Ops / gate |
+|-------|-----|------------|
+| 003 | ✅ Baseline | B1 Meta, B2 OAuth UAT |
+| 004 | ✅ T001–T058 | A-GATE-002/005 |
+| 005 S18–19 | ✅ | Sprint 20 🔒 A-GATE-003 |
+| 006 | ✅ Phases 0–3 | finish-line-ops.md |
+| 007 | Phase 0 docs | CL-055 eng lock |
+| Phase D | Tooling ✅ | #20–#30 human |
+
+---
+
+## Latest verification
 
 | Check | Result |
 |-------|--------|
-| `qa:enterprise:report` | **15 PASS · 0 FAIL** |
-| Production closure on `main` | ✅ Pushed |
-| Phase D verifier | ✅ `npm run verify:phase-d` |
-| `.env.production.template` | ✅ Shipped |
-| B1–B4 human gates | ⬜ Open |
+| Health `/api/health` | overall healthy (redis/worker down local) |
+| Playwright Chromium | **23/23 PASS** |
+| k6 smoke | **714/714 checks**, 0% fail |
+| Dify `ai:verify` | Key OK, **unpublished** (exit 2) |
+| 006 tables | 5/6; `cost_to_serve_snapshots` missing |
 
 ---
 
 ## Next actions
 
-1. ~~`PD-OPS-001` Hermes deploy~~ — **deferred** (founder skip this phase)  
-2. `PD-OPS-002` Fill `.env.production` (when deploy path chosen)  
-3. `npm run verify:phase-d:report` (local / non-Hermes target)  
-4. `PD-OPS-005` OAuth LinkedIn + X  
-5. `PD-OPS-006` Meta App Review (parallel)  
-6. `PD-COM-001` Pilot report  
-7. **Feature 006 Phase 0** pushed — ready for Feature 007 Phase 1 on founder go
+1. 006: SQL Editor apply `20260721`; Dify Publish; Shadow UAT  
+2. 007: Strategy Audit commercial pack + GH issues; find prospect (V7-1)  
+3. Phase D: B1–B4 as capacity allows  
+4. **Do not** start 007 eng (T010+) until CL-055  
+5. Hermes: still skipped unless un-skipped  
