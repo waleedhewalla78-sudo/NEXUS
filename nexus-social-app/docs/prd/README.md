@@ -1,9 +1,20 @@
 # NEXUS PRD — Document Index
 
-**Document ID:** NEXUS-PRD-001 · **Version:** 1.0.0 · **Date:** 2026-07-04  
-**Commit:** `befc0c3` · **Prod:** https://nexussocial.tech
+**Document ID:** NEXUS-PRD-001 · **Version:** 2.0.0 · **Date:** 2026-07-10  
+**Commit:** `0eaa5d5` · **Prod:** https://nexussocial.tech · **Constitution:** v1.5.1
 
-← [Full consolidated PRD](../NEXUS-PRD.md) · [PRD Status](./PRD-STATUS.md) · [QA Results](./QA-RESULTS.md)
+← **[Authoritative consolidated PRD v2.0.0](../NEXUS-PRD.md)** · [PRD Status](./PRD-STATUS.md) · [QA Results](./QA-RESULTS.md)
+
+---
+
+## Authority
+
+| Priority | Source |
+|----------|--------|
+| 1 | [CONSTITUTION.md](../../CONSTITUTION.md) — governing principles |
+| 2 | Speckit clarifications (incl. CL-048–CL-056) |
+| 3 | **[`../NEXUS-PRD.md`](../NEXUS-PRD.md) v2.0.0** — authoritative product requirements (supersedes sprint prompts and PRD 1.0.1) |
+| 4 | Split topic files below — navigation aids; must not diverge from consolidated PRD |
 
 ---
 
@@ -11,10 +22,12 @@
 
 | Dimension | Status |
 |-----------|--------|
-| Platform code (003–007) | ✅ Code-complete on `main` |
-| Production ops | 🟡 Migrations + secrets lag |
+| Verdict | **CONDITIONAL PRODUCTION** — Agency + Intelligence + Conversational eng complete; human/ops gates open; **pre-revenue** |
+| Platform code (003–006 eng) | ✅ on `main` @ `0eaa5d5` |
+| 007 Skill Registry | Phase 0 commercial ✅ · eng 🔒 CL-055 |
+| Production ops | 🟡 Migrations + secrets + Dify publish lag |
 | Commercial (S4/S6) | 🔒 Sales / payment gated |
-| QA harness | 🟡 **13 PASS · 3 FAIL · 1 WARN · 2 SKIP** (2026-07-04) |
+| Tests (2026-07-10) | Health healthy · Playwright **23/23** · k6 **714/714** · 0% fail |
 
 ---
 
@@ -48,19 +61,10 @@
 
 | Document | Purpose |
 |----------|---------|
-| [PRD-STATUS.md](./PRD-STATUS.md) | Completion tracking, gates, blockers, next actions |
+| [PRD-STATUS.md](./PRD-STATUS.md) | Completion tracking, gates, blockers, next actions (v2.0.0) |
 | [QA-RESULTS.md](./QA-RESULTS.md) | Latest enterprise QA harness results |
 | [../QA-ENTERPRISE-MASTER-PLAN.md](../QA-ENTERPRISE-MASTER-PLAN.md) | QA methodology |
 | [../../specs/000-nexus-program/TEST-PLAN.md](../../specs/000-nexus-program/TEST-PLAN.md) | Full test tiers A–F |
-
----
-
-## Authority & conflict resolution
-
-1. [CONSTITUTION.md](../../CONSTITUTION.md) — governing principles  
-2. [clarifications.md](../../specs/000-nexus-program/clarifications.md) — recorded decisions  
-3. This PRD set — product specification  
-4. Sprint prompts — historical; superseded by PRD where divergent
 
 ---
 
@@ -76,7 +80,14 @@
 | STK-006 | Sprint 4 unlock — signed pilot details | Commercial |
 | STK-007 | Intelligence import persistence (OQ-005) | Product |
 | STK-008 | Calendar export scope (OQ-006) | Product |
+| STK-009 | Retention periods | Product |
+| STK-010 | Confirm pricing (~$3k→$5k; Strategy Audit 15–35k) | Founder |
+| STK-011 | Conversational wedge account | Founder |
+| STK-012 | Shadow → AI-Active sign-off | Ops / Client |
+| STK-013 | Unlock 007 eng (CL-055) | Commercial |
+
+Full STK list and open questions: [NEXUS-PRD.md Appendix C](../NEXUS-PRD.md#appendix-c--open-questions--stk-list).
 
 ---
 
-*Maintained with split topic files for stakeholder navigation. Update PRD-STATUS and QA-RESULTS after each release gate.*
+*Maintained with split topic files for stakeholder navigation. **Authoritative requirements live in [`../NEXUS-PRD.md`](../NEXUS-PRD.md) v2.0.0.** Update PRD-STATUS after each release gate.*

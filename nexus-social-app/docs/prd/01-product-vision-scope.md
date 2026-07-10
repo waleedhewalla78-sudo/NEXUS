@@ -1,6 +1,6 @@
 # 1. Product Vision & Scope
 
-← [PRD Index](./README.md) · [PRD Status](./PRD-STATUS.md)
+← [PRD Index](./README.md) · [PRD Status](./PRD-STATUS.md) · [Authoritative PRD v2.0.0](../NEXUS-PRD.md)
 
 ---
 
@@ -9,10 +9,12 @@
 NEXUS is an **AI-native autonomous revenue operating system** for MENA enterprise marketing. It combines:
 
 - **Omnichannel social publishing** (Facebook, Instagram, LinkedIn, X)
-- An **8-agent AI CMO mesh** (Strategic Brain, Creator, Judge, Compliance, Radar, Finance, Quant, Sentinel)
+- A **9-agent AI CMO mesh** (Strategic Brain, Creator, Judge, Compliance, Radar, Finance, Quant, Sentinel + **Concierge**)
 - **ABM intent scoring**, CRM closed-loop attribution, and FinOps cost governance
 - **Enterprise GTM** (public landing, inbound leads, Meta Lead Ads webhook)
 - **Intelligence funnel** (CSV/webhook ingest → executive AI briefs)
+- **Conversational revenue loop** (WhatsApp inbound qualify → Chatwoot HITL → qualified leads → margin gate)
+- **Skill Registry (planned)** — versioned SKILL.md packs on L6.5 (Phase 0 sell-now; eng gated CL-055)
 
 Sold and operated as **Diligent AI** — an agency that deploys the mesh for clients; not self-serve multi-tenant SaaS for pilots.
 
@@ -23,13 +25,15 @@ Sold and operated as **Diligent AI** — an agency that deploys the mesh for cli
 | Track | Scope | Version / Sprint |
 |-------|-------|------------------|
 | **003 — Real Integrations** | OAuth, encrypted tokens, publish adapters, worker, analytics, Chatwoot inbox AI, webhooks, Stripe billing hooks | Sprints 1–11 |
-| **004 — AI CMO Enterprise** | Async campaigns (202+polling), Inngest mesh, policy engine, approvals, FinOps ledger, memory (PG+Qdrant), 8 agents | Sprint 12+ |
+| **004 — AI CMO Enterprise** | Async campaigns (202+polling), Inngest mesh, policy engine, approvals, FinOps ledger, memory (PG+Qdrant), 8 agents (T001–T058) | Sprint 12+ |
 | **005 — Revenue loop** | ABM dashboard, playbook activation, HubSpot/Salesforce webhooks, attribution export, MENA compliance, control plane | Sprints 18–19 |
 | **Enterprise skin** | Feature flags, `/enterprise` landing, `enterprise_leads`, internal leads dashboard | Sprint 2 |
 | **GTM integrations** | LinkedIn OAuth, Meta Lead Ads webhook, `/settings/integrations` | Sprint 3 |
 | **Pilot ROI simulation** | `generate:pilot-report` CLI | Sprint 5 |
 | **Intelligence** | CSV ingest, anomaly detection, briefing agent, `/intelligence` feed, weekly Inngest cron | Sprint 7 |
-| **QA harness** | `qa:enterprise` + master plan | QA pass |
+| **006 — Conversational Revenue Loop** | `mena_conversational_v1`, Concierge Shadow/AI-Active, qualified leads, cost-to-serve, Chatwoot HITL, margin gate | Phases 0–3 eng ✅ · ops finish open |
+| **007 — Skill Registry (Phase 0)** | Strategy Audit commercial pack (EN/AR offer + delivery checklist); Speckit + GH #36–#39 | Phase 0 commercial ✅ · eng gated CL-055 |
+| **QA harness** | `qa:enterprise` + Playwright + k6 | QA pass |
 
 ---
 
@@ -40,9 +44,13 @@ Sold and operated as **Diligent AI** — an agency that deploys the mesh for cli
 | Native GA4 / Meta Ads / WhatsApp sync workers | 8GB RAM; funnel model | CL-038 |
 | TikTok / Snapchat live publish | Enum stub only | FR-P01 |
 | Self-serve pilot onboarding UI | High-touch agency | CL-033/034 |
-| Pit Crew `/admin` + margin dashboard | Payment-gated | CL-036 |
-| `provision-pilot-client.ts` | Sales-gated | CL-033 |
+| Pit Crew `/admin` + margin dashboard before payment | Payment-gated | CL-036 |
+| `provision-pilot-client.ts` before signed pilot | Sales-gated | CL-033 |
 | Sprint 20 agency switcher / client portal | A-GATE-003 / `000014` | CL-029 |
+| **007 Skill Registry engineering** (tables, Inngest, agent wiring) | Eng gated until paying pilot / first-release | **CL-055** |
+| **33-module Marketing OS rebuild** | Three flagships only (Voice, Strategy Audit, GEO) | **CL-056** |
+| Parallel mid-market WhatsApp SDR product | One Diligent AI motion | **CL-048** |
+| Second Pit Crew console for 006 | Reuse Chatwoot | **CL-049** |
 | Standalone Claude/React artifact apps | Native APIs only | CL-006-001 |
 | Modify `campaign-workflow.ts` / `reconciler.ts` | Regression boundary | CL-030 |
 | Intelligence charts / PDF V1 | Text-only V1 | CL-040 |
@@ -63,8 +71,10 @@ Sold and operated as **Diligent AI** — an agency that deploys the mesh for cli
 | Sprint 4 deferral | No provision script pre-sale | Agency-led |
 | Sprint 6 deferral | Pit Crew pre-payment | Revenue before internal tools |
 | Sprint 7 | CSV funnel + briefs | 2-week sprint realism |
+| **006 eng 0–3** | Concierge + conversational loop | Inbound WhatsApp qualify (CL-051 independent of B1) |
+| **007 Phase 0** | Strategy Audit sell pack | Cash before Skill Registry eng (CL-055) |
 | Infra pivot | GHCR pre-built images | Faster VPS deploy |
 
 ---
 
-*See also: [16 Implementation Roadmap](./16-implementation-roadmap.md) · [18 Assumptions & Constraints](./18-assumptions-constraints.md)*
+*See also: [16 Implementation Roadmap](./16-implementation-roadmap.md) · [18 Assumptions & Constraints](./18-assumptions-constraints.md) · [Full PRD §1](../NEXUS-PRD.md#1-product-vision--scope)*
