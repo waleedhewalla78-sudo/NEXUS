@@ -68,6 +68,8 @@
     "verify:abm-seed": "tsx scripts/verify-abm-seed.ts",
     "generate:pilot-report": "tsx scripts/generate-pilot-case-study.ts",
     "generate:006-thread": "tsx scripts/generate-006-audited-thread.ts",
+    "db:apply-006": "tsx scripts/apply-006-migrations.ts",
+    "db:verify-006": "tsx scripts/verify-006-tables.ts",
     "sync:hubspot-deals": "tsx scripts/sync-hubspot-deals.ts",
     "speckit:issues-005": "tsx scripts/create-github-issues-005.ts",
     "uat:apply-eval-columns": "powershell -ExecutionPolicy Bypass -File scripts/apply-uat-eval-columns.ps1",

@@ -69,9 +69,12 @@ Legend: `[x]` done · `[ ]` open · `[~]` blocked/gated
 
 ## Parallel (not 006 code — Phase D)
 
-- [~] **PD-OPS** B1–B4, Hermes (skipped), secrets — see program issues #20–#30
-- [~] **A-GATE-005** Publish Dify app; `npm run ai:verify`
-- [~] **T009** Complete human verification V1–V4 (US-082) — **operator**
+- [~] **PD-OPS** B1–B4, Hermes (**skipped**), secrets — see program issues #20–#30
+- [~] **A-GATE-005** Publish Dify app; `npm run ai:verify` — key valid, publish pending (exit 2)
+- [~] **T009** V1–V3 human samples; **V4** defaulted to CL-050 ABM wedge ✅
+- [~] **DB** Apply `20260720` + `20260721` via SQL Editor if `npm run db:apply-006` DNS fails
+
+**Finish pack:** [checklists/finish-line-ops.md](./checklists/finish-line-ops.md)
 
 ---
 

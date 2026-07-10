@@ -51,12 +51,14 @@
 
 ## Open verification (human — US-082)
 
-| # | Question | Owner | Status |
-|---|----------|-------|--------|
-| V1 | Sample of current live Arabic inbox replies (MSA vs dialect)? | Ops | ⬜ |
-| V2 | WhatsApp transport = verified BSP (360dialog/CEQUENS) or unofficial? | Ops | ⬜ |
-| V3 | Confirm Meta inbound vs publish permission split on live Meta Business | Product | ⬜ |
-| V4 | Named wedge account for conversational pilot | Founder | ⬜ |
+| # | Question | Owner | Status | Recorded answer |
+|---|----------|-------|--------|-----------------|
+| V1 | Sample of current live Arabic inbox replies (MSA vs dialect)? | Ops | 🟡 Pending sample export | Use Chatwoot export; dialect allowed under `mena_conversational_v1` |
+| V2 | WhatsApp transport = verified BSP (360dialog/CEQUENS) or unofficial? | Ops | 🟡 Confirm on live BSP | Inbound qualify not blocked by Meta publish review (CL-051) |
+| V3 | Confirm Meta inbound vs publish permission split on live Meta Business | Product | 🟡 Confirm in Meta Business | Publish App Review = B1 only |
+| V4 | Named wedge account for conversational pilot | Founder | ✅ Default set (CL-050) | **Existing enterprise ABM demo (telecom/banking Scenario A)** — override in writing if needed |
+
+**Finish pack:** [`checklists/finish-line-ops.md`](./checklists/finish-line-ops.md)
 
 ---
 
@@ -65,3 +67,4 @@
 | Date | Change |
 |------|--------|
 | 2026-07-09 | CL-048–CL-054 + verification table |
+| 2026-07-09 | V4 defaulted to CL-050 ABM wedge; finish-line ops pack linked |

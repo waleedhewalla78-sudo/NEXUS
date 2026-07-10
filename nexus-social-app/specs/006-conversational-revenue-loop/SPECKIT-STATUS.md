@@ -2,49 +2,44 @@
 
 **Updated:** 2026-07-09  
 **Track:** [`specs/006-conversational-revenue-loop/`](./)  
-**Verdict:** **PHASE 2 + 3 ENG COMPLETE** — Concierge Shadow/AI-Active + escalation + margin gate + audited thread helpers  
-**Hermes:** Skipped (founder direction)
+**Verdict:** **ALL PHASES ENG FINISHED (0–3)** · Ops finish pack open for live cutover  
+**Hermes:** Skipped (founder direction — explicit)
 
 ---
 
-## Phase board
+## Phase board (finish)
 
-| Phase | Status | Notes |
-|-------|--------|-------|
-| **0** De-risk | ✅ | Profile + cost calculator |
-| **1** Concierge Shadow | ✅ | S1–S4 |
-| **2** Escalation + AI-Active | ✅ | T016–T018 |
-| **3** Close loop + Margin | ✅ | T019–T023 eng; T021 commercial checklist |
+| Phase | Eng | Ops / live |
+|-------|-----|------------|
+| **0** De-risk | ✅ | — |
+| **1** Concierge Shadow | ✅ | Apply migration + Shadow UAT |
+| **2** Escalation + AI-Active | ✅ | Client sign-off before `ai_active` |
+| **3** Close loop + Margin | ✅ | Case study fill + margin PASS for scale |
 
-**Unit tests:** conversation + finops Phase 2/3 suites green
-
----
-
-## Phase 2 deliverables
-
-| Task | Status |
-|------|--------|
-| T016 Escalation → Chatwoot | ✅ `escalation-adapter.ts` + `escalation.ts` + persist |
-| T017 Annotations → Memory | ✅ `annotations.ts` + feedback webhook |
-| T018 AI-Active + runbook | ✅ mode API + `phase-2-oversight.md` |
+**Unit tests:** conversation + finops + T022 catalog green
 
 ---
 
-## Phase 3 deliverables
+## Finish-line artifacts
 
-| Task | Status |
-|------|--------|
-| T019 Audited thread | ✅ ABM `conversationSeed` + `audited-thread.ts` + script |
-| T020/T023 Margin gate | ✅ `margin-gate-report.ts` + migration + API |
-| T021 Case study | ✅ Checklist (commercial fill) |
-| T022 Compliance catalog | ✅ Smoke test |
+| Item | Path |
+|------|------|
+| Ops pack | [checklists/finish-line-ops.md](./checklists/finish-line-ops.md) |
+| Oversight | [checklists/phase-2-oversight.md](./checklists/phase-2-oversight.md) |
+| Case study EN/AR templates | [checklists/case-study-en-template.md](./checklists/case-study-en-template.md) · [case-study-ar-template.md](./checklists/case-study-ar-template.md) |
+| Apply migrations | `npm run db:apply-006` (needs reachable `DATABASE_URL`) |
+| Verify tables | `npx tsx scripts/verify-006-tables.ts` |
+| Dify | `npm run ai:verify` — key valid, **workflow not published** (exit 2) |
 
 ---
 
-## Operator (parallel — not eng-blocked)
+## Remaining human-only (cannot auto-close)
 
-1. Apply `20260720_conversation_qualification_tables.sql` + `20260721_cost_to_serve_snapshots.sql`
-2. T009 V1–V4 in clarifications.md
-3. Dify publish → `npm run ai:verify`
-4. Client sign-off before production `ai_active` flip
-5. Hermes: still skipped unless un-skipped
+1. **SQL Editor apply** if `db.*.supabase.co` DNS fails — paste `20260720` + `20260721`
+2. **Dify Publish** in Studio (A-GATE-005)
+3. **T009 V1–V3** sample/BSP/Meta confirm (V4 defaulted to CL-050 ABM wedge)
+4. Shadow UAT → client sign-off → AI-Active drill
+5. Fill EN/AR case study with live numbers; margin PASS before scale
+6. Hermes / PD-OPS B1–B4 — out of 006 eng; Hermes skipped
+
+**Eng finish point reached.** Live production readiness = ops pack above.
